@@ -1,18 +1,57 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, Text, View,Button,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
-import {test} from './redux/actions'
+import {getData} from './redux/actions'
+import firebase from 'react-native-firebase';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.ref = firebase.firestore().collection('data');
+  }
+
+  componentDidMount() {
+    this.SearchData();
+  }
+
+  SearchData(){
+    let data = [];
+    this.unsubscribe = this.ref.onSnapshot((newData) => {
+      newData.forEach(item => {
+        data.push(item.data());
+      })
+    });
+    this.props.getData(data);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
 
   render() {
+    console.log(this.props.state);
+    
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
+        <ScrollView>
+          <Text style={styles.welcome}>Welcome to React Native!</Text>
+          <Button
+          title='data'/>
+        </ScrollView>
+        <View style={styles.bottomNav}>
+          <Button
+          title='main'/>
+          <Button
+          title='second'/>
+        </View>
       </View>
     );
   }
+
 }
+
+
+
 
 const mapStateToProps = (state) => {
   return {
@@ -21,7 +60,7 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    test: (data) => dispatch(test(data))
+    getData: (data) => dispatch(getData(data))
   }
 }
 
@@ -32,8 +71,6 @@ export default connect(mapStateToProps,mapDispatchToProps)(App);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
   welcome: {
@@ -45,4 +82,9 @@ const styles = StyleSheet.create({
     textShadowRadius:10,
     textDecorationColor: 'black',
   },
+  bottomNav: {
+    position: 'absolute',
+    bottom: 0,
+    flexDirection: 'row',
+  }
 });

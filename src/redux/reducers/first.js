@@ -1,4 +1,4 @@
-import {TEST} from '../const';
+import {GET_DATA} from '../const';
 
 const initState = {
     data : []
@@ -6,9 +6,8 @@ const initState = {
 
 export default (state = initState, action) => {
     switch (action.type) {
-        case TEST:
-            console.log(action.newData);
-            return state
+        case GET_DATA:
+            return {...state,data:action.newData}
 
         
         default: return state

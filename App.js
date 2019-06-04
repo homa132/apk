@@ -4,12 +4,13 @@ import {createStore, applyMiddleware} from 'redux';
 import ReduxThunk from 'redux-thunk';
 import Content from './src/test';
 import reducer from './src/redux/reducers/reducer';
-import { createStackNavigator,createAppContainer } from "react-navigation";
-
+import { createStackNavigator,createAppContainer,createBottomTabNavigator } from "react-navigation";
+import Login from './src/pages/login';
 const store = createStore(reducer,applyMiddleware(ReduxThunk));
 
 const screens = createStackNavigator({
-  Test: Content
+  Test: Content,
+  second: Login
 },{
   headerMode: 'none',
   mode: 'modal'

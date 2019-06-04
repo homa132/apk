@@ -1,8 +1,8 @@
-import {TEST} from './const'
+import {GET_DATA} from './const'
 
-export const test = (newData) => {
+export const getData = (newData) => {
     return {
-        type:TEST,
+        type:GET_DATA,
         newData
     }
 }
