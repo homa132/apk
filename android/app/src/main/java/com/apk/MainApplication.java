@@ -9,7 +9,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
+import com.airbnb.android.react.maps.MapsPackage;
 import io.invertase.firebase.firestore.RNFirebaseFirestorePackage; 
 
 import java.util.Arrays;
@@ -29,7 +29,8 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new RNFirebasePackage(),
             new RNGestureHandlerPackage(),
-            new RNFirebaseFirestorePackage()
+            new RNFirebaseFirestorePackage(),
+            new MapsPackage()
       );
     }
 

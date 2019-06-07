@@ -146,6 +146,7 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'com.google.firebase:firebase-core:16.0.9'
     implementation "com.google.firebase:firebase-firestore:19.0.0"
+    implementation project(':react-native-maps')
 }
 
 // Run this once to be able to run the application with BUCK

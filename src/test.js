@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text, View,Button,ScrollView} from 'react-native';
+import {StyleSheet, Dimensions, View,Button,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {getData} from './redux/actions'
 import firebase from 'react-native-firebase';
+import Map from './map/map';
+const { width, height } = Dimensions.get('window');
 
 class App extends Component {
   constructor(props){
@@ -34,9 +36,9 @@ class App extends Component {
     return (
       <View style={styles.container}>
         <ScrollView>
-          <Text style={styles.welcome}>Welcome to React Native!</Text>
-          <Button
-          title='data'/>
+          <View style={styles.container}>
+            <Map/>
+          </View>
         </ScrollView>
         <View style={styles.bottomNav}>
           <Button
@@ -72,6 +74,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: width,
+    height: height
   },
   welcome: {
     fontSize: 20,
