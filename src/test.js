@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {getData} from './redux/actions'
 import firebase from 'react-native-firebase';
 import Map from './map/map';
+import NavBtn from './navBtn/navBtn';
+
 const { width, height } = Dimensions.get('window');
 
 class App extends Component {
@@ -31,8 +33,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props.state);
-    
     return (
       <View style={styles.container}>
         <ScrollView>
@@ -41,10 +41,8 @@ class App extends Component {
           </View>
         </ScrollView>
         <View style={styles.bottomNav}>
-          <Button
-          title='main'/>
-          <Button
-          title='second'/>
+          <NavBtn
+          navigation={this.props.navigation}/>
         </View>
       </View>
     );
