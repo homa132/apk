@@ -1,5 +1,9 @@
 import {combineReducers} from 'redux';
-import First from './first';
+import Data from './data';
+import Navigation from './navigation';
+
+
 export default combineReducers({
-    first: First
+    data: Data,
+    navigation: Navigation
 })

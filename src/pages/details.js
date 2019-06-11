@@ -1,16 +1,20 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet} from 'react-native';
+import {View,Text,StyleSheet,Button} from 'react-native';
 import {connect} from 'react-redux';
 import NavBtn from '../navBtn/navBtn';
+import {navigateTo} from '../redux/actions';
 
 
-class Login extends Component{
+class Details extends Component{
 
 
     render(){
         return (
             <View style={styles.container}>
-                <Text>Login</Text>
+                <Text>Details</Text>
+                <Button
+                title='Back'
+                onPress={() => this.props.navigateTo('Back')}/>
                 <View style={styles.bottomNav}>
                     <NavBtn/>
                 </View>
@@ -33,4 +37,11 @@ const styles = StyleSheet.create({
       }
 })
 
-export default connect()(Login);
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        navigateTo: (screen) => dispatch(navigateTo(screen))
+    }
+}
+
+export default connect(null,mapDispatchToProps)(Details);

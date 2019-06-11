@@ -4,13 +4,13 @@ import {connect} from 'react-redux';
 import NavBtn from '../navBtn/navBtn';
 
 
-class Login extends Component{
+class Likes extends Component{
 
 
     render(){
         return (
             <View style={styles.container}>
-                <Text>Login</Text>
+                <Text>Likes</Text>
                 <View style={styles.bottomNav}>
                     <NavBtn/>
                 </View>
@@ -33,4 +33,4 @@ const styles = StyleSheet.create({
       }
 })
 
-export default connect()(Login);
+export default connect()(Likes);
