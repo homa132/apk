@@ -1,18 +1,42 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {View,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import DateBtn from './dateBtn';
 import TypeBtn from './typeBtn';
+import {filterList} from '../redux/actions';
 
-function filterBtn(){
+
+class filterBtn extends Component{
+
+    state = {
+        date: 'default',
+        type: 'default'
+    }
+
+
+    filterData = (name,value) => {
+        name == 'date'?this.setState({date: value}):null;
+        name == 'type'?this.setState({type: value}):null;
+    }
+
+    render(){
+        const {date,type} = this.state;
+        this.props.filterList(date,type);
+
         return (
             <View style={styles.conteiner}>
-                <DateBtn/>
+                <DateBtn 
+                filterData={this.filterData}
+                />
                 <View style={styles.line}></View>
-                <TypeBtn/>
+                <TypeBtn
+                filterData={this.filterData}
+                />
             </View>
         )
+    }
 }
+
 
 const styles = StyleSheet.create({
     conteiner: {
@@ -25,4 +49,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect()(filterBtn);
+mapDispatchToProps = (dispatch) => {
+    return {
+        filterList: (date,type) => dispatch(filterList(date,type))
+    }
+}
+
+export default connect(null,mapDispatchToProps)(filterBtn);

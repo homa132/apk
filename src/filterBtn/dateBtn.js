@@ -12,8 +12,11 @@ class TypeBtn extends Component {
     changeType = (value,index) => {
         value == 'today'?this.today(value):null;
         value == 'tomorrow'?this.tomorrow(value):null;
-        value == 'default'?this.setState({date:value}):null;
         value == 'calendar'?this.calendar(value):null;
+        if(value == 'default'){
+            this.setState({date:value});
+            this.props.filterData('date',value);
+        }
     }
 
     today = (value) => {
@@ -24,7 +27,9 @@ class TypeBtn extends Component {
         let date = _date.getDate();
         date < 10? date =`0${date}`:null
         const fullDate = `${date}.${month}.${year}`;
-        console.log(fullDate);
+
+        this.props.filterData('date',fullDate);
+        
         this.setState({date:value});
     }
 
@@ -38,6 +43,9 @@ class TypeBtn extends Component {
         let date = tomorrow.getDate();
         date < 10? date =`0${date}`:null;
         const fullDate = `${date}.${month}.${year}`;
+
+        this.props.filterData('date',fullDate);
+
         this.setState({date:value});
     }
 
@@ -50,6 +58,9 @@ class TypeBtn extends Component {
                 month < 10? month = `0${month + 1}`:month += 1;
                 day < 10? day =`0${day}`:null;
                 const fullDate = `${day}.${month}.${year}`;
+
+                this.props.filterData('date',fullDate);
+
                 this.setState({date:value,calendar:fullDate});
             }
           } catch ({code, message}) {
@@ -65,7 +76,7 @@ class TypeBtn extends Component {
                 style={styles.pickerConteiner}
                 onValueChange={(itemValue,itemIndex) => this.changeType(itemValue,itemIndex)}
                 >
-                    <Picker.Item label="Выберите дату" value="default" />
+                    <Picker.Item label="Дата события" value="default" />
                     <Picker.Item label="Сегодня" value="today" />
                     <Picker.Item label="Завтра" value="tomorrow" />
                     <Picker.Item label={this.state.calendar} value="calendar" />
@@ -78,7 +89,7 @@ class TypeBtn extends Component {
 
 const styles = StyleSheet.create({
     conteinerBtn: {
-        width: 134,
+        minWidth: 140,
         height: 40,
         backgroundColor: '#EAEAEA',
         borderColor: '#969696',
@@ -87,12 +98,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         borderRadius: 15,
     },
-    textBtn: {
-        fontSize: 17,
-        color: '#4F4F4F'
-    },
     pickerConteiner: {
-        width: 130,
+        minWidth: 130,
         height: 34,
     }
 })

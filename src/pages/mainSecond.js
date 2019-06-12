@@ -1,8 +1,9 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import NavBtn from '../navBtn/navBtn';
-
+import List from '../mainSecondItems/mainSecondItems';
+const { width, height } = Dimensions.get('window');
 
 class MainSecond extends Component{
 
@@ -11,7 +12,7 @@ class MainSecond extends Component{
 
         return (
             <View style={styles.container}>
-                <Text>MainSecond</Text>
+                <List/>
                 <View style={styles.bottomNav}>
                     <NavBtn/>
                 </View>
@@ -23,15 +24,17 @@ class MainSecond extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5FCFF',
         justifyContent: 'center',
         alignItems: 'center',
+        margin: 0,
+        padding: 0,
       },
     bottomNav: {
         position: 'absolute',
-        bottom: 0,
+        bottom: 3,
         flexDirection: 'row',
-      }
+      },
+
 })
 
 export default connect()(MainSecond);

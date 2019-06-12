@@ -7,7 +7,7 @@ import MainSecond from '../pages/mainSecond';
 import Details from '../pages/details';
 import {connect} from 'react-redux';
 import {navigateTo} from '../redux/actions';
-
+import Messenger from '../pages/messenger';
 
 let history = [];
 
@@ -31,6 +31,8 @@ function navigation (props){
             return (<Account/>)
         case 'Details':
             return (<Details/>)
+        case 'Messenger':
+            return (<Messenger/>)
         case 'Back':
             let backIndex = history.length -1;
             let Back = history[backIndex];

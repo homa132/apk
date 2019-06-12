@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Dimensions, View} from 'react-native';
+import {StyleSheet, Dimensions, View,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {getData} from '../redux/actions'
 import firebase from 'react-native-firebase';
@@ -12,7 +12,10 @@ const { width, height } = Dimensions.get('window');
 class App extends Component {
   constructor(props){
     super(props);
-    this.ref = firebase.firestore().collection('data');
+    this.ref = firebase.firestore().collection('list');
+    this.state = {
+      loader: true
+    }
   }
 
   componentDidMount() {
@@ -27,6 +30,7 @@ class App extends Component {
       })
     });
     this.props.getData(data);
+    this.setState({loader:false});
   }
 
   componentWillUnmount() {
@@ -34,19 +38,30 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.containerFilterBtn}>
-          <FilterBtn/>
+    let {loader} = this.state;
+
+    if(loader){
+      return (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#0000ff" />
         </View>
-        <View style={styles.mapConteiner}>
-            <Map/>
+      )
+    }else{
+      return (
+        <View style={styles.container}>
+          <View style={styles.containerFilterBtn}>
+            <FilterBtn/>
+          </View>
+          <View style={styles.mapConteiner}>
+              <Map/>
+          </View>
+          <View style={styles.bottomNav}>
+            <NavBtn/>
+          </View>
         </View>
-        <View style={styles.bottomNav}>
-          <NavBtn/>
-        </View>
-      </View>
-    );
+      );
+    }
+
   }
 }
 
@@ -74,24 +89,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#13D9D9',
     justifyContent: 'center',
     alignItems: 'center',
+    margin: 0,
+    padding: 0,
   },
   mapConteiner: {
     width: width,
     height: height,
     overflow: 'hidden'
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-    textShadowColor:'#585858',
-    textShadowOffset:{width: 5, height: 5},
-    textShadowRadius:10,
-    textDecorationColor: 'black',
-  },
   bottomNav: {
     position: 'absolute',
-    bottom: 0,
+    bottom: 3,
     flexDirection: 'row',
   },
   containerFilterBtn: {
