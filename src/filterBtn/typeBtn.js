@@ -22,7 +22,7 @@ class TypeBtn extends Component {
                 style={styles.pickerConteiner}
                 onValueChange={(itemValue,itemIndex) => this.changeType(itemValue,itemIndex)}
                 >
-                    <Picker.Item label="Тип события" value="default" />
+                    <Picker.Item label="Все типы" value="default" />
                     <Picker.Item label="Спорт" value="sport" />
                     <Picker.Item label="IT" value="it" />
                     <Picker.Item label="Клубы" value="club" />

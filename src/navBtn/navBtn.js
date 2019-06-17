@@ -8,6 +8,12 @@ import Acc from '../icon/nav/accaunt.svg';
 import MapIcon from '../icon/nav/map.svg';
 import Likes from '../icon/nav/myLike.svg';
 import List from '../icon/nav/list';
+import AddActive from '../icon/nav/addActive.svg';
+import AccActive from '../icon/nav/accauntActive.svg';
+import MapIconActive from '../icon/nav/mapActive.svg';
+import LikesActive from '../icon/nav/myLikeActive.svg';
+import ListActive from '../icon/nav/listActive.svg';
+
 const { width, height } = Dimensions.get('window');
 
 
@@ -15,17 +21,17 @@ let mapScreen = true;
 
 class navBtn extends Component {
 
-    Button = (screen,Icon,widthIcon,heightIcon)=>{
+    Button = (screen,Icon,IconActive,widthIcon,heightIcon)=>{
         const {activeScreen} = this.props.navigate;
-        const style = {backgroundColor: '#EAEAEA'};
         return (
-            <TouchableOpacity style={[styles.conteiner,activeScreen == screen?style:null]}
+            <TouchableOpacity style={[styles.conteiner]}
             onPress={() => {
                 screen == 'MainFirst' || screen == 'MainSecond'?mapScreen = !mapScreen:null;
-                
                 this.props.navigateTo(screen)
                 }}>
-                <Icon width={widthIcon} height={heightIcon}/>
+                    {activeScreen == screen?<IconActive width={widthIcon} height={heightIcon}/>:
+                    <Icon width={widthIcon} height={heightIcon}/>}
+                
             </TouchableOpacity>
         )
     }
@@ -36,6 +42,7 @@ class navBtn extends Component {
         if(activeScreen != 'MainFirst' && activeScreen != 'MainSecond'){
             mapScreen = false;
         }
+        
         return (
         <React.Fragment>
             {mapScreen?
@@ -44,7 +51,8 @@ class navBtn extends Component {
                     mapScreen = !mapScreen
                     this.props.navigateTo('MainSecond')
                 }}>
-                <List width={44} height={44}/>
+                    {activeScreen == 'MainFirst'?<ListActive width={44} height={44}/>:<List width={44} height={44}/>}
+                
             </TouchableOpacity>
             :
             <TouchableOpacity style={[styles.conteiner,activeScreen == 'MainFirst'||activeScreen == 'MainSecond'?style:null]}
@@ -52,12 +60,13 @@ class navBtn extends Component {
                     mapScreen = !mapScreen
                     this.props.navigateTo('MainFirst')
                 }}>
-                <MapIcon width={56} height={42}/>
+                {activeScreen == 'MainSecond'?<MapIconActive width={56} height={42}/>:<MapIcon width={56} height={42}/>}
+                
             </TouchableOpacity>
         }
-            {this.Button('Add',Add,36,36)}
-            {this.Button('Likes',Likes,32,38)}
-            {this.Button('Account',Acc,34,36)}
+            {this.Button('Add',Add,AddActive,36,36)}
+            {this.Button('Likes',Likes,LikesActive,32,38)}
+            {this.Button('Account',Acc,AccActive,34,36)}
         </React.Fragment>
     )};
 };
@@ -69,8 +78,8 @@ const styles = StyleSheet.create({
         borderColor: '#969696',
         borderWidth: 2,
         borderRadius: 15,
-        marginHorizontal: 2.5,
-        backgroundColor: '#13D9D9',
+        marginHorizontal: 2,
+        backgroundColor: '#EAEAEA',
         justifyContent: 'center',
         alignItems: 'center',
         marginBottom: 3,

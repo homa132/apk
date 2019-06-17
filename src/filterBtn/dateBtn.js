@@ -1,12 +1,12 @@
 import React,{Component} from 'react';
-import {View,Picker,StyleSheet,DatePickerAndroid} from 'react-native';
+import {View,Picker,StyleSheet,DatePickerAndroid,Text} from 'react-native';
 import {connect} from 'react-redux';
 
 class TypeBtn extends Component {
 
     state = {
         date: "default",
-        calendar: 'Календарь'
+        calendar: 'Выбраная дата'
     }
     
     changeType = (value,index) => {
@@ -62,6 +62,8 @@ class TypeBtn extends Component {
                 this.props.filterData('date',fullDate);
 
                 this.setState({date:value,calendar:fullDate});
+                this.setState({date:"date"});
+
             }
           } catch ({code, message}) {
             console.warn('Cannot open date picker', message);
@@ -76,10 +78,12 @@ class TypeBtn extends Component {
                 style={styles.pickerConteiner}
                 onValueChange={(itemValue,itemIndex) => this.changeType(itemValue,itemIndex)}
                 >
-                    <Picker.Item label="Дата события" value="default" />
+                    <Picker.Item label="Все даты" value="default" />
                     <Picker.Item label="Сегодня" value="today" />
                     <Picker.Item label="Завтра" value="tomorrow" />
-                    <Picker.Item label={this.state.calendar} value="calendar" />
+                    <Picker.Item label='Календарь' value="calendar" />
+                    <Picker.Item label={this.state.calendar} value="date" />
+
                 </Picker>
             </View>
 

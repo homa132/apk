@@ -1,9 +1,9 @@
 import {GET_DATA,SET_NAVIGATOR,FILTER_LIST} from '../const';
 
 const item = {
-    hesh: 'my hesh',
-    name: 'Hello world',
-    category: 'club',
+    hesh: '12341234',
+    name: 'First',
+    category: {name:'Клуб',value: 'club'},
     date: '13.06.2019',
     time: '10-20',
     images: ['https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=1&w=500'],
@@ -26,10 +26,10 @@ const item = {
 }
 
 const item2 = {
-    hesh: 'my hesh',
-    name: 'Hello world',
-    category: 'sport',
-    date: '12.06.2019',
+    hesh: '123123',
+    name: 'Second',
+    category: {name:'Спорт',value: 'sport'},
+    date: '14.06.2019',
     time: '10-20',
     images: ['https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=1&w=500'],
     contacts: {
@@ -84,7 +84,7 @@ const filterDate = (date,category,allList) => {
     
     if(category != 'default'){
         filtredList = filtredList.filter((item,index) => {
-            return item.category == category
+            return item.category.value == category
         })
     }
 

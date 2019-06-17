@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, View,Text,TouchableOpacity } from 'react-native';
 import { Marker, Callout } from 'react-native-maps';
-
+import {connect} from 'react-redux';
+import {navigateTo,setActiveItem} from '../redux/actions';
 
 function MarkerMore (props) {
-    const {location,name,time,date,category,hesh,textMore} = props.item
+    const {location,name,time,date,category,hesh} = props.item
     return(
         <Marker
             coordinate={location}
@@ -12,7 +13,8 @@ function MarkerMore (props) {
             <Callout 
             style={styles.plainView}
             onPress={() => {
-              this.props.navigateTo('Details')
+              props.setActiveItem(hesh);
+              props.navigateTo('Details');
             }}
             >
               <View style={styles.modalContent}>
@@ -21,10 +23,9 @@ function MarkerMore (props) {
                     <Text style={styles.modalText}>Дата: {date}</Text>
                     <Text style={styles.modalText}>Время: {time}</Text>
                   </View>
-                  <Text style={styles.moreText} numberOfLines={3}>{textMore}</Text>
                   <View style={styles.buttom}>
                     <View>
-                      <Text style={styles.category}>Категори: {category}</Text>
+                      <Text style={styles.category}>Категори: {category.name}</Text>
                       <Text style={styles.category}>Учасников: 178</Text>
                     </View>
                     <TouchableOpacity style={styles.buttonConteiner}>
@@ -52,7 +53,8 @@ const styles = StyleSheet.create({
       paddingHorizontal: 10,
       backgroundColor: '#EAEAEA',
       marginVertical: 4,
-      justifyContent: 'space-around'
+      justifyContent: 'space-around',
+      padding: 7
     },
     modalName: {
       height: 50,
@@ -82,12 +84,11 @@ const styles = StyleSheet.create({
     },
     buttom: {
       width: 240,
-      height: 40,
       flexDirection: 'row',
       justifyContent: 'space-between',
       borderTopColor: '#3AE7FF',
       borderTopWidth: 1,
-      alignItems: 'center'
+      alignItems: 'flex-end'
     },
     category: {
       fontSize: 14,
@@ -112,5 +113,12 @@ const styles = StyleSheet.create({
     }
   });
   
+  const mapDispatchToProps = (dispatch) => {
+    return {
+        navigateTo: (screen) => dispatch(navigateTo(screen)),
+        setActiveItem: (hesh) => dispatch(setActiveItem(hesh))
+    }
+  }
 
-export default MarkerMore;
+
+export default connect(null,mapDispatchToProps)(MarkerMore);

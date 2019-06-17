@@ -1,113 +1,63 @@
-import React,{Component} from 'react';
+import React from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import {navigateTo} from '../redux/actions';
+import {navigateTo,setActiveItem} from '../redux/actions';
+import Messenger from '../btns/messenger';
+import LikesDis from '../btns/likesDis';
 
-
-import Mess from '../icon/item/Messanger.svg';
 import DateI from '../icon/item/calendar.svg';
 import CategI from '../icon/item/category.svg';
 import TimeI from '../icon/item/time.svg';
-import Up from '../icon/item/up.svg';
-import Down from '../icon/item/down.svg';
-import UpAll from '../icon/item/upActive.svg';
-import DownAll from '../icon/item/downActive.svg';
+
 
 const { width, height } = Dimensions.get('window');
 
 
-
-
-class Item extends Component {
-
-    state = {
-        like: false,
-        dithlike: false
-    }
-
-    change = (value) => {
-        const {like,dithlike} = this.state;
-        if(like && value == 'dithlike'){
-            this.setState({dithlike:!dithlike,like: false})
-        }
-        if(dithlike && value == 'like'){
-          this.setState({like: !like,dithlike: false})
-        }
-        if(!like && value == 'dithlike'){
-          this.setState({dithlike:!dithlike})
-        }
-        if(!dithlike && value == 'like'){
-          this.setState({like: !like})
-        }
-    }
-
-    more = () => {
-        this.props.navigateTo('Details');
-    }
+function Item (props) {
+    const {name,heshMessenger,date,time,category,hesh} = props.item;
     
-    messanger = () => {
-        this.props.navigateTo('Messenger');
-    }
-
-    render(){
-        const {like,dithlike} = this.state;
-        const {name,heshMessenger,date,time,category} = this.props.item;
+    return (
+    <View style={styles.conteiner}>
+        <View style={styles.itemTop}>
+            <Text style={styles.itemName} numberOfLines={3}>{name}</Text>
+            <Messenger/>
+        </View>
+        <View style={styles.images}>
+        </View>
         
-        return (
-            <View style={styles.conteiner}>
-                <View style={styles.itemTop}>
-                    <Text style={styles.itemName} numberOfLines={3}>{name}</Text>
-                    <TouchableOpacity style={styles.btnMessConteiner}
-                    onPress={this.messanger}>
-                             <Mess/>
-                    </TouchableOpacity>
-                </View>
-    
-                <View style={styles.images}>
-                </View>
-    
-                <View style={styles.infoStyle}>
-                    <View style={styles.infoItem}>
-                        <DateI/>
-                        <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
-                            <Text style={styles.infoText}>{date}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <CategI/>
-                        <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
-                            <Text style={styles.infoText}>{category}</Text>
-                        </View>
-                    </View>
-                    <View style={styles.infoItem}>
-                        <TimeI/>
-                        <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
-                            <Text style={styles.infoText}>{time}</Text>
-                        </View>
-                    </View>
-                </View>
-    
-                <View style={styles.buttom}>
-                    <View style={styles.btns}>
-                        <TouchableOpacity style={ like?null:{marginBottom:2}}
-                        onPress={() => this.change('like')}>
-                            {like?<UpAll/>:<Up/>}
-                        </TouchableOpacity>
-                        <View style={{borderColor: '#11A1A1',borderWidth: 1,height:40}}></View>
-                        <TouchableOpacity style={dithlike?null:{marginTop:2}}
-                        onPress={() => this.change('dithlike')}>
-                            {dithlike?<DownAll/>:<Down/>}
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={styles.btnMore}
-                    onPress={this.more}>
-                        <Text style={styles.btnMoreText}>Подробнее</Text>
-                    </TouchableOpacity>
+        <View style={styles.infoStyle}>
+            <View style={styles.infoItem}>
+                <DateI/>
+                <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
+                    <Text style={styles.infoText}>{date}</Text>
                 </View>
             </View>
-        )
-    }
-    
+            <View style={styles.infoItem}>
+                <CategI/>
+                <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
+                    <Text style={styles.infoText}>{category.name}</Text>
+                </View>
+            </View>
+            <View style={styles.infoItem}>
+                <TimeI/>
+                <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
+                    <Text style={styles.infoText}>{time}</Text>
+                </View>
+            </View>
+        </View>
+        
+        <View style={styles.buttom}>
+            <LikesDis/>
+            <TouchableOpacity style={styles.btnMore}
+            onPress={()=>{
+                props.setActiveItem(hesh);
+                props.navigateTo('Details')
+                    }}>
+                <Text style={styles.btnMoreText}>Подробнее</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -133,12 +83,6 @@ const styles = StyleSheet.create({
         lineHeight: 15,
         maxWidth: width - 80,
         textAlign: 'center'
-    },
-    btnMessConteiner: {
-        width: 40,
-        height: 40,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     btnMess: {
         borderColor: '#4F4F4F',
@@ -171,7 +115,7 @@ const styles = StyleSheet.create({
         marginBottom: 5,
     },
     infoText: {
-        fontSize: 13,
+        fontSize: 14,
         color: '#4F4F4F',
         letterSpacing: 0.5,
         paddingHorizontal: 10,
@@ -185,19 +129,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: width
     },
-    btns: {
-        flexDirection: 'row',
-        width: 120,
-        height: 40,
-        borderColor: '#11A1A1',
-        borderWidth: 1.5,
-        borderRadius: 12,
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        paddingHorizontal: 10,
-        backgroundColor: '#EAEAEA'
 
-    },
     btnMore: {
         width: 140,
         height: 40,
@@ -217,7 +149,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigateTo: (screen) => dispatch(navigateTo(screen))
+        navigateTo: (screen) => dispatch(navigateTo(screen)),
+        setActiveItem: (hesh) => dispatch(setActiveItem(hesh))
     }
   }
 
