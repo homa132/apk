@@ -3,22 +3,17 @@ import {ScrollView,TouchableOpacity,StyleSheet,Dimensions,Image} from 'react-nat
 import {connect} from 'react-redux';
 import {addImage} from '../redux/actions';
 import AddPhotoI from '../icon/btn/addPhoto.svg';
-import ImagePicker from 'react-native-image-crop-picker';
+import ImagePicker from 'react-native-image-picker';
 
 const { width, height } = Dimensions.get('window');
 
 function Images (props) {
     
     const changeImage = () => {
-          ImagePicker.openPicker({
-            width: 360,
-            height: 360,
-            cropping: true,
-            compressImageQuality: 0.7,
-            mediaType: 'photo',
-          }).then(image => {
-            props.addImage(image.path);
-          });
+          ImagePicker.launchImageLibrary({},(value)=> {
+              console.log(value);
+              props.addImage(`file://${value.path}`)
+          })
     }
     
     return (
