@@ -1,8 +1,8 @@
 import React from 'react';
 import { StyleSheet, Dimensions } from 'react-native';
-import MapView, { ProviderPropType } from 'react-native-maps';
+import MapView, { ProviderPropType,Marker } from 'react-native-maps';
 import {connect} from 'react-redux';
-import {navigateTo} from '../redux/actions';
+import {navigateTo,setCordinate} from '../redux/actions';
 import MarkerMore from './markerMore';
 
 const { width, height } = Dimensions.get('window');
@@ -13,14 +13,10 @@ const LONGITUDE = 30.524518;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
-function log(eventName, e) {
-  console.log(eventName, e.nativeEvent);
-}
 
 class MarkerTypes extends React.Component {
 
   render() {
-
     return (
         <MapView
           provider={this.props.provider}
@@ -36,24 +32,20 @@ class MarkerTypes extends React.Component {
           loadingBackgroundColor='#EAEAEA'
           showsMyLocationButton={false}
         >
-          {
+          {this.props.new?
+            <Marker
+            coordinate={{latitude: LATITUDE,
+                      longitude: LONGITUDE,}}
+            onDragEnd={e => this.props.setCordinate(e.nativeEvent.coordinate)}
+            draggable
+          />:
             this.props.state.data.testList.map((item,index) => {
               return (
                 <MarkerMore item={item} key={index}/>
               )
             })
           }
-          
-
-          {/* <Marker
-            coordinate={this.state.b}
-            onSelect={e => log('onSelect', e)}
-            onDrag={e => log('onDrag', e)}
-            onDragStart={e => log('onDragStart', e)}
-            onDragEnd={e => log('onDragEnd', e)}
-            onPress={e => log('onPress', e)}
-            draggable
-          /> */}
+        
         </MapView>
     );
   }
@@ -72,7 +64,8 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      navigateTo: (screen) => dispatch(navigateTo(screen))
+      navigateTo: (screen) => dispatch(navigateTo(screen)),
+      setCordinate: (cordinate) => dispatch(setCordinate(cordinate))
   }
 }
 

@@ -6,8 +6,8 @@ import {navigateTo} from '../redux/actions';
 import Messenger from '../btns/messenger';
 import LikesDith from '../btns/likesDis';
 const { width, height } = Dimensions.get('window');
+import BackBtn from '../btns/back';
 
-import BackI from '../icon/item/back.svg';
 import CalendarI from '../icon/item/calendar.svg';
 import TimeI from '../icon/item/time.svg';
 import CategoryI from '../icon/item/category.svg';
@@ -37,9 +37,7 @@ class Details extends Component{
         <ImageBackground style={{width: width,height: height - 22,padding: 0,margin: 0}} source={require('../icon/background.jpg')}>
             <View style={styles.container}>
                 <View style={styles.headerConteiner}>
-                    <TouchableOpacity onPress={()=>this.props.navigateTo('Back')}>
-                        <BackI/>
-                    </TouchableOpacity>
+                    <BackBtn/>
                     <Text style={styles.nameText} numberOfLines={2}>{name}</Text>
                     <TouchableOpacity>
                         <Messenger/>
