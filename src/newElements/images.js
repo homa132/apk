@@ -10,14 +10,16 @@ const { width, height } = Dimensions.get('window');
 function Images (props) {
     
     const changeImage = () => {
-          ImagePicker.launchImageLibrary({},(value)=> {
-              console.log(value);
-              props.addImage(`file://${value.path}`)
+          ImagePicker.launchImageLibrary({
+            mediaType: 'photo',
+            quality: 0.7,
+            noData: true
+          },(value)=> {
+              props.addImage(value.fileName,`file://${value.path}`)
           })
     }
-    
     return (
-        <ScrollView horizontal={true} style={styles.imagesConteiner}>
+        <ScrollView horizontal={true} style={[styles.imagesConteiner,!props.state.images.length?{width: 120,alignSelf: 'center'}:{width:width - 20}]}>
 
             <TouchableOpacity onPress={()=>changeImage()}
                 style={styles.addPhotoConteiner}>
@@ -26,7 +28,7 @@ function Images (props) {
             {props.state.images.map((item,index)=> {
                 return(
                     <Image style={styles.image} 
-                    source={{uri: item}}
+                    source={{uri: item.path}}
                     key={index}/>
                 )
             })}
@@ -42,18 +44,17 @@ const styles = StyleSheet.create({
         marginTop: 25,
         marginHorizontal: 10,
         flexDirection: 'row',
-        width: width - 20
     },
     addPhotoConteiner: {
         width: 120,
-        height: 120
+        height: 120,
     },
     image: {
         height: 120,
         width: 120,
         marginLeft: 10,
         borderRadius: 10,
-        borderColor: '#13D9D9',
+        borderColor: '#11A1A1',
         borderWidth: 1
     },
 })
@@ -66,7 +67,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        addImage: (image) => dispatch(addImage(image))
+        addImage: (name,path) => dispatch(addImage(name,path))
     }
 }
 

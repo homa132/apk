@@ -14,3 +14,4 @@ export const CHANGE_DATE = 'CHANGE_DATE';
 export const CAHNGE_TIME = 'CAHNGE_TIME';
 export const SET_TEXT_DATE = 'SET_TEXT_DATE';
 export const SET_CORDINATE = 'SET_CORDINATE';
+export const SET_INITIAL_STATE = 'SET_INITIAL_STATE';

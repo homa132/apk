@@ -23,19 +23,19 @@ function ChangeCategory (props) {
 const styles = StyleSheet.create({
     typeConteiner: {
         width: 180,
-        height: 30,
+        height: 40,
         flexDirection: 'row',
         alignSelf: 'center',
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#13D9D9',
-        borderRadius: 20,
+        borderRadius: 10,
         paddingHorizontal: 10,
         marginTop: 20
     },
     pickerType: {
         width: 140,
-        height: 28,
+        height: 38,
     },
 })
 

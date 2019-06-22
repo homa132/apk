@@ -1,5 +1,5 @@
 import {SET_CORDINATE,ADD_IMAGES,CHANGE_CATEGORY,CHANGE_DATE,CAHNGE_TIME,
-    SET_TEXT_DATE} from '../const';
+    SET_TEXT_DATE,SET_INITIAL_STATE} from '../const';
 
 const initState = {
     name: '',
@@ -20,13 +20,13 @@ const initState = {
     }
 }
 
-
+const saveInitialState = initState;
 
 export default (state = initState, action) => {
-    console.log(state);
     switch (action.type) {
     case ADD_IMAGES:
-        return {...state,images:[action.image,...state.images] }
+        
+        return {...state,images:[{path:action.image,name:action.nameImg},...state.images] }
     case CHANGE_CATEGORY:
         return {...state,type: action.category}
     case CHANGE_DATE:
@@ -35,6 +35,8 @@ export default (state = initState, action) => {
         return {...state,time: action.time}
     case SET_CORDINATE:
         return {...state,location: {latitude:action.cordinate.latitude,longitude:action.cordinate.longitude}}
+    case SET_INITIAL_STATE: 
+        return {...saveInitialState}
     case SET_TEXT_DATE:
         let social = {};
         (action.what == 'telegram')?social = {...state,telegram:action.value}:null;

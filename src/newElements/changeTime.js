@@ -41,9 +41,9 @@ function ChangeTime (props) {
 const styles = StyleSheet.create({
     dateConteiner: {
         width: 160,
-        height: 30,
+        height: 40,
         backgroundColor: '#13D9D9',
-        borderRadius: 20,
+        borderRadius: 10,
         paddingHorizontal:10,
         justifyContent: 'center',
         alignItems: 'center',

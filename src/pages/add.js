@@ -46,6 +46,7 @@ class Add extends Component{
                         <SaveBtn/>
                     </View>
 
+                    <Text style={styles.optionalText}>Обязательная информация</Text>
                     <NameInput/>
                     <Images/>
                     <ChangeType/>
@@ -61,17 +62,18 @@ class Add extends Component{
                                     placeholder="Подробности события"
                                     multiline={true} />
                     </View>
+                    <Social name='locationText'/>
+                    <View style={styles.map}>
+                        <Map new={true}/>
+                    </View>
+
+                    <Text style={styles.optionalText}>Дополнительная информация</Text>
 
                     <Social name='telegram'/>
                     <Social name='viber'/>
                     <Social name='insta'/>
                     <Social name='facebook'/>
                     <Social name='web'/>
-                    <Social name='locationText'/>
-
-                    <View style={styles.map}>
-                        <Map new={true}/>
-                    </View>
 
                     <View style={{width:width,height: 60}}></View>
                 </ScrollView>
@@ -90,6 +92,15 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
       },
+    optionalText: {
+        marginVertical: 10,
+        alignSelf: 'center',
+        color: '#8C8C8C',
+        fontSize: 18,
+        textShadowColor: '#717171',
+        textShadowOffset: {width: 0, height: 0},
+        textShadowRadius: 50,
+    },
     bottomNav: {
         position: 'absolute',
         bottom: 5,
@@ -101,7 +112,7 @@ const styles = StyleSheet.create({
         width: width,
         alignItems: 'center',
         height: 60,
-        borderBottomColor: '#13D9D9',
+        borderBottomColor: '#11A1A1',
         borderBottomWidth: 2,
         paddingLeft: 20,
         paddingRight: 10,
@@ -117,7 +128,7 @@ const styles = StyleSheet.create({
 
     moreText: {
         width: width - 30,
-        borderBottomColor: '#13D9D9',
+        borderBottomColor: '#11A1A1',
         borderBottomWidth: 2,
         fontSize: 16,
         marginTop: 20
@@ -132,17 +143,18 @@ const styles = StyleSheet.create({
     inputItem: {
         width: width - 80,
         height: 30,
-        borderBottomColor: '#13D9D9',
+        borderBottomColor: '#11A1A1',
         borderBottomWidth: 2,
         paddingVertical: 0,
     },
     map: {
-        width: width,
-        height: width,
-        borderRadius: 30,
-        borderColor: '#13D9D9',
+        width: width - 80,
+        height: width + 80,
+        borderRadius: 20,
+        borderColor: '#11A1A1',
         borderWidth: 1.4,
-        overflow: 'hidden'
+        overflow: 'hidden',
+        alignSelf: 'center',
     }
 })
 

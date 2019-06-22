@@ -1,6 +1,6 @@
 import {GET_DATA,NAVIGATE_TO,FILTER_LIST,SET_ACTIVE_ITEM,SET_CORDINATE,
     ADD_IMAGES,CHANGE_CATEGORY,CHANGE_DATE,CAHNGE_TIME,
-    SET_TEXT_DATE} from './const'
+    SET_TEXT_DATE,SET_INITIAL_STATE} from './const'
 
 export const getData = (newData) => {
     return {
@@ -34,10 +34,11 @@ export const setActiveItem = (heshItem) => {
 
 // create new
 
-export const addImage = (image) => {
+export const addImage = (nameImg,image) => {
+
     return {
         type:ADD_IMAGES,
-        image
+        image,nameImg
     }
 }
 
@@ -73,5 +74,11 @@ export const setCordinate = (cordinate) => {
     return {
         type:SET_CORDINATE,
         cordinate
+    }
+}
+
+export const setInitialState = () => {
+    return {
+        type:SET_INITIAL_STATE
     }
 }

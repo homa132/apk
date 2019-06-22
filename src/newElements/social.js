@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
     inputItem: {
         width: width - 80,
         height: 30,
-        borderBottomColor: '#13D9D9',
+        borderBottomColor: '#11A1A1',
         borderBottomWidth: 2,
         paddingVertical: 0,
     },

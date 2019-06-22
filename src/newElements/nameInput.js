@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         ,width: width
     },
     nameText: {
-        borderBottomColor: '#13D9D9',
+        borderBottomColor: '#11A1A1',
         borderBottomWidth: 2,
         width: width - 100,
         marginTop: 20,
