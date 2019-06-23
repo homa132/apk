@@ -3,6 +3,7 @@ import {View,Text,StyleSheet,ImageBackground,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import NavBtn from '../navBtn/navBtn';
 import List from '../mainSecondItems/mainSecondItems';
+
 const { width, height } = Dimensions.get('window');
 
 class MainSecond extends Component{
@@ -13,9 +14,6 @@ class MainSecond extends Component{
         return (
             <View style={styles.container}>
                 <List/>
-                <View style={styles.bottomNav}>
-                    <NavBtn/>
-                </View>
             </View>
         )
     }
@@ -36,5 +34,6 @@ const styles = StyleSheet.create({
       },
 
 })
+
 
 export default connect()(MainSecond);

@@ -120,9 +120,6 @@ class Details extends Component{
                     <View style={{width:width,height: 50}}></View>
                 </ScrollView>
 
-                <View style={styles.bottomNav}>
-                    <NavBtn/>
-                </View>
             </View>
         </ImageBackground>
         )
@@ -145,11 +142,6 @@ const styles = StyleSheet.create({
         textShadowRadius: 15,
         letterSpacing: 2,
         maxWidth: 200
-    },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 5,
-        flexDirection: 'row',
     },
     headerConteiner: {
         flexDirection: 'row',

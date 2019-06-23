@@ -1,20 +1,26 @@
 import React from 'react';
-import { StyleSheet, View,Text,TouchableOpacity } from 'react-native';
+import { StyleSheet, View,Text,TouchableOpacity,Image } from 'react-native';
 import { Marker, Callout } from 'react-native-maps';
 import {connect} from 'react-redux';
 import {navigateTo,setActiveItem} from '../redux/actions';
 
 function MarkerMore (props) {
-    const {location,name,time,date,category,hesh} = props.item
+    
+  const {location,name,time,date,category,hesh} = props.item;
+
     return(
         <Marker
             coordinate={location}
           >
+            <View>
+              <Image source={{uri: 'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
+                    style={{width: 30,height: 30,borderRadius: 30}}/>
+            </View>
             <Callout 
             style={styles.plainView}
             onPress={() => {
               props.setActiveItem(hesh);
-              props.navigateTo('Details');
+              props.state.navigation.push('Details');
             }}
             >
               <View style={styles.modalContent}>
@@ -45,7 +51,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
       width:260,
-      height: 180,
+      height: 150,
       borderColor: '#3AE7FF',
       borderWidth: 2,
       borderRadius: 5,
@@ -75,7 +81,7 @@ const styles = StyleSheet.create({
       width: 240,
       flexDirection: 'row',
       justifyContent: 'space-between',
-      marginTop: 5
+      alignSelf: 'center',
     },
     moreText: {
       fontSize: 15,
@@ -88,7 +94,7 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
       borderTopColor: '#3AE7FF',
       borderTopWidth: 1,
-      alignItems: 'flex-end'
+      alignItems: 'center'
     },
     category: {
       fontSize: 14,
@@ -120,5 +126,10 @@ const styles = StyleSheet.create({
     }
   }
 
+  const mapStateToProps = (state) => {
+    return {
+      state: state.navigation
+    }
+  }
 
-export default connect(null,mapDispatchToProps)(MarkerMore);
+export default connect(mapStateToProps,mapDispatchToProps)(MarkerMore);

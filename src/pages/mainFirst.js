@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Dimensions, View,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {getData} from '../redux/actions'
+import {getData,setNavigation} from '../redux/actions'
 import firebase from 'react-native-firebase';
 import Map from '../map/map';
 import NavBtn from '../navBtn/navBtn';
@@ -20,6 +20,7 @@ class App extends Component {
 
   componentDidMount() {
     this.SearchData();
+    this.props.setNavigation(this.props.navigation)
   }
 
   SearchData(){
@@ -55,9 +56,6 @@ class App extends Component {
           <View style={styles.mapConteiner}>
               <Map/>
           </View>
-          <View style={styles.bottomNav}>
-            <NavBtn/>
-          </View>
         </View>
       );
     }
@@ -76,6 +74,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getData: (data) => dispatch(getData(data)),
+    setNavigation: (nav) => dispatch(setNavigation(nav))
   }
 }
 

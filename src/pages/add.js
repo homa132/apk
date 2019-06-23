@@ -77,9 +77,6 @@ class Add extends Component{
 
                     <View style={{width:width,height: 60}}></View>
                 </ScrollView>
-                <View style={styles.bottomNav}>
-                    <NavBtn/>
-                </View>
             </View>
         </ImageBackground>
         )
@@ -101,11 +98,6 @@ const styles = StyleSheet.create({
         textShadowOffset: {width: 0, height: 0},
         textShadowRadius: 50,
     },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 5,
-        flexDirection: 'row',
-      },
     headerConteiner: {
         flexDirection: 'row',
         justifyContent: 'space-between',

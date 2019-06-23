@@ -1,6 +1,6 @@
 import {GET_DATA,NAVIGATE_TO,FILTER_LIST,SET_ACTIVE_ITEM,SET_CORDINATE,
     ADD_IMAGES,CHANGE_CATEGORY,CHANGE_DATE,CAHNGE_TIME,
-    SET_TEXT_DATE,SET_INITIAL_STATE} from './const'
+    SET_TEXT_DATE,SET_INITIAL_STATE,SET_NAVIGATION} from './const'
 
 export const getData = (newData) => {
     return {
@@ -23,6 +23,14 @@ export const navigateTo = (screen) => {
         screen
     }
 }
+
+export const setNavigation = (navigation) => {
+    return {
+        type: SET_NAVIGATION,
+        navigation
+    }
+}
+
 
 //active item
 export const setActiveItem = (heshItem) => {

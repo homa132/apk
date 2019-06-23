@@ -11,9 +11,6 @@ class Likes extends Component{
         return (
             <View style={styles.container}>
                 <Text>Likes</Text>
-                <View style={styles.bottomNav}>
-                    <NavBtn/>
-                </View>
             </View>
         )
     }
@@ -26,11 +23,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
       },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 0,
-        flexDirection: 'row',
-      }
 })
 
 export default connect()(Likes);
