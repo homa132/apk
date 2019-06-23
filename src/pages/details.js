@@ -1,8 +1,7 @@
 import React,{Component} from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground} from 'react-native';
 import {connect} from 'react-redux';
-import NavBtn from '../navBtn/navBtn';
-import {navigateTo} from '../redux/actions';
+import {navigateTo,setNavigation} from '../redux/actions';
 import Messenger from '../btns/messenger';
 import LikesDith from '../btns/likesDis';
 const { width, height } = Dimensions.get('window');
@@ -27,6 +26,11 @@ class Details extends Component{
         return data.testList.filter((item,index) => {
             return navigation.heshItem == item.hesh
         })
+    }
+
+
+    componentDidMount(){
+        this.props.setNavigation(this.props.navigation)
     }
 
     render(){
@@ -257,7 +261,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigateTo: (screen) => dispatch(navigateTo(screen))
+        navigateTo: (screen) => dispatch(navigateTo(screen)),
+        setNavigation: (nav) => dispatch(setNavigation(nav))
     }
 }
 

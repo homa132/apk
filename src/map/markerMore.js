@@ -34,9 +34,7 @@ function MarkerMore (props) {
                       <Text style={styles.category}>Категори: {category.name}</Text>
                       <Text style={styles.category}>Учасников: 178</Text>
                     </View>
-                    <TouchableOpacity style={styles.buttonConteiner}>
-                      <Text style={styles.buttonText}>Подробнее</Text>
-                    </TouchableOpacity>
+                      <Text style={styles.buttonText} numberOfLines={2}>Автор: Привет пака пs</Text>
                   </View>
               </View>
             </Callout>
@@ -105,6 +103,7 @@ const styles = StyleSheet.create({
       fontSize: 15,
       color: '#3C3C3C',
       textAlign: 'center',
+      width: 120
     },
     buttonConteiner: {
       width: 100,

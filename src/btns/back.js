@@ -2,12 +2,11 @@ import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import BackI from '../icon/item/back.svg';
-import {navigateTo} from '../redux/actions';
 
 function Back (props) {
 
     return (
-        <TouchableOpacity onPress={()=> props.navigateTo('Back')}>
+        <TouchableOpacity onPress={()=> console.log(props.state.navigation.goBack())}>
             <BackI/>
         </TouchableOpacity>
     )
@@ -15,8 +14,13 @@ function Back (props) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        navigateTo: (screen) => dispatch(navigateTo(screen))
     }
 }
 
-export default connect(null,mapDispatchToProps)(Back);
+const mapStateToProps = (state) => {
+    return {
+        state: state.navigation
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Back);
