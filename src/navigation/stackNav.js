@@ -1,4 +1,5 @@
 import React from 'react';
+import {Image} from 'react-native';
 import { createStackNavigator,createBottomTabNavigator } from "react-navigation";
 import mainFirst from '../pages/mainFirst';
 import mainSecond from '../pages/mainSecond';
@@ -7,16 +8,6 @@ import Likes from '../pages/likes';
 import Acc from '../pages/login';
 import Details from '../pages/details';
 
-import MapI from '../icon/nav/map.svg';
-import MapActiveI from '../icon/nav/mapActive.svg';
-import TopI from '../icon/nav/top.svg';
-import TopActiveI from '../icon/nav/topActive.svg';
-import AddI from '../icon/nav/add.svg';
-import AddActiveI from '../icon/nav/addActive.svg';
-import ChatI from '../icon/nav/myLike.svg';
-import ChatActiveI from '../icon/nav/myLikeActive.svg';
-import AccI from '../icon/nav/accaunt.svg';
-import AccActiveI from '../icon/nav/accauntActive.svg';
 
 const mapStack = createStackNavigator({
     MainFirst: mainFirst,
@@ -33,7 +24,7 @@ const AppNavigator = createBottomTabNavigator(
       screen: mapStack,
       navigationOptions: {
         tabBarIcon: ({focused})=> {
-            return focused?(<MapActiveI/>):(<MapI/>);
+            return focused?<Image source={require('../icon/nav/MapIActive.png')}/>:<Image source={require('../icon/nav/MapI.png')}/>;
         }
       }
     },
@@ -41,7 +32,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: mainSecond,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?(<TopActiveI/>):(<TopI/>);
+                return focused?<Image source={require('../icon/nav/TopIActive.png')}/>:<Image source={require('../icon/nav/TopI.png')}/>;
             }
           }
       },
@@ -49,7 +40,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Add,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?(<AddActiveI/>):(<AddI/>);
+                return focused?<Image source={require('../icon/nav/AddIActive.png')}/>:<Image source={require('../icon/nav/AddI.png')}/>;
             }
           }
       },
@@ -57,7 +48,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Likes,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?(<ChatActiveI/>):(<ChatI/>);
+                return focused?<Image source={require('../icon/nav/ChatIActive.png')}/>:<Image source={require('../icon/nav/ChaI.png')}/>;
             }
           }
       },
@@ -65,7 +56,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Acc,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?(<AccActiveI/>):(<AccI/>);
+                return focused?<Image source={require('../icon/nav/AccIActive.png')}/>:<Image source={require('../icon/nav/AccI.png')}/>;
             }
           }
       },
@@ -76,9 +67,9 @@ const AppNavigator = createBottomTabNavigator(
         style: {
             backgroundColor: '#EAEAEA',
         },
-        showIcon: true,
-        showLabel: false,
-        activeBackgroundColor: '#CBCBCB'
+    showIcon: true,
+    showLabel: false,
+    activeBackgroundColor: '#CBCBCB'
     }
   }
 );

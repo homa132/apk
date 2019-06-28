@@ -3,6 +3,7 @@ package com.apk;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.imagepicker.ImagePickerPackage;
 import com.reactnative.ivpusic.imagepicker.PickerPackage;
 import com.horcrux.svg.SvgPackage;
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new AsyncStoragePackage(),
             new ImagePickerPackage(),
             new PickerPackage(),
             new SvgPackage(),

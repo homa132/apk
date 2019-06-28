@@ -46,6 +46,7 @@
 		A4313BB080E04A4884CE73D5 /* libRNSVG-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 006D18F79AA244C6B4BC5623 /* libRNSVG-tvOS.a */; };
 		E5B4BEC2BC0F4076A193299E /* libimageCropPicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C7A2C90D0E7A4ED3891D02C5 /* libimageCropPicker.a */; };
 		08F68230E81F430ABD8E3194 /* libRNImagePicker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CA36ACF43DE494D8AC4E40A /* libRNImagePicker.a */; };
+		0D5E03F4C3854D899AC34339 /* libRNCAsyncStorage.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 49104A3CF084422EBBCDC5A6 /* libRNCAsyncStorage.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -365,6 +366,8 @@
 		C7A2C90D0E7A4ED3891D02C5 /* libimageCropPicker.a */ = {isa = PBXFileReference; name = "libimageCropPicker.a"; path = "libimageCropPicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		9AEAC49BCB434433A1BF52CA /* RNImagePicker.xcodeproj */ = {isa = PBXFileReference; name = "RNImagePicker.xcodeproj"; path = "../node_modules/react-native-image-picker/ios/RNImagePicker.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
 		6CA36ACF43DE494D8AC4E40A /* libRNImagePicker.a */ = {isa = PBXFileReference; name = "libRNImagePicker.a"; path = "libRNImagePicker.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		1194B707D78E4A28913DEFB5 /* RNCAsyncStorage.xcodeproj */ = {isa = PBXFileReference; name = "RNCAsyncStorage.xcodeproj"; path = "../node_modules/@react-native-community/async-storage/ios/RNCAsyncStorage.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		49104A3CF084422EBBCDC5A6 /* libRNCAsyncStorage.a */ = {isa = PBXFileReference; name = "libRNCAsyncStorage.a"; path = "libRNCAsyncStorage.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -398,6 +401,7 @@
 				F4F1A79143E44131812ABDF5 /* libRNSVG.a in Frameworks */,
 				E5B4BEC2BC0F4076A193299E /* libimageCropPicker.a in Frameworks */,
 				08F68230E81F430ABD8E3194 /* libRNImagePicker.a in Frameworks */,
+				0D5E03F4C3854D899AC34339 /* libRNCAsyncStorage.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -594,6 +598,7 @@
 				0ED257A7D3DB4C3F9A7430BF /* RNSVG.xcodeproj */,
 				D63FB3231213425F95B64A4B /* imageCropPicker.xcodeproj */,
 				9AEAC49BCB434433A1BF52CA /* RNImagePicker.xcodeproj */,
+				1194B707D78E4A28913DEFB5 /* RNCAsyncStorage.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";
@@ -1228,6 +1233,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1236,6 +1242,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Debug;
@@ -1264,6 +1271,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1272,6 +1280,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Release;
@@ -1299,6 +1308,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Debug;
@@ -1325,6 +1335,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Release;
@@ -1361,6 +1372,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1369,6 +1381,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Debug;
@@ -1405,6 +1418,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1413,6 +1427,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Release;
@@ -1448,6 +1463,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1456,6 +1472,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Debug;
@@ -1491,6 +1508,7 @@
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 					"\"$(SRCROOT)/$(TARGET_NAME)\"",
+					"\"$(SRCROOT)/$(TARGET_NAME)\"",
 				);
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1499,6 +1517,7 @@
 					"$(SRCROOT)\..\node_modules\react-native-svg\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-crop-picker\ios/**",
 					"$(SRCROOT)\..\node_modules\react-native-image-picker\ios",
+					"$(SRCROOT)\..\node_modules\@react-native-community\async-storage\ios",
 				);
 			};
 			name = Release;
