@@ -34,11 +34,11 @@ public class MainApplication extends Application implements ReactApplication {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
             new AsyncStoragePackage(),
+            new RNGestureHandlerPackage(),
             new ImagePickerPackage(),
             new PickerPackage(),
             new SvgPackage(),
             new RNFirebasePackage(),
-            new RNGestureHandlerPackage(),
             new RNFirebaseFirestorePackage(),
             new MapsPackage(),
             new RNFirebaseStoragePackage()

@@ -19,6 +19,7 @@ const loginStack = createStackNavigator({
 {
   headerMode: 'none',
   mode: 'modal',
+  initialRouteName: 'Auth'
 })
 
 const Navigation =  createAppContainer(createSwitchNavigator({

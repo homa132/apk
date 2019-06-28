@@ -1,7 +1,9 @@
 import React,{Component} from 'react';
-import {View,StyleSheet,Text,TouchableOpacity,Dimensions,TextInput,ImageBackground,Image,ScrollView} from 'react-native';
+import {View,StyleSheet,Text,TouchableOpacity,Dimensions,TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
+import GoogleI from '../icon/register/googleI.svg';
+import FacebookI from '../icon/register/facebookI.svg';
 
 const { width, height } = Dimensions.get('window');
 
@@ -24,43 +26,52 @@ class SignInScreen extends Component {
     
     render() {
       return (
-          <ImageBackground source={require('../img/background/background1.jpg')} style={{width: width,height: height}}>
-            <View style={styles.conteiner}>
+        <View style={styles.conteiner}>
+            <View style={styles.headerConteiner}>
+                <Text style={styles.headerText}>
+                Авторизация
+                </Text>
+            </View>
 
-                <View style={styles.headerContiner}>
-                    <TouchableOpacity style={styles.headerBtnBackConteiner}>
-                        <Image style={styles.headerBtnBack} source={require('../img/icons/btns/btnBack.png')}/>
+            <View style={styles.mainConteiner}>
+                <TextInput placeholder='Электронный адрес' value={this.state.login} 
+                    onChangeText={(login) => this.setState({login})}
+                    style={styles.inputs}/>
+                <TextInput placeholder='Пароль' value={this.state.password} 
+                    onChangeText={(password) => this.setState({password})}
+                    style={styles.inputs}/>
+
+
+                <TouchableOpacity style={styles.buttonConteiner} onPress={this._signInAsync}>
+                    <Text style={styles.buttonText}>Войти</Text>
+                </TouchableOpacity>
+
+                <View style={{flexDirection: 'row',alignItems: 'center',justifyContent: 'space-between',width: width - 60,height:10}}>
+                    <View style={{width: 100,heigth: 1,borderWidth:1,borderColor:'#13D9D9'}}/>
+                    <Text style={{fontSize: 18,color: '#5F5F5F',letterSpacing:1}}>или</Text>
+                    <View style={{width: 100,heigth: 1,borderWidth:1,borderColor:'#13D9D9'}}/>
+                </View>
+                
+                <Text style={{fontSize: 17, color: '#000000',marginTop: 25}}>
+                Войти при помощи соцсетей
+                </Text>
+
+                <View style={{marginTop: 20,flexDirection: 'row',justifyContent: 'space-around',alignItems: 'center',width: 170}}>
+                    <TouchableOpacity>
+                        <GoogleI/>
                     </TouchableOpacity>
-                    <View style={styles.headerTextConteiner}>
-                        <Text style={styles.headerText}>Регистрация</Text>
-                    </View>
+                    <TouchableOpacity>
+                        <FacebookI/>
+                    </TouchableOpacity>
                 </View>
 
-                <ScrollView>
-                    <View style={styles.mainConteiner}>
-                        <View style={styles.inpuntsConteiner}>
-                            <TextInput placeholder='Введите эл. почту' style={styles.input} numberOfLines={1} 
-                                        placeholderTextColor='rgba(100, 72, 0, 0.7)'/>
-                            <TextInput placeholder='Введите пароль' style={styles.input} numberOfLines={1} 
-                                        placeholderTextColor='rgba(100, 72, 0, 0.7)'/>
-                            <TextInput placeholder='Введите ник' style={styles.input} numberOfLines={1} 
-                                        placeholderTextColor='rgba(100, 72, 0, 0.7)'/>
-                        </View>
+                <Text style={{fontSize: 14,marginTop: 25, color:'#000000',marginTop:30}}>Еще нет аккаунта?</Text>
 
-                        <View style={styles.changeGenderConteiner}>
-                            <Text style={styles.changeGenderText}>Выберите пол</Text>
-                            <View style={styles.genderConteiner}>
-                                <View style={styles.genderItem}>
-                                    <Image style={styles.genderImage} source={require('../img/icons/registerScreen/man.png')}/>
-                                </View>
-                            </View>
-                        </View>
-                    </View>
-                </ScrollView>
-
+                <TouchableOpacity style={styles.registerConteiner} onPress={()=>this.props.navigation.navigate('Register')}>
+                    <Text style={styles.registerText}>Зарегестрируйтесь</Text>
+                </TouchableOpacity>
             </View>
-          </ImageBackground>
-
+        </View>
       );
     }
   }
@@ -71,82 +82,61 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
         alignItems: 'center',
     },
-    headerContiner: {
-        height: 60,
+    headerConteiner: {
         width: width,
-        flexDirection: 'row',
+        height: 60,
+        justifyContent: 'center',
+        borderBottomColor: '#13D9D9',
+        borderBottomWidth: 2,
         alignItems: 'center',
-        paddingHorizontal: 5,
-        justifyContent: 'space-between',
-        borderBottomColor: '#E8BC4D',
-        borderBottomWidth: 2
-    },
-    headerBtnBackConteiner: {
-        width: 60,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center'
-    },
-    headerBtnBack: {
-        width: 50,
-        height: 50,
-    },
-    headerTextConteiner: {
-        width: width - 70,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center'
     },
     headerText: {
-        color: '#644800',
-        fontSize: 28,
-        letterSpacing: 0.7,
-        textShadowColor: 'rgba(100, 72, 0, 0.6)',
-        textShadowOffset: {width: 0, height: 4},
-        textShadowRadius: 4
+        color: '#000000',
+        fontSize: 25,
+        textShadowColor: '#656565',
+        textShadowOffset: {width: 0, height: 0},
+        textShadowRadius: 50,
     },
     mainConteiner: {
-        width: 240,
-        flexDirection: 'column',
-        justifyContent: 'flex-start',
-        alignContent: 'center',
+        width: width - 60,
+        marginTop: 30,
+        alignItems: 'center'
     },
-    inpuntsConteiner: {
-        width: 240,
-        marginTop: 15,
-    },
-    input: {
-        fontSize: 17,
-        color: '#644800',
-        borderBottomColor: '#644800',
-        borderBottomWidth: 2,
+    inputs: {
+        borderBottomColor: '#13D9D9',
+        borderBottomWidth: 1,
         textAlign: 'center',
-        paddingBottom: 3,
         marginBottom: 10,
+        fontSize: 17,
+        width: 280
     },
-    changeGenderConteiner: {
-        width: 240,
-        marginTop: 15,
+    buttonConteiner: {
+        width: 280,
+        height: 40,
+        backgroundColor: '#13D9D9',
+        borderRadius: 15,
         justifyContent: 'center',
-        flexDirection: 'column',
         alignItems: 'center',
+        marginVertical: 20,
+        marginBottom: 30,
+
     },
-    changeGenderText: {
+    buttonText: {
         fontSize: 20,
-        color: '#644800'
+        color: '#555555'
     },
-    genderImage: {
-        width: 42,
-        height: 42
-    },
-    genderItem: {
-        width: 50,
-        height: 50,
-        borderColor: '#E8BC4D',
-        borderWidth: 2,
-        alignItems: 'center',
+    registerConteiner: {
+        width: 280,
+        borderRadius: 15,
+        backgroundColor: '#00B775',
+        height: 40,
         justifyContent: 'center',
-        borderRadius: 10
+        alignItems: 'center',
+        marginTop: 20
+    },
+    registerText: {
+        color: '#FFFFFF',
+        fontSize: 20
     }
 })
 
