@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {View, Text,TouchableOpacity,StyleSheet,TextInput,Dimensions,Image,ImageBackground,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,17 +13,17 @@ class Register extends Component{
         password: '',
         name: '',
         gender: 'default',
-        nameImg: '',
-        img: ''
+        img: '',
+        error: false
     }
 
     changeImage = () => {
         ImagePicker.launchImageLibrary({
             mediaType: 'photo',
-            quality: 0.7,
+            quality: 0.45,
             noData: true
           },({path,fileName})=> {
-              this.setState({img:`file://${path}`,nameImg:fileName})
+              this.setState({img:`file://${path}`})
           })
     }
 
@@ -34,67 +35,88 @@ class Register extends Component{
         )
     }
 
+    register = async () => {
+        let err = false;
+        const {email,password,img,error} = this.state;
+            const register = await firebase.auth().createUserWithEmailAndPassword(email,password).catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            this.setState({error: true});
+            err = true;
+          });
+          err?err=false:null;
+          if(!err){
+            const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
+            await firebase.firestore().collection('users').doc(register.user.uid).set({...this.state,urlImg:image.downloadURL});
+            this.props.navigation.navigate('Auth')
+          }
+
+    }
 
     render() {
-
-        const {gender,img} = this.state;
+        const {gender,img,error} = this.state;
 
         return (
-            <ImageBackground source={require('../img/background/background1.jpg')} style={{width: width,height: height}}>
+            <ImageBackground source={require('../img/background/background1.jpg')} style={{width: '100%', height: '100%'}}>
               <View style={styles.conteiner}>
   
-                  <View style={styles.headerContiner}>
-                      <TouchableOpacity style={styles.headerBtnBackConteiner} onPress={()=>this.props.navigation.goBack()}>
-                          <Image style={styles.headerBtnBack} source={require('../img/icons/btns/btnBack.png')}/>
-                      </TouchableOpacity>
-                      <View style={styles.headerTextConteiner}>
-                          <Text style={styles.headerText}>Регистрация</Text>
-                      </View>
-                  </View>
+                    <View style={styles.headerContiner}>
+                        <TouchableOpacity style={styles.headerBtnBackConteiner} onPress={()=>this.props.navigation.goBack()}>
+                            <Image style={styles.headerBtnBack} source={require('../img/icons/btns/btnBack.png')}/>
+                        </TouchableOpacity>
+                        <View style={styles.headerTextConteiner}>
+                            <Text style={styles.headerText}>Регистрация</Text>
+                        </View>
+                    </View>
 
-                  <View style={styles.mainConteiner}>
-  
-                  <ScrollView style={{flex: 1,height: height - 150}}>
-                          <View style={styles.inpuntsConteiner}>
-                                {this.createInput('Введите эл. почту','email')}
-                                {this.createInput('Введите пароль','password')}
-                                {this.createInput('Введите ник','name')}
-                          </View>
-  
-                          <View style={styles.changeGenderConteiner}>
-                              <Text style={styles.changeGenderText}>Выберите пол</Text>
-                              <View style={styles.genderConteiner}>
-                                  <TouchableOpacity onPress={() => this.setState({gender: 'man'})}>
-                                      <View style={[styles.genderItem,gender == 'man'?{backgroundColor: '#FFF960'}:null]}>
-                                          <Image style={styles.genderImage} source={require('../img/icons/registerScreen/man.png')}/>
-                                      </View>
-                                  </TouchableOpacity>
-                                  <TouchableOpacity onPress={() => this.setState({gender: 'woman'})}>
-                                      <View style={[styles.genderItem,gender == 'woman'?{backgroundColor: '#FFF960'}:null]}>
-                                          <Image style={styles.genderImage} source={require('../img/icons/registerScreen/woman.png')}/>
-                                      </View>
-                                  </TouchableOpacity>
-                              </View>
-                          </View>
-  
-                          <View style={styles.addImageConteiner}>
-                              <Text style={styles.addImageText}>Добавьте свое фото или свой логотип, он будет отображаться на Ваших событиях</Text>
-                              <TouchableOpacity style={styles.addImageBtnConteiner} onPress={this.changeImage}>
-                                  {img == ''?<Image source={require('../img/icons/registerScreen/AddImage.png')} 
-                                          style={styles.addImageImg}/>:
-                                          <Image source={{uri: img}} style={styles.addImageImg}/>}
-                                  
-                              </TouchableOpacity>
-                          </View>
-  
-                          <TouchableOpacity>
-                              <View style={styles.btnRegistrConteiner}>
-                                  <Text style={styles.btnRegistrText} numberOfLines={1}>Зарегистрировать</Text>
-                              </View>
-                          </TouchableOpacity>
-                      
-                  </ScrollView>
-                  </View>
+                    <ScrollView>
+                    <View style={styles.mainConteiner}>
+
+                        <View style={styles.inpuntsConteiner}>
+                            {this.createInput('Введите эл. почту','email')}
+                            {this.createInput('Введите пароль','password')}
+                            {this.createInput('Введите ник','name')}
+                        </View>
+    
+                        <View style={styles.changeGenderConteiner}>
+                            <Text style={styles.changeGenderText}>Выберите пол</Text>
+                            <View style={styles.genderConteiner}>
+                                <TouchableOpacity onPress={() => this.setState({gender: 'man'})}>
+                                    <View style={[styles.genderItem,gender == 'man'?{backgroundColor: '#FFF960'}:null]}>
+                                        <Image style={styles.genderImage} source={require('../img/icons/registerScreen/man.png')}/>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => this.setState({gender: 'woman'})}>
+                                    <View style={[styles.genderItem,gender == 'woman'?{backgroundColor: '#FFF960'}:null]}>
+                                        <Image style={styles.genderImage} source={require('../img/icons/registerScreen/woman.png')}/>
+                                    </View>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+    
+                        <View style={styles.addImageConteiner}>
+                            <Text style={styles.addImageText}>Добавьте свое фото или свой логотип, он будет отображаться на Ваших событиях</Text>
+                            <TouchableOpacity style={styles.addImageBtnConteiner} onPress={this.changeImage}>
+                                {img == ''?<Image source={require('../img/icons/registerScreen/AddImage.png')} 
+                                        style={styles.addImageImg}/>:
+                                        <Image source={{uri: img}} style={styles.addImageImg}/>}
+                                
+                            </TouchableOpacity>
+                        </View>
+    
+                        {error?<View style={{justifyContent: "center",alignItems:'center'}}><Text style={{color: 'red'}}>*Неверно введенные данные</Text></View>:null}
+
+                        <TouchableOpacity onPress={this.register}>
+                            <View style={styles.btnRegistrConteiner}>
+                                <Text style={styles.btnRegistrText} numberOfLines={1}>Зарегистрировать</Text>
+                            </View>
+                        </TouchableOpacity>
+
+
+                    </View>
+                    <Text></Text>
+                </ScrollView>
+
               </View>
             </ImageBackground>
   
@@ -105,7 +127,7 @@ class Register extends Component{
   const styles = StyleSheet.create({
       conteiner: {
           flex: 1,
-          justifyContent: 'flex-start',
+          justifyContent: 'center',
           alignItems: 'center',
       },
       headerContiner: {
@@ -143,11 +165,11 @@ class Register extends Component{
           textShadowRadius: 4
       },
       mainConteiner: {
-          width: 240,
+          width: width,
           flexDirection: 'column',
           justifyContent: 'flex-start',
           alignItems: 'center',
-          height: height - 150
+          marginBottom: 7
       },
       inpuntsConteiner: {
           width: 240,
@@ -160,7 +182,8 @@ class Register extends Component{
           borderBottomWidth: 2,
           textAlign: 'center',
           paddingBottom: 3,
-          marginBottom: 10,
+          marginBottom: 20,
+          paddingTop: 0,
       },
       changeGenderConteiner: {
           width: 240,
@@ -213,7 +236,7 @@ class Register extends Component{
       addImageImg: {
           width: 140,
           height: 140,
-          borderRadius: 50
+          borderRadius: 70
       },
       btnRegistrConteiner: {
           borderColor: '#E8BC4D',
