@@ -2,12 +2,18 @@ import React,{Component} from 'react';
 import {View,Text,Button,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
-
+import firebase from 'react-native-firebase';
+import { StackActions } from 'react-navigation';
 
 class Login extends Component{
 
     _signOutAsync = async () => {
+        await firebase.auth().signOut();
         await AsyncStorage.clear();
+        StackActions.reset({
+            index: 0,
+            actions: [],
+          });
         this.props.navigation.navigate('Auth');
       };
 

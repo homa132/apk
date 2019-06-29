@@ -3,6 +3,7 @@ import {View,StyleSheet,Text,TouchableOpacity,Dimensions,TextInput,ImageBackgrou
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
+import { GoogleSignin } from 'react-native-google-signin';
 
 const { width, height } = Dimensions.get('window');
 
@@ -26,25 +27,30 @@ class SignInScreen extends Component {
         this.props.navigation.navigate('App');
       };
     
-      singInGoogle = () => {
-        const provider = new firebase.auth.GoogleAuthProvider ();
-        firebase.auth().signInWithPopup(provider).then(function(result) {
-            // This gives you a Google Access Token. You can use it to access the Google API.
-            var token = result.credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
-            console.log(token,user);
-            
-          }).catch(function(error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            // The email of the user's account used.
-            var email = error.email;
-            // The firebase.auth.AuthCredential type that was used.
-            var credential = error.credential;
-            // ...
-          });
+      singInGoogle = async () => {
+        try {
+            await GoogleSignin.configure({
+                scopes: ['https://www.googleapis.com/auth/drive.readonly'],
+                webClientId: '804058946664-j1gqhi7n11gj22aufph5omht1p0bjct8.apps.googleusercontent.com'
+            });
+        
+            const data = await GoogleSignin.signIn();
+        
+            const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
+
+            const register = await firebase.auth().signInWithCredential(credential);
+            await firebase.firestore().collection('users').doc(register.user.uid).set({email:register.user.email,name:register.user.displayName,
+                heshUser:register.user.uid,urlImg:register.user.photoURL,gender: 'default'});
+            await AsyncStorage.setItem('userToken', register.user.uid);
+            await this.props.navigation.navigate('App');
+        
+          } catch (e) {
+            console.error(e);
+          }
+      }
+
+      singInFacebook = async () => {
+
       }
 
     render() {
@@ -65,7 +71,7 @@ class SignInScreen extends Component {
                                 <TouchableOpacity style={styles.singInWithBtnConteiner} onPress={this.singInGoogle}>
                                     <Image source={require('../img/icons/singInScreen/google.png')} style={styles.singInWithImg}/>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={styles.singInWithBtnConteiner}>
+                                <TouchableOpacity style={styles.singInWithBtnConteiner} onPress={this.singInFacebook}>
                                     <Image source={require('../img/icons/singInScreen/facebook.png')} style={styles.singInWithImg}/>
                                 </TouchableOpacity>
                             </View>
