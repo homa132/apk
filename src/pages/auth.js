@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,StyleSheet,Text,TouchableOpacity,Dimensions,TextInput,ImageBackground,Image,ScrollView,KeyboardAvoidingView} from 'react-native';
+import {View,StyleSheet,Text,TouchableOpacity,Dimensions,TextInput,ImageBackground,Image,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase'
@@ -13,18 +13,31 @@ class SignInScreen extends Component {
     state = {
         login: '',
         password: '',
+        error: false,
+        disabledBtn: true
     }
 
+    componentDidUpdate(){
+        const {login,password,disabledBtn} = this.state;
+
+        if(login=='' || password==''){
+            disabledBtn?null:this.setState({disabledBtn:true});
+        }else{
+            disabledBtn?this.setState({disabledBtn:false}):null;
+        }
+    }
 
     _signInAsync = async () => {
-        const {login,password} = this.state;
-        const singInFirebase = await firebase.auth().signInWithEmailAndPassword(login,password).catch(function(error) {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode,errorMessage);
-          });
-        await AsyncStorage.setItem('userToken', singInFirebase.user.uid);
-        this.props.navigation.navigate('App');
+        try{
+            const {login,password} = this.state;
+            const singInFirebase = await firebase.auth().signInWithEmailAndPassword(login,password);
+                await AsyncStorage.setItem('userToken', singInFirebase.user.uid);
+                this.props.navigation.navigate('App');
+    
+        }catch(error){
+            this.setState({error:true,password: ''})
+        }
+      
       };
     
       singInGoogle = async () => {
@@ -35,26 +48,27 @@ class SignInScreen extends Component {
             });
         
             const data = await GoogleSignin.signIn();
-        
+
             const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
 
             const register = await firebase.auth().signInWithCredential(credential);
-            await firebase.firestore().collection('users').doc(register.user.uid).set({email:register.user.email,name:register.user.displayName,
-                heshUser:register.user.uid,urlImg:register.user.photoURL,gender: 'default'});
+            await firebase.firestore().collection('users').doc(register.user.uid).set({email:register.user.email,
+                name:register.user.displayName,heshUser:register.user.uid,urlImg:register.user.photoURL,gender: 'default'});
             await AsyncStorage.setItem('userToken', register.user.uid);
             await this.props.navigation.navigate('App');
+            
+
         
           } catch (e) {
-            console.error(e);
+            console.log(e);
           }
       }
 
-      singInFacebook = async () => {
-
-      }
 
     render() {
-        const {login,password} = this.state;
+        const {login,password,error,disabledBtn} = this.state;
+
+
       return (
           <ImageBackground source={require('../img/background/background1.jpg')} style={{width: '100%', height: '100%'}}>
             <ScrollView style={{width: width}}>
@@ -67,25 +81,27 @@ class SignInScreen extends Component {
 
                         <View style={styles.singInWithConteiner}>
                             <Text style={styles.singInWithText}>Войдите с помощю:</Text>
-                            <View style={styles.singInWithBtnsConteiner}>
-                                <TouchableOpacity style={styles.singInWithBtnConteiner} onPress={this.singInGoogle}>
-                                    <Image source={require('../img/icons/singInScreen/google.png')} style={styles.singInWithImg}/>
-                                </TouchableOpacity>
-                                <TouchableOpacity style={styles.singInWithBtnConteiner} onPress={this.singInFacebook}>
-                                    <Image source={require('../img/icons/singInScreen/facebook.png')} style={styles.singInWithImg}/>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity style={styles.singInWithBtnConteiner} onPress={this.singInGoogle}>
+                                <Image source={require('../img/icons/singInScreen/google.png')} style={styles.singInWithImg}/>
+                            </TouchableOpacity>
                         </View>
-                            <TextInput placeholder='Введите эл. почту' style={[styles.input,{marginTop:40,textAlign: 'center',}]} placeholderTextColor='rgba(100, 72, 0, 0.7)'
-                                            value={login} onChangeText={(login)=>this.setState({login})}/>
+
+                            <TextInput placeholder='Введите эл. почту' style={[styles.input,{marginTop:40,textAlign: 'center',}]} 
+                                        placeholderTextColor='rgba(100, 72, 0, 0.7)'
+                                        value={login} onChangeText={(login)=>this.setState({login})} autoCapitalize='none' 
+                                        maxLength={40} autoCompleteType='email' keyboardType='email-address' />
                             
                             <TextInput placeholder='Введите пароль' style={styles.input} placeholderTextColor='rgba(100, 72, 0, 0.7)'
                                         value={password} onChangeText={(password)=>this.setState({password})}
-                                        maxLength={50}/>
+                                        maxLength={30} autoCapitalize='none' autoCompleteType='password' 
+                                        secureTextEntry={true} />
+                        
+
+                        {error?<Text style={{color:'red'}}>Неверно введенные данные</Text>:null}
 
                         <View style={styles.btnsConteiner}>
-                            <TouchableOpacity onPress={this._signInAsync}>
-                                <View style={styles.btnConteiner}>
+                            <TouchableOpacity onPress={this._signInAsync} disabled={disabledBtn}>
+                                <View style={[styles.btnConteiner, disabledBtn?{opacity:0.5}:null]}>
                                     <Text style={styles.btnText}>Войти</Text>
                                 </View>
                             </TouchableOpacity>
@@ -137,7 +153,8 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginTop: 15
     },
     singInWithImg: {
         width: 70,
@@ -162,7 +179,6 @@ const styles = StyleSheet.create({
         marginBottom: 30
     },
     btnsConteiner: {
-        marginTop: 20,
         alignItems: 'center',
         justifyContent: 'flex-start'
     },

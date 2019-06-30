@@ -14,13 +14,23 @@ class Register extends Component{
         name: '',
         gender: 'default',
         img: '',
-        error: false
+        error: false,
+        disabledBtn: true
+    }
+
+    componentDidUpdate(){
+        const {email,password,name,gender,img,disabledBtn} = this.state;
+        if(email==''|| password==''||name==''||gender=='default'||img==''){
+            disabledBtn?null:this.setState({disabledBtn:true});
+        }else{
+            disabledBtn?this.setState({disabledBtn:false}):null;
+        }
     }
 
     changeImage = () => {
         ImagePicker.launchImageLibrary({
             mediaType: 'photo',
-            quality: 0.45,
+            quality: 0.4,
             noData: true
           },({path,fileName})=> {
               this.setState({img:`file://${path}`})
@@ -30,8 +40,10 @@ class Register extends Component{
     createInput = (placeholder,valueState) => {
         return (
             <TextInput placeholder={placeholder} style={styles.input} numberOfLines={1} 
-                                          placeholderTextColor='rgba(100, 72, 0, 0.7)' value={this.state[valueState]} 
-                                        onChangeText={(value=>this.setState({[valueState]:value}))}/>
+                                        placeholderTextColor='rgba(100, 72, 0, 0.7)' value={this.state[valueState]} 
+                                        onChangeText={(value=>this.setState({[valueState]:value}))} autoCapitalize='none' 
+                                        maxLength={40} autoCompleteType={valueState=='password'?'password':'email'} 
+                                        keyboardType={valueState == 'password'?'default':'email-address'}/>
         )
     }
 
@@ -54,7 +66,7 @@ class Register extends Component{
     }
 
     render() {
-        const {gender,img,error} = this.state;
+        const {gender,img,error,disabledBtn} = this.state;
 
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={{width: '100%', height: '100%'}}>
@@ -106,8 +118,8 @@ class Register extends Component{
     
                         {error?<View style={{justifyContent: "center",alignItems:'center'}}><Text style={{color: 'red'}}>*Неверно введенные данные</Text></View>:null}
 
-                        <TouchableOpacity onPress={this.register}>
-                            <View style={styles.btnRegistrConteiner}>
+                        <TouchableOpacity onPress={this.register} disabled={disabledBtn}>
+                            <View style={[styles.btnRegistrConteiner,disabledBtn?{opacity:0.5}:null]}>
                                 <Text style={styles.btnRegistrText} numberOfLines={1}>Зарегистрировать</Text>
                             </View>
                         </TouchableOpacity>

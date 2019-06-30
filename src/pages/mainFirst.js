@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 import {getData,setNavigation} from '../redux/actions'
 import firebase from 'react-native-firebase';
 import Map from '../map/map';
-import NavBtn from '../navBtn/navBtn';
 import FilterBtn from '../filterBtn/filterBtn';
 
 const { width, height } = Dimensions.get('window');

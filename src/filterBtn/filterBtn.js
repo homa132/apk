@@ -24,29 +24,21 @@ class filterBtn extends Component{
         this.props.filterList(date,type);
 
         return (
-            <View style={styles.conteiner}>
+            <React.Fragment>
                 <DateBtn 
                 filterData={this.filterData}
                 />
-                <View style={styles.line}></View>
                 <TypeBtn
                 filterData={this.filterData}
                 />
-            </View>
+            </React.Fragment>
         )
     }
 }
 
 
 const styles = StyleSheet.create({
-    conteiner: {
-        justifyContent: 'space-around',
-        flexDirection: 'row',
-    },
-    line: {
-        borderColor: '#11A1A1',
-        borderWidth:1.4
-    }
+    
 })
 
 mapDispatchToProps = (dispatch) => {
