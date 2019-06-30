@@ -6,7 +6,7 @@ import BackI from '../icon/item/back.svg';
 function Back (props) {
 
     return (
-        <TouchableOpacity onPress={()=> console.log(props.state.navigation.goBack())}>
+        <TouchableOpacity onPress={()=> props.state.navigation.goBack()}>
             <BackI/>
         </TouchableOpacity>
     )

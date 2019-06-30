@@ -1,8 +1,7 @@
 import React,{Component} from 'react';
-import {View,TouchableOpacity,StyleSheet,Text,Dimensions,ScrollView} from 'react-native';
+import {TouchableOpacity,StyleSheet,Text,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
-
-const { width, height } = Dimensions.get('window');
+import LinearGradient from 'react-native-linear-gradient';
 
 const types = [{label:'Все типы',value:"default"},{label:"Спорт", value:"sport"},
             {label:"IT", value:"it"},{label:"Клубы", value:"club"},{label:"Музыка", value:"music"}]
@@ -28,9 +27,10 @@ class TypeBtn extends Component {
                     {types.map(({label,value},index)=>{
                         return (
                             <TouchableOpacity onPress={()=>this.changeType(value)} key={index} >
-                                <View style={[styles.btn,type==value?{backgroundColor:'#E8BC4D'}:null]}>
+                                <LinearGradient colors={type==value?['#FFF960','#E8BC4D']:['#F3F3F3','#D9D9D9']} 
+                                                style={[styles.btn,type==value?{opacity:1}:{opacity:0.8}]}>
                                     <Text style={styles.btnText} numberOfLines={1}>{label}</Text>
-                                </View>
+                                </LinearGradient>
                             </TouchableOpacity>
                         )
                     })}
@@ -53,7 +53,6 @@ const styles = StyleSheet.create({
         borderColor: '#644800',
         marginRight:10,
         borderWidth: 1.5,
-        backgroundColor: 'rgba(217, 217, 217, 0.7)',
         borderRadius: 20,
         justifyContent: 'center',
         alignItems: 'center',

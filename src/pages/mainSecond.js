@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {View,Text,StyleSheet,ImageBackground,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import NavBtn from '../navBtn/navBtn';
 import List from '../mainSecondItems/mainSecondItems';
 
 const { width, height } = Dimensions.get('window');

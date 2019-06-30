@@ -4,7 +4,7 @@ const item = {
     hesh: '12341234',
     name: 'First',
     category: {name:'Клуб',value: 'club'},
-    date: '13.06.2019',
+    date: {month:'13.06',year:'2019'},
     time: '10-20',
     images: ['https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=1&w=500'],
     contacts: {
@@ -29,7 +29,7 @@ const item2 = {
     hesh: '123123',
     name: 'Second',
     category: {name:'Спорт',value: 'sport'},
-    date: '14.06.2019',
+    date: {month:'14.06',year:'2019'},
     time: '10-20',
     images: ['https://images.pexels.com/photos/67636/rose-blue-flower-rose-blooms-67636.jpeg?auto=format%2Ccompress&cs=tinysrgb&dpr=1&w=500'],
     contacts: {
@@ -78,7 +78,7 @@ const filterDate = (date,category,allList) => {
     
     if(date != 'default'){
         filtredList = filtredList.filter((item,index) => {
-            return item.date == date
+            return date == `${item.date.month}.${item.date.year}`
         })
     }
     

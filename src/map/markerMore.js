@@ -1,13 +1,15 @@
 import React from 'react';
-import { StyleSheet, View,Text,TouchableOpacity,Image } from 'react-native';
+import { StyleSheet, View,Text,Image } from 'react-native';
 import { Marker, Callout } from 'react-native-maps';
 import {connect} from 'react-redux';
 import {navigateTo,setActiveItem} from '../redux/actions';
+import LinearGradient from 'react-native-linear-gradient';
+
 
 function MarkerMore (props) {
     
   const {location,name,time,date,category,hesh} = props.item;
-
+  
     return(
         <Marker
             coordinate={location}
@@ -16,6 +18,7 @@ function MarkerMore (props) {
               <Image source={{uri: 'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
                     style={{width: 30,height: 30,borderRadius: 30}}/>
             </View>
+            
             <Callout 
             style={styles.plainView}
             onPress={() => {
@@ -23,20 +26,35 @@ function MarkerMore (props) {
               props.state.navigation.push('Details');
             }}
             >
-              <View style={styles.modalContent}>
-                  <Text style={styles.modalName} numberOfLines={2}>{name}</Text>
-                  <View style={styles.modalDate}>
-                    <Text style={styles.modalText}>Дата: {date}</Text>
-                    <Text style={styles.modalText}>Время: {time}</Text>
-                  </View>
-                  <View style={styles.buttom}>
-                    <View>
-                      <Text style={styles.category}>Категори: {category.name}</Text>
-                      <Text style={styles.category}>Учасников: 178</Text>
+              <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 
+                            locations={[0.01,0.5,0.99]} style={styles.modalContent}>
+                  <Text numberOfLines={2} style={styles.nameText}>{name}Турнир с футбoла для школьников</Text>
+
+                  <View style={styles.infoConteiner}>
+                    <View style={styles.infoItemConteiner}>
+                      <Image source={require('../img/icons/mapMarker/time.png')} style={styles.imgInfo}/>
+                      <Text style={styles.infoItemText} numberOfLines={1}>{time}</Text>
                     </View>
-                      <Text style={styles.buttonText} numberOfLines={2}>Автор: Привет пака пs</Text>
+                    <View style={styles.infoItemConteiner}>
+                      <Image source={require('../img/icons/mapMarker/date.png')} style={styles.imgInfo}/>
+                      <Text style={styles.infoItemText} numberOfLines={1}>{date.month}</Text>
+                      <Text style={[styles.infoItemText,{fontSize:10,position:'relative',top:-5}]} numberOfLines={1}>{date.year}</Text>
+                    </View>
+                    <View style={styles.infoItemConteiner}>
+                      <Image source={require('../img/icons/mapMarker/category.png')} style={styles.imgInfo}/>
+                      <Text style={styles.infoItemText} numberOfLines={1}>{category.name}</Text>
+                    </View>
                   </View>
-              </View>
+
+                <View style={styles.bottomConteiner}>
+                  <View style={styles.autorConteiner}>
+                    <Image source={{uri:'https://mint-media.pl/wp-content/uploads/2018/02/client-1295901_960_720.png'}} 
+                    style={styles.autorImage}/>
+                    <Text style={styles.autorText}>автор ник</Text>
+                  </View>
+                  <Image source={require('../img/icons/mapMarker/btnMore.png')} style={styles.autorImage}/>
+                </View>
+              </LinearGradient>
             </Callout>
           </Marker>
     )
@@ -48,73 +66,60 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     modalContent: {
-      width:260,
-      height: 150,
-      borderColor: '#3AE7FF',
-      borderWidth: 2,
-      borderRadius: 5,
+      width:240,
+      height: 140,
       alignItems: 'center',
-      paddingHorizontal: 10,
-      backgroundColor: '#EAEAEA',
-      marginVertical: 4,
-      justifyContent: 'space-around',
-      padding: 7
-    },
-    modalName: {
-      height: 50,
-      width: 240,
-      borderBottomColor:'#3AE7FF' ,
-      borderBottomWidth: 1,
-      marginHorizontal: 20,
-      fontSize: 16,
-      color: '#3C3C3C',
-      textAlign: 'center',
-      paddingBottom: 5,
-    },
-    modalText: {
-      fontSize: 14,
-      color: '#3C3C3C'
-    },
-    modalDate: {
-      width: 240,
-      flexDirection: 'row',
       justifyContent: 'space-between',
-      alignSelf: 'center',
     },
-    moreText: {
+    nameText: {
       fontSize: 15,
-      color: '#3C3C3C',
-      textAlign: 'left'
+      color: '#644800',
+      textAlign: 'center',
+      width: 220,
+      height: 42
     },
-    buttom: {
+    infoConteiner: {
       width: 240,
+      height: 50,
       flexDirection: 'row',
-      justifyContent: 'space-between',
-      borderTopColor: '#3AE7FF',
-      borderTopWidth: 1,
+      justifyContent: 'space-around',
       alignItems: 'center'
     },
-    category: {
-      fontSize: 14,
-      color: '#3C3C3C',
-      justifyContent: 'space-around'
-    },
-    buttonText: {
-      fontSize: 15,
-      color: '#3C3C3C',
-      textAlign: 'center',
-      width: 120
-    },
-    buttonConteiner: {
-      width: 100,
-      height: 20,
-      borderColor: '#3AE7FF',
-      borderWidth: 1,
-      backgroundColor: '#F0F0F0',
-      borderRadius: 7,
-      justifyContent: 'center',
+    infoItemConteiner: {
+      width:80,
+      height: 45,
       alignItems: 'center',
-      marginTop: 5
+      justifyContent:'space-between'
+    },
+    imgInfo: {
+      width: 26,
+      height: 26
+    },
+    infoItemText: {
+      fontSize: 15,
+      color:'#644800'
+    },
+    bottomConteiner: {
+      width: 240,
+      height: 35,
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center'
+    },
+    autorConteiner: {
+      flexDirection: 'row',
+      justifyContent: 'flex-start',
+      alignItems: 'center'
+    },
+    autorImage: {
+      width: 30,
+      height: 30,
+      borderRadius: 15
+    },
+    autorText: {
+      color: '#000000',
+      fontSize: 14,
+      marginLeft: 8,
     }
   });
   

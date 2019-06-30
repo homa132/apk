@@ -29,7 +29,7 @@ function Item (props) {
             <View style={styles.infoItem}>
                 <DateI/>
                 <View style={{alignItems: 'center', justifyContent: 'center',width: '90%'}}>
-                    <Text style={styles.infoText}>{date}</Text>
+                    <Text style={styles.infoText}>{date.month}</Text>
                 </View>
             </View>
             <View style={styles.infoItem}>

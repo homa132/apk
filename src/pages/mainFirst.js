@@ -63,8 +63,6 @@ class App extends Component {
 }
 
 
-
-
 const mapStateToProps = (state) => {
   return {
     state: state.data
@@ -102,7 +100,7 @@ const styles = StyleSheet.create({
   },
   containerFilterBtn: {
     position: 'absolute',
-    top: 10,
+    top: 0,
     width: width,
     zIndex: 100
   }
