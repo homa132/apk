@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {View,Text,StyleSheet,ImageBackground,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
-import List from '../mainSecondItems/mainSecondItems';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,7 +11,7 @@ class MainSecond extends Component{
 
         return (
             <View style={styles.container}>
-                <List/>
+                <Text>Top event</Text>
             </View>
         )
     }
@@ -26,12 +25,6 @@ const styles = StyleSheet.create({
         margin: 0,
         padding: 0,
       },
-    bottomNav: {
-        position: 'absolute',
-        bottom: 3,
-        flexDirection: 'row',
-      },
-
 })
 
 

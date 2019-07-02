@@ -1,7 +1,6 @@
 import React,{Component} from 'react';
 import {View,Text,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
-import NavBtn from '../navBtn/navBtn';
 
 
 class Likes extends Component{

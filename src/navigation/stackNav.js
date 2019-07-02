@@ -2,16 +2,17 @@ import React from 'react';
 import {Image} from 'react-native';
 import { createStackNavigator,createBottomTabNavigator } from "react-navigation";
 import mainFirst from '../pages/mainFirst';
-import mainSecond from '../pages/mainSecond';
+import Top from '../pages/top';
 import Add from '../pages/add';
 import Likes from '../pages/likes';
 import Acc from '../pages/login';
 import Details from '../pages/details';
+import Messenger from '../pages/messenger';
 
-
-const mapStack = createStackNavigator({
+const mainStack = createStackNavigator({
     MainFirst: mainFirst,
-    Details: Details
+    Details: Details,
+    Messenger:Messenger
 },
 {
     headerMode: 'none',
@@ -21,18 +22,18 @@ const mapStack = createStackNavigator({
 const AppNavigator = createBottomTabNavigator(
   {
     MainFirst: {
-      screen: mapStack,
+      screen: mainStack,
       navigationOptions: {
         tabBarIcon: ({focused})=> {
-            return focused?<Image source={require('../icon/nav/MapIActive.png')}/>:<Image source={require('../icon/nav/MapI.png')}/>;
+            return focused?<Image source={require('../img/nav/MapIActive.png')}/>:<Image source={require('../img/nav/MapI.png')}/>;
         }
       }
     },
     MainSecond: {
-        screen: mainSecond,
+        screen: Top,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../icon/nav/TopIActive.png')}/>:<Image source={require('../icon/nav/TopI.png')}/>;
+                return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;
             }
           }
       },
@@ -40,7 +41,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Add,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../icon/nav/AddIActive.png')}/>:<Image source={require('../icon/nav/AddI.png')}/>;
+                return focused?<Image source={require('../img/nav/AddIActive.png')}/>:<Image source={require('../img/nav/AddI.png')}/>;
             }
           }
       },
@@ -48,7 +49,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Likes,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../icon/nav/ChatIActive.png')}/>:<Image source={require('../icon/nav/ChaI.png')}/>;
+                return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
             }
           }
       },
@@ -56,7 +57,7 @@ const AppNavigator = createBottomTabNavigator(
         screen: Acc,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../icon/nav/AccIActive.png')}/>:<Image source={require('../icon/nav/AccI.png')}/>;
+                return focused?<Image source={require('../img/nav/AccIActive.png')}/>:<Image source={require('../img/nav/AccI.png')}/>;
             }
           }
       },
