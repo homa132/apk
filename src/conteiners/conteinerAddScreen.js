@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {View,Animated,Easing,Dimensions,StyleSheet,Image,TouchableOpacity,Text} from 'react-native';
+import {View,Animated,Easing,Dimensions,StyleSheet,Image,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import {connect} from 'react-redux';
 import Map from '../map/map';
@@ -14,7 +14,6 @@ class Conteiner extends Component {
         this.state = {
             scroled: false,
             pageY:0,
-            likes: false,
             showMap:false
         }
     }
@@ -50,13 +49,15 @@ class Conteiner extends Component {
             inputRange: [0, 1],
             outputRange: [width, 90]
           })
+        const {scrollEnd} = this.props;
+        
         return (
             <View style={styles.conteiner} onStartShouldSetResponder={(e)=>{
                 if(e.nativeEvent.pageY>width-40&&!scroled){
                     this.setState({pageY:e.nativeEvent.pageY})
                     return true
                 }
-                if(scroled&&e.nativeEvent.pageY>50&&this.props.scroll<2){
+                if(scroled&&e.nativeEvent.pageY>50&&scrollEnd <5){
                     this.setState({pageY:e.nativeEvent.pageY})
                     return true
                 }
@@ -75,7 +76,7 @@ class Conteiner extends Component {
                 }
             }}>
                         <View style={styles.conteinerImageSlider}>
-                            {showMap?<Map/>:
+                            {showMap?<Map new={true}/>:
                             <ImageSlider
                             loop
                             images={['https://firebasestorage.googleapis.com/v0/b/project-99846.appspot.com/o/testImage.png?alt=media&token=e4ac9402-dc9d-4621-b886-9c0ace7d903b',
@@ -86,34 +87,22 @@ class Conteiner extends Component {
                             />
                             }
                             
-                            <TouchableOpacity onPress={()=> this.props.state.navigation.goBack()} style={styles.backBtn}>
-                                <Image source={require('../img/icons/btns/btnBack.png')} style={{width:50,height:50}}/>
-                            </TouchableOpacity>
-                            <TouchableOpacity style={styles.messengerBtn}>
-                                <Image source={require('../img/icons/btns/messenger.png')} style={{width:50,height:50}}/>
+                            <TouchableOpacity style={styles.removeImage}>
+                                <View style={styles.removeImageConteiner}>
+                                    <Image source={require('../img/icons/addScreen/removeImage.png')} style={{width:32,height:32}}/>
+                                </View>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.locationBtn} onPress={()=>this.setState({showMap:!showMap})}>
                                 <View style={styles.cirecleBtn}>
                                     {showMap?
-                                    <Image source={require('../img/icons/detailsScreen/showImage.png')} style={{width:24,height:24}}/>
-                                    :
-                                    <Image source={require('../img/icons/detailsScreen/location.png')} style={{width:32,height:32}}/>
+                                    <Image source={require('../img/icons/detailsScreen/showImage.png')} style={{width:24,height:24}}/>:
+                                    <Image source={require('../img/icons/addScreen/location.png')} style={{width:32,height:32}}/>
                                     }
-                                </View>
-                                <View style={styles.textConteinerBtn}>
-                                    <Text style={styles.textBtn}>Киев</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.likeBtn} onPress={()=>this.setState({likes:!likes})}>
+                            <TouchableOpacity style={styles.likeBtn} >
                                 <View style={styles.cirecleBtn}>
-                                    {likes?
-                                    <Image source={require('../img/icons/detailsScreen/likeActive.png')} style={{width:26,height:24}}/>:
-                                    <Image source={require('../img/icons/detailsScreen/noLike.png')} style={{width:26,height:24}}/>
-                                    }
-
-                                </View>
-                                <View style={styles.textConteinerBtn}>
-                                    <Text style={styles.textBtn}>500</Text>
+                                    <Image source={require('../img/icons/addScreen/AddImage.png')} style={{width:32,height:32}}/>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -146,23 +135,22 @@ const styles = StyleSheet.create({
         top: -width - 30,
         height: height - 130,
     },
-    backBtn: {
-        width:60,
-        height:60,
+    removeImageConteiner: {
+        width:50,
+        height:50,
         justifyContent: 'center',
         alignItems: 'center',
-        position: 'absolute',
-        top:0,
-        left:0
+        backgroundColor: 'rgba(217, 217, 217, 0.9)',
+        borderRadius:25
     },
-    messengerBtn: {
+    removeImage: {
         width:60,
         height:60,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'absolute',
         top:0,
-        right:0
+        right:0,
     },
     cirecleBtn: {
         width: 50,
@@ -174,7 +162,7 @@ const styles = StyleSheet.create({
     },
     locationBtn: {
         position: 'absolute',
-        top: width - 100,
+        top: width - 90,
         left: 10,
         justifyContent: 'center',
         alignItems: 'center',
@@ -196,7 +184,7 @@ const styles = StyleSheet.create({
     },
     likeBtn: {
         position: 'absolute',
-        top: width - 100,
+        top: width - 90,
         right: 10,
         justifyContent: 'center',
         alignItems: 'center',

@@ -1,32 +1,70 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet,ScrollView,Dimensions,ImageBackground,TextInput} from 'react-native';
+import {View,Text,StyleSheet,ScrollView,Dimensions,ImageBackground,TextInput,KeyboardAvoidingView} from 'react-native';
 import {connect} from 'react-redux';
 import {setTextDate} from '../redux/actions';
-
+import Conteiner from '../conteiners/conteinerAddScreen'
 
 const { width, height } = Dimensions.get('window');
 
 
 class Add extends Component{
 
+    state = {
+        scrollEnd: 0
+    }
+
     render(){
-        
+        const {scrollEnd} = this.state;
+
         return (
-        <ImageBackground style={{width: '100%',height: '100%',padding: 0,margin: 0}} source={require('../img/background/background1.jpg')}>
-            <View style={styles.container}>
-                <Text>add</Text>
-            </View>
-        </ImageBackground>
+                <Conteiner scrollEnd={scrollEnd}>
+                    <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
+                        <View style={styles.line}></View>
+                        <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
+                            <View style={styles.conteiner} >
+                                <TextInput placeholder='название события' placeholderTextColor='#644800' style={styles.nameInput}
+                                        numberOfLines={1}/>
+                            </View>
+                        </ScrollView>
+                    </ImageBackground>
+                </Conteiner>
         )
     }
 };
 
 const styles = StyleSheet.create({
-    container: {
+    conteiner: {
         flex: 1,
-        justifyContent: 'center',
         alignItems: 'center',
-      },
+    },
+      line: {
+        width: 60,
+        borderColor: '#644800',
+        borderWidth: 2,
+        borderRadius: 2,
+        marginTop: 12,
+        marginLeft:width/2-30,
+        marginBottom:10
+    },
+    backgroundConteiner: {
+        width: '100%',
+        height: '100%',
+        borderTopRightRadius: 30,
+        borderTopLeftRadius: 30,
+        overflow: 'hidden',
+    },
+    nameInput: {
+        width: 240,
+        fontSize: 18,
+        color: '#644800',
+        borderRadius: 10,
+        borderColor: '#644800',
+        borderWidth: 2,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        paddingVertical: 2.5,
+        marginTop: 20
+    }
 })
 
 const mapStateToProps = (state) => {

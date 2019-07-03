@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground,Image} from 'react-native';
 import {connect} from 'react-redux';
 import {navigateTo,setNavigation} from '../redux/actions';
-import Conteiner from '../conteiners/conteinerScrolled';
+import Conteiner from '../conteiners/conteinerDetailsScreen';
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,9 +10,15 @@ const { width, height } = Dimensions.get('window');
 
 class Details extends Component{
 
-    state = {
-        showSocial: false
+    constructor(props){
+        super(props);
+        props.setNavigation(props.navigation);
+        this.state = {
+            showSocial: false,
+            scrollEnd: 0
+        }
     }
+
 
     changeItem = () => {
         const {navigation,data} = this.props.state;
@@ -21,22 +27,16 @@ class Details extends Component{
         })
     }
 
-    componentDidMount(){
-        this.props.setNavigation(this.props.navigation)
-    }
-
-
     render(){
         let item = this.changeItem();
         const {name,date,time,category,contacts,images,heshMessenger,textMore}  = item[0];
-        const {showSocial} = this.state;
-        
+        const {showSocial,scrollEnd} = this.state;
 
         return (
-            <Conteiner scroll={this.state.scroll}>
+            <Conteiner scrollEnd={scrollEnd}>
                 <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
                     <View style={styles.line}></View>
-                    <ScrollView onScroll={(e)=>this.setState({scroll:e.nativeEvent.contentOffset.y})} ref='_scrollView' noScroll={true}>
+                    <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
                         <View style={styles.conteiner}>
                             
                             <Text style={styles.mainText}>Футбольное соревнование между студантами </Text>
