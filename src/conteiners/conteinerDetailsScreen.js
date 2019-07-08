@@ -25,7 +25,7 @@ class Conteiner extends Component {
           this.animatedTop,
           {
             toValue: 1,
-            duration: 500,
+            duration: 700,
             easing: Easing.linear
           }
         ).start(this.setState({scroled:true}))
@@ -37,7 +37,7 @@ class Conteiner extends Component {
           this.animatedTop,
           {
             toValue: 0,
-            duration: 500,
+            duration: 1000,
             easing: Easing.linear
           }
         ).start(this.setState({scroled:false}))

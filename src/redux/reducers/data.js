@@ -43,7 +43,6 @@ const item2 = {
         latitude: 50.459793,
         longitude: 30.534518,
       },
-    locationText: 'м.Київ,вул.Соборності 79/8',
     nameAutor: 'Andrey',
     heshAutor: 'hesh',
     heshMessenger: 'hesh',

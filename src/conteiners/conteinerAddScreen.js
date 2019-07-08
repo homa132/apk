@@ -1,8 +1,10 @@
 import React,{Component} from 'react';
-import {View,Animated,Easing,Dimensions,StyleSheet,Image,TouchableOpacity,KeyboardAvoidingView} from 'react-native';
+import {View,Animated,Easing,Dimensions,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import {connect} from 'react-redux';
 import Map from '../map/map';
+import ImagePicker from 'react-native-image-picker';
+import {setImages} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,7 +16,8 @@ class Conteiner extends Component {
         this.state = {
             scroled: false,
             pageY:0,
-            showMap:false
+            showMap:false,
+            showFirst: true
         }
     }
 
@@ -24,7 +27,7 @@ class Conteiner extends Component {
           this.animatedTop,
           {
             toValue: 1,
-            duration: 500,
+            duration: 1000,
             easing: Easing.linear
           }
         ).start(this.setState({scroled:true}))
@@ -36,32 +39,50 @@ class Conteiner extends Component {
           this.animatedTop,
           {
             toValue: 0,
-            duration: 500,
+            duration: 1000,
             easing: Easing.linear
           }
         ).start(this.setState({scroled:false}))
     }
 
+    addPhoto = () => {
+        this.setState({showFirst: false})
+        ImagePicker.launchImageLibrary({
+            title: 'Выберите фото',
+            mediaType: 'photo',
+            maxWidth: 1500,
+            maxHeight: 1500,
+            quality: 0.8,
+            noData: true
+        },(image)=> {
+            this.props.setImages(image.uri,'add');
+        })
+    }
+
+    removePhoto = () => {
+        this.setState({showFirst:true});
+        this.props.setImages('','remove');
+    }
 
     render(){
         const {pageY,scroled,likes,showMap} = this.state;
         const toTop = this.animatedTop.interpolate({
             inputRange: [0, 1],
-            outputRange: [width, 90]
+            outputRange: [width, 30]
           })
-        const {scrollEnd} = this.props;
-        
+        let {scrollEnd} = this.props;
         return (
-            <View style={styles.conteiner} onStartShouldSetResponder={(e)=>{
+            <View style={styles.conteiner} 
+            onStartShouldSetResponder={(e)=>{
                 if(e.nativeEvent.pageY>width-40&&!scroled){
                     this.setState({pageY:e.nativeEvent.pageY})
                     return true
                 }
-                if(scroled&&e.nativeEvent.pageY>50&&scrollEnd <5){
+                if(scroled&&e.nativeEvent.pageY>30&&scrollEnd <5){
                     this.setState({pageY:e.nativeEvent.pageY})
                     return true
                 }
-                if(scroled&&e.nativeEvent.pageY>60&&e.nativeEvent.pageY<90){
+                if(scroled&&e.nativeEvent.pageY>0&&e.nativeEvent.pageY<35){
                     this.setState({pageY:e.nativeEvent.pageY})
                     return true
                 }
@@ -79,15 +100,14 @@ class Conteiner extends Component {
                             {showMap?<Map new={true}/>:
                             <ImageSlider
                             loop
-                            images={['https://firebasestorage.googleapis.com/v0/b/project-99846.appspot.com/o/testImage.png?alt=media&token=e4ac9402-dc9d-4621-b886-9c0ace7d903b',
-                            'https://firebasestorage.googleapis.com/v0/b/project-99846.appspot.com/o/usersImage%2FqTTXpkM9sWOYpc8GXRJ4sG6Y7wq2%2FuserImg?alt=media&token=7b69b590-d9c2-4b21-b6bc-6b8e2a216c1d']}
-                            customSlide={({ index, item, style }) => (
+                            images={this.state.showFirst?['https://www.tellerreport.com/images/no-image.png',...this.props.state.images]:[...this.props.state.images]}
+                            customSlide={({ index,item }) => (
                                 <Image source={{ uri: item }} style={{width:width,height:width}} key={index}/>
                             )}
                             />
                             }
                             
-                            <TouchableOpacity style={styles.removeImage}>
+                            <TouchableOpacity style={styles.removeImage} onPress={this.removePhoto}>
                                 <View style={styles.removeImageConteiner}>
                                     <Image source={require('../img/icons/addScreen/removeImage.png')} style={{width:32,height:32}}/>
                                 </View>
@@ -100,7 +120,7 @@ class Conteiner extends Component {
                                     }
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.likeBtn} >
+                            <TouchableOpacity style={styles.likeBtn} onPress={this.addPhoto}>
                                 <View style={styles.cirecleBtn}>
                                     <Image source={require('../img/icons/addScreen/AddImage.png')} style={{width:32,height:32}}/>
                                 </View>
@@ -133,7 +153,7 @@ const styles = StyleSheet.create({
         zIndex:500,
         position: 'relative',
         top: -width - 30,
-        height: height - 130,
+        height: '100%',
     },
     removeImageConteiner: {
         width:50,
@@ -191,10 +211,16 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
+mapDispatchToProps = (dispatch)=> {
     return {
-        state: state.navigation
+        setImages: (path,operation)=> dispatch(setImages(path,operation))
     }
 }
 
-export default connect(mapStateToProps)(Conteiner);
+const mapStateToProps = (state) => {
+    return {
+        state: state.new
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Conteiner);

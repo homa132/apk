@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Dimensions } from 'react-native';
+import { StyleSheet, Dimensions,View,Image} from 'react-native';
 import MapView, { ProviderPropType,Marker } from 'react-native-maps';
 import {connect} from 'react-redux';
-import {navigateTo,setCordinate} from '../redux/actions';
 import MarkerMore from './markerMore';
+import {setNewData} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -36,9 +36,13 @@ class MarkerTypes extends React.Component {
             <Marker
             coordinate={{latitude: LATITUDE,
                       longitude: LONGITUDE,}}
-            onDragEnd={e => this.props.setCordinate(e.nativeEvent.coordinate)}
-            draggable
-          />:
+            onDragEnd={e => this.props.setNewData(e.nativeEvent.coordinate,'location') }
+            draggable>
+              <View>
+                <Image source={{uri: 'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
+                      style={{width: 30,height: 30,borderRadius: 30}}/>
+              </View>
+            </Marker>:
             this.props.state.data.testList.map((item,index) => {
               return (
                 <MarkerMore item={item} key={index}/>
@@ -64,8 +68,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-      navigateTo: (screen) => dispatch(navigateTo(screen)),
-      setCordinate: (cordinate) => dispatch(setCordinate(cordinate))
+    setNewData: (value,name)=>dispatch(setNewData(value,name))
   }
 }
 
