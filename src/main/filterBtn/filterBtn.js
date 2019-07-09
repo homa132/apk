@@ -1,9 +1,8 @@
 import React,{Component} from 'react';
-import {View,StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import DateBtn from './dateBtn';
 import TypeBtn from './typeBtn';
-import {filterList} from '../redux/actions';
+import {filterList} from '../../redux/actions';
 
 
 class filterBtn extends Component{
@@ -36,10 +35,6 @@ class filterBtn extends Component{
     }
 }
 
-
-const styles = StyleSheet.create({
-    
-})
 
 mapDispatchToProps = (dispatch) => {
     return {

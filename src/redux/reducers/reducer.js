@@ -1,10 +1,11 @@
 import {combineReducers} from 'redux';
 import Data from './data';
-import Navigation from './navigation';
 import New from './new';
+import Navigation from './navigation';
+
 
 export default combineReducers({
     data: Data,
-    navigation: Navigation,
-    new: New
+    new: New,
+    navigation: Navigation
 })

@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image} from 'react-native';
 import { createStackNavigator,createBottomTabNavigator } from "react-navigation";
-import mainFirst from '../pages/mainFirst';
+import main from '../pages/main';
 import Top from '../pages/top';
 import Add from '../pages/add';
 import Likes from '../pages/likes';
@@ -10,7 +10,7 @@ import Details from '../pages/details';
 import Messenger from '../pages/messenger';
 
 const mainStack = createStackNavigator({
-    MainFirst: mainFirst,
+    Main: main,
     Details: Details,
     Messenger:Messenger
 },
@@ -21,7 +21,15 @@ const mainStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
-    MainFirst: {
+    Top: {
+      screen: Top,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;
+          }
+        }
+    },
+    Main: {
       screen: mainStack,
       navigationOptions: {
         tabBarIcon: ({focused})=> {
@@ -29,14 +37,6 @@ const AppNavigator = createBottomTabNavigator(
         }
       }
     },
-    MainSecond: {
-        screen: Top,
-        navigationOptions: {
-            tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;
-            }
-          }
-      },
     Add: {
         screen: Add,
         navigationOptions: {
@@ -70,7 +70,7 @@ const AppNavigator = createBottomTabNavigator(
         },
     showIcon: true,
     showLabel: false,
-    activeBackgroundColor: '#CBCBCB'
+    activeBackgroundColor: '#CBCBCB',
     }
   }
 );

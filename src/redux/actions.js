@@ -1,4 +1,4 @@
-import {GET_DATA,NAVIGATE_TO,FILTER_LIST,SET_ACTIVE_ITEM,SET_NAVIGATION,
+import {GET_DATA,FILTER_LIST,SET_ACTIVE_ITEM,SET_NAVIGATION,
     SET_NEW_DATA,SET_NEW_IMAGES} from './const'
 
 export const getData = (newData) => {
@@ -16,13 +16,6 @@ export const filterList = (date,category) => {
 }
 
 // naviation
-export const navigateTo = (screen) => {
-    return {
-        type: NAVIGATE_TO,
-        screen
-    }
-}
-
 export const setNavigation = (navigation) => {
     return {
         type: SET_NAVIGATION,

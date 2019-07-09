@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground,Image,TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import {navigateTo,setNavigation} from '../redux/actions';
-import Conteiner from '../conteiners/conteinerDetailsScreen';
+import Conteiner from '../details/conteinerDetailsScreen';
 
 const { width, height } = Dimensions.get('window');
 

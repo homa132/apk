@@ -3,7 +3,7 @@ import {View,TouchableOpacity,StyleSheet,ScrollView,Dimensions,ImageBackground,T
     TimePickerAndroid,Picker,DatePickerAndroid} from 'react-native';
 import {connect} from 'react-redux';
 import {setNewData} from '../redux/actions';
-import Conteiner from '../conteiners/conteinerAddScreen'
+import Conteiner from '../add/conteinerAddScreen'
 import LinearGradient from 'react-native-linear-gradient';
 
 

@@ -1,6 +1,7 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet,ImageBackground,Dimensions} from 'react-native';
+import {View,Text,StyleSheet,ImageBackground,Dimensions,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
+import {  } from 'react-native-gesture-handler';
 
 const { width, height } = Dimensions.get('window');
 
@@ -10,9 +11,19 @@ class MainSecond extends Component{
     render(){
 
         return (
-            <View style={styles.container}>
-                <Text>Top event</Text>
-            </View>
+            <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
+                <View style={styles.container}>
+                    <View style={styles.headerConteiner}>
+                        <Text>Лучшие</Text>
+                        <View>
+                            <TouchableOpacity>
+
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+            </ImageBackground>
+
         )
     }
 };
@@ -20,11 +31,13 @@ class MainSecond extends Component{
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
-        margin: 0,
-        padding: 0,
-      },
+    },
+    background: {
+        width: '100%',
+        height: '100%'
+    }
 })
 
 
