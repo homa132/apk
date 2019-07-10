@@ -4,10 +4,11 @@ import {connect} from 'react-redux';
 const { width, height } = Dimensions.get('window');
 import Ocenka from './ocenka';
 import InfoUser from './infoAboutUsers';
+import { withNavigation } from 'react-navigation';
 
 
 function Item (props){
-
+    
     return (
         <View style={styles.itemConteiner}>
             <Text style={styles.nikText} numberOfLines={1}>nikNAme enfie</Text>
@@ -15,7 +16,7 @@ function Item (props){
 
             <View style={styles.itemBottomConteiner}>
                 <Ocenka/>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={()=>props.navigation.navigate('DetailsUser')}>
                     <Image style={{width: 50,height: 50}} source={require('../img/icons/mapMarker/btnMore.png')}/>
                 </TouchableOpacity>
 
@@ -46,4 +47,10 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect()(Item);
+const mapStateToProps = (state) => {
+    return{
+        state: state.navigation
+    }
+}
+
+export default connect(mapStateToProps)(withNavigation(Item));

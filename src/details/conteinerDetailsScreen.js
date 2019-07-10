@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {View,Animated,Easing,Dimensions,StyleSheet,Image,TouchableOpacity,Text} from 'react-native';
 import ImageSlider from 'react-native-image-slider';
 import {connect} from 'react-redux';
+import {withNavigation} from 'react-navigation';
 import Map from '../map/map';
 
 const { width, height } = Dimensions.get('window');
@@ -88,7 +89,7 @@ class Conteiner extends Component {
                             />
                             }
                             
-                            <TouchableOpacity onPress={()=> this.props.state.navigation.goBack()} style={styles.backBtn}>
+                            <TouchableOpacity onPress={()=> this.props.navigation.goBack()} style={styles.backBtn}>
                                 <Image source={require('../img/icons/btns/btnBack.png')} style={{width:50,height:50}}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.messengerBtn}>
@@ -207,8 +208,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        state: state.navigation
+        state: state
     }
 }
 
-export default connect(mapStateToProps)(Conteiner);
+export default connect(mapStateToProps)(withNavigation(Conteiner));

@@ -8,6 +8,7 @@ import Likes from '../pages/likes';
 import Acc from '../pages/login';
 import Details from '../pages/details';
 import Messenger from '../pages/messenger';
+import DetailsUser from '../pages/detailsUser';
 
 const mainStack = createStackNavigator({
     Main: main,
@@ -19,10 +20,21 @@ const mainStack = createStackNavigator({
     mode: 'modal',
 })
 
+
+const topStack = createStackNavigator({
+  Top: Top,
+  DetailsUser: DetailsUser
+},
+{
+  headerMode: 'none',
+  mode: 'modal',
+  initialRouteName: 'Top'
+})
+
 const AppNavigator = createBottomTabNavigator(
   {
     Top: {
-      screen: Top,
+      screen: topStack,
       navigationOptions: {
           tabBarIcon: ({focused})=> {
               return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;

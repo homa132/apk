@@ -15,14 +15,6 @@ export const filterList = (date,category) => {
     }
 }
 
-// naviation
-export const setNavigation = (navigation) => {
-    return {
-        type: SET_NAVIGATION,
-        navigation
-    }
-}
-
 
 //active item
 export const setActiveItem = (heshItem) => {

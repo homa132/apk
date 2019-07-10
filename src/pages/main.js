@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, Dimensions, View,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {getData,setNavigation} from '../redux/actions'
+import {getData} from '../redux/actions'
 import firebase from 'react-native-firebase';
 import Map from '../map/map';
 import FilterBtn from '../main/filterBtn/filterBtn';
@@ -12,6 +12,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.ref = firebase.firestore().collection('list');
+
     this.state = {
       loader: true
     }
@@ -19,7 +20,6 @@ class App extends Component {
 
   componentDidMount() {
     this.SearchData();
-    this.props.setNavigation(this.props.navigation)
   }
 
   SearchData(){
@@ -71,7 +71,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     getData: (data) => dispatch(getData(data)),
-    setNavigation: (nav) => dispatch(setNavigation(nav))
   }
 }
 

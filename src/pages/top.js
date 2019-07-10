@@ -1,12 +1,19 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {View,FlatList,StyleSheet,ImageBackground,Dimensions,ScrollView,Image,
     TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import Item from '../top/item';
 
+
 const { width, height } = Dimensions.get('window');
 
-function MainSecond (props){
+class MainSecond extends Component{
+
+    constructor(props){
+        super(props);
+    }
+
+    render(){
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 <View style={styles.container}>
@@ -23,6 +30,7 @@ function MainSecond (props){
             </ImageBackground>
 
         )
+    }
 };
 
 const styles = StyleSheet.create({
@@ -61,5 +69,15 @@ const styles = StyleSheet.create({
     },
 })
 
+const mapStateToProps = (state) => {
+    return {
+        state: state
+    }
+}
 
-export default connect()(MainSecond);
+const mapDispatchToProps = (dispatch) => {
+    return {
+    }
+}  
+
+export default connect(mapStateToProps,mapDispatchToProps)(MainSecond);

@@ -2,9 +2,9 @@ import React from 'react';
 import { StyleSheet, View,Text,Image } from 'react-native';
 import { Marker, Callout } from 'react-native-maps';
 import {connect} from 'react-redux';
-import {navigateTo,setActiveItem} from '../redux/actions';
+import {setActiveItem} from '../redux/actions';
 import LinearGradient from 'react-native-linear-gradient';
-
+import {withNavigation} from 'react-navigation';
 
 function MarkerMore (props) {
     
@@ -23,7 +23,7 @@ function MarkerMore (props) {
             style={styles.plainView}
             onPress={() => {
               props.setActiveItem(hesh);
-              props.state.navigation.push('Details');
+              props.navigation.navigate('Details');
             }}
             >
               <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 
@@ -125,7 +125,6 @@ const styles = StyleSheet.create({
   
   const mapDispatchToProps = (dispatch) => {
     return {
-        navigateTo: (screen) => dispatch(navigateTo(screen)),
         setActiveItem: (hesh) => dispatch(setActiveItem(hesh))
     }
   }
@@ -136,4 +135,4 @@ const styles = StyleSheet.create({
     }
   }
 
-export default connect(mapStateToProps,mapDispatchToProps)(MarkerMore);
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(MarkerMore));
