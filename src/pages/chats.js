@@ -1,25 +1,36 @@
 import React,{Component} from 'react';
-import {View,FlatList,StyleSheet,ImageBackground,Dimensions,ScrollView,Image,
-    TextInput} from 'react-native';
+import {View,Text,StyleSheet,FlatList,Image,ImageBackground,Dimensions,TextInput} from 'react-native';
 import {connect} from 'react-redux';
-import Item from '../top/item';
+import ChatEvent from '../chats/chatEvent';
+import ChatPeople from '../chats/chatPeople';
 
 
 const { width, height } = Dimensions.get('window');
 
-class MainSecond extends Component{
+
+class Likes extends Component{
+
 
     render(){
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 <View style={styles.container}>
-                        <View style={styles.searchConteiner}>
-                            <Image source={require('../img/icons/btns/search.png')} style={styles.searchImage}/>
-                            <TextInput placeholder='поиск пользователей' placeholderTextColor='#FFF960' style={styles.searchInput} />
-                        </View>
-                        <FlatList
-                        data={[{key:'1'},{key: '2'},{key:'3'},{key:'4'},{key:'5'},{key:'6'}]}
-                        renderItem={(item)=><Item item={item}/>}/>
+                    <View style={styles.searchConteiner}>
+
+                        <Image source={require('../img/icons/btns/search.png')} style={styles.searchImage}/>
+                        <TextInput placeholder='поиск чата' placeholderTextColor='#FFF960' style={styles.searchInput} />
+                    </View>
+            
+                    <FlatList
+                    data={[{key:'1'},{key:'2'},{key:'3'},{key:'4'},{key:'5'},{key:'6'},{key:'7'}]}
+                    renderItem={({item,index})=>{
+                    if(+item.key%2){
+                        return <ChatPeople/>
+                    }else{
+                        return <ChatEvent/>
+                    }}}/>
+                    
+
                 </View>
             </ImageBackground>
 
@@ -63,14 +74,5 @@ const styles = StyleSheet.create({
     },
 })
 
-const mapStateToProps = (state) => {
-    return {
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-    }
-}  
-
-export default connect(mapStateToProps,mapDispatchToProps)(MainSecond);
+export default connect()(Likes);

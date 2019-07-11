@@ -3,7 +3,7 @@ import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackgro
 import {connect} from 'react-redux';
 import Conteiner from '../details/conteinerDetailsScreen';
 import SocialLink from '../details/socialLink';
-
+import InfoEvent from '../details/infoEvent';
 const { width, height } = Dimensions.get('window');
 
 
@@ -40,19 +40,7 @@ class Details extends Component{
                             <Text style={styles.mainText}>{name} Футбольное соревнование между студантами </Text>
 
                             <View style={styles.infoConteiner}>
-                                <View style={styles.infoItemConeiner}>
-                                    <Image source={require('../img/icons/detailsScreen/time.png')} style={{width:32,height:32}}/>
-                                    <Text style={styles.infoItemText}>20:40</Text>
-                                </View>
-                                <View style={styles.infoItemConeiner}>
-                                    <Image source={require('../img/icons/detailsScreen/date.png')} style={{width:32,height:32}}/>
-                                    <Text style={styles.infoItemText}>20.05</Text>
-                                    <Text style={{color: '#644800',fontSize:13,position: 'relative',top:-10}}>2019</Text>
-                                </View>
-                                <View style={styles.infoItemConeiner}>
-                                    <Image source={require('../img/icons/detailsScreen/category.png')} style={{width:32,height:32}}/>
-                                    <Text style={styles.infoItemText}>Спорт</Text>
-                                </View>
+                                <InfoEvent/>
                                 <View style={styles.secondConteiner}>
                                     <View style={styles.infoItemSecondConteiner}>
                                         <Image source={{uri:'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}

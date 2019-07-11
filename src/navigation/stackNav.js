@@ -4,7 +4,7 @@ import { createStackNavigator,createBottomTabNavigator } from "react-navigation"
 import main from '../pages/main';
 import Top from '../pages/top';
 import Add from '../pages/add';
-import Likes from '../pages/likes';
+import Chats from '../pages/chats';
 import Acc from '../pages/login';
 import Details from '../pages/details';
 import Messenger from '../pages/messenger';
@@ -33,6 +33,7 @@ const topStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
+
     Main: {
       screen: mainStack,
       navigationOptions: {
@@ -57,8 +58,8 @@ const AppNavigator = createBottomTabNavigator(
             }
           }
       },
-    Likes: {
-        screen: Likes,
+      Chats: {
+        screen: Chats,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
                 return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;

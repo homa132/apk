@@ -14,9 +14,9 @@ function MarkerMore (props) {
         <Marker
             coordinate={location}
           >
-            <View>
+            <View style={styles.conteinerItem}>
               <Image source={{uri: 'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
-                    style={{width: 30,height: 30,borderRadius: 30}}/>
+                    style={styles.itemImage}/>
             </View>
             
             <Callout 
@@ -65,6 +65,21 @@ const styles = StyleSheet.create({
     container: {
       ...StyleSheet.absoluteFillObject,
       alignItems: 'center',
+    },
+    conteinerItem: {
+      width: 30,
+      height: 30,
+      borderRadius: 15,
+      backgroundColor: 'green',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    itemImage: {
+      width: 26,
+      height: 26,
+      borderRadius: 13,
+      borderColor: 'black',
+      borderWidth: 0.8
     },
     modalContent: {
       width:240,
