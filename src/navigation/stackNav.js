@@ -33,14 +33,6 @@ const topStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
-    Top: {
-      screen: topStack,
-      navigationOptions: {
-          tabBarIcon: ({focused})=> {
-              return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;
-          }
-        }
-    },
     Main: {
       screen: mainStack,
       navigationOptions: {
@@ -48,6 +40,14 @@ const AppNavigator = createBottomTabNavigator(
             return focused?<Image source={require('../img/nav/MapIActive.png')}/>:<Image source={require('../img/nav/MapI.png')}/>;
         }
       }
+    },
+    Top: {
+      screen: topStack,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/TopIActive.png')}/>:<Image source={require('../img/nav/TopI.png')}/>;
+          }
+        }
     },
     Add: {
         screen: Add,
@@ -65,7 +65,7 @@ const AppNavigator = createBottomTabNavigator(
             }
           }
       },
-    Acc: {
+      Acc: {
         screen: Acc,
         navigationOptions: {
             tabBarIcon: ({focused})=> {

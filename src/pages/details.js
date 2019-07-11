@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground,Image,TextInput} from 'react-native';
 import {connect} from 'react-redux';
 import Conteiner from '../details/conteinerDetailsScreen';
+import SocialLink from '../details/socialLink';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,7 +13,6 @@ class Details extends Component{
     constructor(props){
         super(props);
         this.state = {
-            showSocial: false,
             scrollEnd: 0
         }
     }
@@ -69,32 +69,7 @@ class Details extends Component{
                             <Text style={styles.moreText}>Material is an adaptable system of guidelines, components, and tools that support the best practices of user interface design. Backed by open-source code, Material streamlines collaboration between designers and developers, and helps teams quickly build beautiful products.</Text>
                             
                             <View style={styles.bottomConteiner}>
-                                <View style={styles.socialConteiner}>
-                                    {showSocial?
-                                    <React.Fragment>
-                                        <TouchableOpacity style={styles.allSocial}>
-                                            <Image source={require('../img/icons/detailsScreen/inst.png')} style={{width: 30,height:30}}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.social}>
-                                            <Image source={require('../img/icons/detailsScreen/telegrame.png')} style={{width: 30,height:30}}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.social} onPress={()=>this.setState({showSocial:false})}>
-                                            <Image source={require('../img/icons/detailsScreen/closeMore.png')} style={{width: 50,height:50}}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.social}>
-                                            <Image source={require('../img/icons/detailsScreen/web.png')} style={{width: 30,height:30}}/>
-                                        </TouchableOpacity>
-                                        <TouchableOpacity style={styles.allSocial}>
-                                            <Image source={require('../img/icons/detailsScreen/facebook.png')} style={{width: 30,height:30}}/>
-                                        </TouchableOpacity>
-                                    </React.Fragment>
-                                    :
-                                    <TouchableOpacity style={[styles.social,{marginLeft:50}]} onPress={()=>this.setState({showSocial:true})}>
-                                        <Image source={require('../img/icons/detailsScreen/IconMore.png')} style={{width: 50,height:50}}/>
-                                    </TouchableOpacity>
-                                    }
-                                    
-                                </View>
+                                <SocialLink/>
 
                                 <TouchableOpacity style={styles.friendsConteiner}>
                                     <Text style={styles.friendsText}>Пригласить</Text>
@@ -185,22 +160,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: '#644800',
         marginTop: 22
-    },
-    socialConteiner: {
-        width:150,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-    },
-    allSocial: {
-        width:140,
-        justifyContent: 'center',
-        alignItems: 'center',
-        margin: 5,
-    },
-    social: {
-        margin: 5,
     },
     bottomConteiner: {
         width: width -40,

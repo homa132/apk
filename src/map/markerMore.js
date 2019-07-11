@@ -24,6 +24,7 @@ function MarkerMore (props) {
             onPress={() => {
               props.setActiveItem(hesh);
               props.navigation.navigate('Details');
+              
             }}
             >
               <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 

@@ -9,10 +9,6 @@ const { width, height } = Dimensions.get('window');
 
 class MainSecond extends Component{
 
-    constructor(props){
-        super(props);
-    }
-
     render(){
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
@@ -71,7 +67,6 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        state: state
     }
 }
 
