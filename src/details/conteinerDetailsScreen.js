@@ -92,7 +92,7 @@ class Conteiner extends Component {
                             <TouchableOpacity onPress={()=> this.props.navigation.goBack()} style={styles.backBtn}>
                                 <Image source={require('../img/icons/btns/btnBack.png')} style={{width:50,height:50}}/>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.messengerBtn}>
+                            <TouchableOpacity style={styles.messengerBtn} onPress={()=> this.props.navigation.navigate('Messenger')}>
                                 <Image source={require('../img/icons/btns/messenger.png')} style={{width:50,height:50}}/>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.locationBtn} onPress={()=>this.setState({showMap:!showMap})}>

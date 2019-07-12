@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image} from 'react-native';
 import { createStackNavigator,createBottomTabNavigator } from "react-navigation";
-import main from '../pages/main';
+import Main from '../pages/main';
 import Top from '../pages/top';
 import Add from '../pages/add';
 import Chats from '../pages/chats';
@@ -11,7 +11,7 @@ import Messenger from '../pages/messenger';
 import DetailsUser from '../pages/detailsUser';
 
 const mainStack = createStackNavigator({
-    Main: main,
+    Main: Main,
     Details: Details,
     Messenger:Messenger
 },
@@ -29,6 +29,16 @@ const topStack = createStackNavigator({
   headerMode: 'none',
   mode: 'modal',
   initialRouteName: 'Top'
+})
+
+const chatsStack = createStackNavigator({
+  Chats: Chats,
+  Messenger:Messenger
+},
+{
+  headerMode: 'none',
+  mode: 'modal',
+  initialRouteName: 'Chats'
 })
 
 const AppNavigator = createBottomTabNavigator(
@@ -59,7 +69,7 @@ const AppNavigator = createBottomTabNavigator(
           }
       },
       Chats: {
-        screen: Chats,
+        screen: chatsStack,
         navigationOptions: {
             tabBarIcon: ({focused})=> {
                 return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;

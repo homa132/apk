@@ -25,7 +25,7 @@ function ChatEvent (props) {
                     <InfoEvent/>
                 </View>
 
-                <TouchableOpacity style={styles.btnConteiner}>
+                <TouchableOpacity style={styles.btnConteiner} onPress={()=>props.navigation.navigate('Messenger')}>
                     <Image style={styles.btnImage} source={require('../img/icons/btns/messenger.png')}/>
                 </TouchableOpacity>
             </View>

@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,StyleSheet,Image,Text,Dimensions} from 'react-native';
+import {View,StyleSheet,Image,Text,Dimensions,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 
@@ -16,7 +16,9 @@ function ChatPeople(props){
                 <Text style={styles.chatPeopleAutorText} numberOfLines={1}>nik_name cdsvsd</Text>
                 <Text style={styles.chatPeopleMessegText} numberOfLines={2}>nik_name: привет!</Text>
             </View>
-            <Image style={styles.imageMessenger} source={require('../img/icons/btns/messenger.png')}/>
+            <TouchableOpacity onPress={()=>props.navigation.navigate('Messenger')}>
+                <Image style={styles.imageMessenger} source={require('../img/icons/btns/messenger.png')}/>
+            </TouchableOpacity>
         </View>
     )
 }
