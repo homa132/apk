@@ -56,12 +56,10 @@ class SignInScreen extends Component {
             const {login,password} = this.state;
             const singInFirebase = await firebase.auth().signInWithEmailAndPassword(login,password);
                 await AsyncStorage.setItem('userToken', singInFirebase.user.uid);
-                this.props.navigation.navigate('App');
-    
+                this.props.navigation.navigate('AuthLoading');
         }catch(error){
             this.setState({error:true,password: ''})
         }
-      
       };
     
       singInGoogle = async () => {
@@ -83,8 +81,7 @@ class SignInScreen extends Component {
                 nick:displayName,heshUser:uid,urlImg:photoURL,...state});
                 
             await AsyncStorage.setItem('userToken', uid);
-            await this.props.navigation.navigate('App');
-            
+            await this.props.navigation.navigate('AuthLoading');
 
         
           } catch (e) {

@@ -1,11 +1,5 @@
 import {FILTER_LIST,SET_ACTIVE_ITEM,GET_MY_DATA,
-    SET_NEW_DATA,SET_NEW_IMAGES} from './const';
-
-//import for get data from database
-import firebase from 'react-native-firebase';
-import AsyncStorage from '@react-native-community/async-storage';
-
-
+    SET_NEW_DATA,SET_NEW_IMAGES} from './const'
 
 export const filterList = (date,category) => {
     return {
@@ -39,11 +33,9 @@ export const setImages = (path,operation) => {
 }
 
 // get data about my accaunt
-export const getMyData = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    const myData  = await firebase.firestore().collection('users').doc(userToken).get();
+export const getMyData = (myDataAcc) => {
     return {
         type: GET_MY_DATA,
-        myDataAcc: myData.data()
+        myDataAcc
     }
 }

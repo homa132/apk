@@ -52,7 +52,8 @@ const item2 = {
 const initState = {
     list : [],
     allList: [item,item2],
-    myDataAcc: ''
+    myDataAcc: '',
+    testList: []
 }
 
 export default (state = initState, action) => {
@@ -69,6 +70,8 @@ export default (state = initState, action) => {
         default: return state
     }
 }
+
+
 
 const filterDate = (date,category,allList) => {
     let filtredList = allList;

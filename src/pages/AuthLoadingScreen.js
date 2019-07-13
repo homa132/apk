@@ -3,19 +3,23 @@ import {ActivityIndicator,StyleSheet,View} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import {getMyData} from '../redux/actions';
 import {connect} from 'react-redux';
+import firebase from 'react-native-firebase';
+
 
 class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
-    this._bootstrapAsync(props);
+    this._bootstrapAsync();
   }
 
-  _bootstrapAsync = async (props) => {
+  _bootstrapAsync = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
     console.log(userToken);
     
     if(userToken){
-      await props.getMyData();
+      const myData  = await firebase.firestore().collection('users').doc(userToken).get();
+      console.log(myData.data());
+      this.props.getMyData(myData.data())
     }
 
     this.props.navigation.navigate(userToken ? 'App' : 'Auth');
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    getMyData: () => dispatch(getMyData())
+    getMyData: (myDataAcc) => dispatch(getMyData(myDataAcc))
   }
 }
 

@@ -28,7 +28,7 @@ class App extends Component {
         data.push(item.data());
       })
     });
-    console.log(data);
+
     
     this.setState({loader:false});
   }
@@ -39,7 +39,6 @@ class App extends Component {
 
   render() {
     let {loader} = this.state;
-    console.log(this.props.state);
     
     if(loader){
       return (
