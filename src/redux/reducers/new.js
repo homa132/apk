@@ -16,12 +16,17 @@ const initState = {
     location: {
         latitude: 50.459793,
         longitude: 30.534518,
-      },
-    nameAutor: '',
-    heshAutor: '',
+    },
+    autor: {
+        balsAutor: '',
+        nickAutor: '',
+        heshAutor: '',
+        photoAutor: ''
+    },
     heshMessenger: '',
     textMore:'',
-    save: false
+    likesHesh: [],
+    save: false,
 }
 
 

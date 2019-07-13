@@ -1,4 +1,4 @@
-import {GET_DATA,SET_NAVIGATOR,FILTER_LIST} from '../const';
+import {FILTER_LIST,GET_MY_DATA} from '../const';
 
 const item = {
     hesh: '12341234',
@@ -51,23 +51,21 @@ const item2 = {
 
 const initState = {
     list : [],
-    testList: [item],
-    allList: [item,item2]
+    allList: [item,item2],
+    myDataAcc: ''
 }
 
 export default (state = initState, action) => {
 
-    const {newData,navigator,category,date,type} = action;
-    const {list,testList,allList} = state;
+    const {category,date,type} = action;
+    const {allList} = state;
 
     switch (type) {
-        case GET_DATA:
-            return {...state,list:newData}
-        case SET_NAVIGATOR:
-            return {...state,navigator:navigator}
         case FILTER_LIST:
             const newTestList = filterDate(date,category,allList)
             return {...state,testList: newTestList}
+        case GET_MY_DATA: 
+            return {...state,myDataAcc: action.myDataAcc}
         default: return state
     }
 }

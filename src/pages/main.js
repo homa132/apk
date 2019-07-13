@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import {StyleSheet, Dimensions, View,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {getData} from '../redux/actions'
 import firebase from 'react-native-firebase';
 import Map from '../map/map';
 import FilterBtn from '../main/filterBtn/filterBtn';
@@ -29,7 +28,8 @@ class App extends Component {
         data.push(item.data());
       })
     });
-    this.props.getData(data);
+    console.log(data);
+    
     this.setState({loader:false});
   }
 
@@ -39,7 +39,8 @@ class App extends Component {
 
   render() {
     let {loader} = this.state;
-
+    console.log(this.props.state);
+    
     if(loader){
       return (
         <View style={styles.container}>
@@ -70,7 +71,6 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    getData: (data) => dispatch(getData(data)),
   }
 }
 

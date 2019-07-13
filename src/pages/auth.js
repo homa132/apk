@@ -7,6 +7,30 @@ import { GoogleSignin } from 'react-native-google-signin';
 
 const { width, height } = Dimensions.get('window');
 
+const state = {
+    gender: 'default',
+    myEvents: [],
+    myMessengers: [],
+    aboutMe: '',
+    contacts: {
+        facebook: '',
+        webSite: '',
+        telegrame: '',
+        instagrame: ''
+    },
+    color: '#00FF29',
+    friends: [],
+    myFriends: [],
+    bal: 0,
+    position: 0,
+    ocenka:{
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0
+    },
+}
 
 class SignInScreen extends Component {
 
@@ -52,9 +76,13 @@ class SignInScreen extends Component {
             const credential = firebase.auth.GoogleAuthProvider.credential(data.idToken, data.accessToken);
 
             const register = await firebase.auth().signInWithCredential(credential);
-            await firebase.firestore().collection('users').doc(register.user.uid).set({email:register.user.email,
-                name:register.user.displayName,heshUser:register.user.uid,urlImg:register.user.photoURL,gender: 'default'});
-            await AsyncStorage.setItem('userToken', register.user.uid);
+
+            const {email,uid,displayName, photoURL} = register.user;
+
+            await firebase.firestore().collection('users').doc(uid).set({email:email,
+                nick:displayName,heshUser:uid,urlImg:photoURL,...state});
+                
+            await AsyncStorage.setItem('userToken', uid);
             await this.props.navigation.navigate('App');
             
 

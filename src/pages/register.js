@@ -11,16 +11,37 @@ class Register extends Component{
     state = {
         email: '',
         password: '',
-        name: '',
+        nick: '',
         gender: 'default',
         img: '',
         error: false,
-        disabledBtn: true
+        disabledBtn: true,
+        myEvents: [],
+        myMessengers: [],
+        aboutMe: '',
+        contacts: {
+            facebook: '',
+            webSite: '',
+            telegrame: '',
+            instagrame: ''
+        },
+        color: '#00FF29',
+        friends: [],
+        myFriends: [],
+        bal: 0,
+        position: 0,
+        ocenka:{
+            1: 0,
+            2: 0,
+            3: 0,
+            4: 0,
+            5: 0
+        },
     }
 
     componentDidUpdate(){
-        const {email,password,name,gender,img,disabledBtn} = this.state;
-        if(email==''|| password==''||name==''||gender=='default'||img==''){
+        const {email,password,nick,gender,img,disabledBtn} = this.state;
+        if(email==''|| password==''||nick==''||gender=='default'||img==''){
             disabledBtn?null:this.setState({disabledBtn:true});
         }else{
             disabledBtn?this.setState({disabledBtn:false}):null;
@@ -87,7 +108,7 @@ class Register extends Component{
                         <View style={styles.inpuntsConteiner}>
                             {this.createInput('Введите эл. почту','email')}
                             {this.createInput('Введите пароль','password')}
-                            {this.createInput('Введите ник','name')}
+                            {this.createInput('Введите ник','nick')}
                         </View>
     
                         <View style={styles.changeGenderConteiner}>
