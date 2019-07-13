@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import {View,StyleSheet,Text,TouchableOpacity,Image,ImageBackground,Dimensions,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
-import InfoUser from '../top/infoAboutUsers';
-import Ocenka from '../top/ocenka';
+import InfoUser from '../detailsUser/infoAboutUsers';
+import Ocenka from '../detailsUser/ocenka';
 import SocialLink from '../details/socialLink';
 
 

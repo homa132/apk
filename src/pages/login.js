@@ -5,8 +5,8 @@ import {connect} from 'react-redux';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
-import InfoUser from '../top/infoAboutUsers'
-import Ocenka from '../top/ocenka';
+import InfoUser from '../detailsUser/infoAboutUsers'
+import Ocenka from '../detailsUser/ocenka';
 
 const { width, height } = Dimensions.get('window');
 
