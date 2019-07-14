@@ -1,8 +1,8 @@
 import React,{Component} from 'react';
 import {View,TouchableOpacity,StyleSheet,ScrollView,Dimensions,ImageBackground,TextInput,Image,Text,
-    TimePickerAndroid,Picker,DatePickerAndroid} from 'react-native';
+    TimePickerAndroid,Picker,DatePickerAndroid,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {setNewData} from '../redux/actions';
+import {setNewData,setDefaultState} from '../redux/actions';
 import Conteiner from '../add/conteinerAddScreen'
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
@@ -18,6 +18,7 @@ class Add extends Component{
         super(props);
         this.state = {
             scrollEnd: 0,
+            saved: false
         };
         this.listCol = firebase.firestore().collection('list');
     }
@@ -84,8 +85,13 @@ class Add extends Component{
     }
 
     saveEvent = async () => {
+        await this.props.setNewData('','name');
+        await this.setState({saved: true});
         const {images,name} = this.props.state;
+        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents} = this.props;
         const inList = await this.listCol.add(this.props.state);
+
+
         const hesh = inList.path.split('/')[1];
         let urlImg = []
         for(let i = 0; i< images.length;i++ ){
@@ -95,7 +101,6 @@ class Add extends Component{
             urlImg.push(imgUrl.downloadURL)
         }
 
-        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents} = this.props;
 
         await this.listCol.doc(hesh).update({
             images: urlImg,
@@ -109,15 +114,16 @@ class Add extends Component{
         await firebase.firestore().collection('users').doc(autorHesh).update({
             myEvents: [...autorEvents,{hesh,name}]
         })
-        console.log('finish');
+        await this.props.setDefaultState();
+        await this.setState({saved: false});
     }
 
     render(){
-        const {scrollEnd} = this.state;
-        const {category,contacts,date,hesh,heshAutor,heshMessenger,
-            images,location,name,nameAutor,textMore,time,save} = this.props.state;
+        const {scrollEnd,saved} = this.state;
+        const {category,name,textMore,save,time,date} = this.props.state;
 
         return (
+            <React.Fragment>
                 <Conteiner scrollEnd={scrollEnd}>
                     <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
                         <View style={styles.line}></View>
@@ -128,10 +134,11 @@ class Add extends Component{
                                         numberOfLines={1} value={name} onChangeText={(value)=>this.setDataRedax(value,'name')}/>
 
                                 <View style={styles.addBtnsConteiner}>
-                                    <TouchableOpacity onPress={this.setTime}>
+                                    <TouchableOpacity onPress={this.setTime} style={styles.btnConteiner}>
                                         <LinearGradient style={styles.addBtn} colors={['#FFF960','#E8BC4D']}>
                                             <Image style={styles.addBtnImg} source={require('../img/icons/detailsScreen/time.png')}/>
                                         </LinearGradient>
+                                        <Text style={styles.btnTimeText}>{time}</Text>
                                     </TouchableOpacity>
                                     
                                     <Picker style={styles.typePicker} onValueChange={(value,index)=>this.setDataRedax(value,'category')}
@@ -139,10 +146,12 @@ class Add extends Component{
                                         {types.map((item,index)=><Picker.Item label={item.label} value={item.value} key={index}/>)}
                                     </Picker>
 
-                                    <TouchableOpacity onPress={this.setDate}>
+                                    <TouchableOpacity onPress={this.setDate} style={styles.btnConteiner}>
                                         <LinearGradient style={styles.addBtn} colors={['#FFF960','#E8BC4D']}>
                                             <Image style={styles.addBtnImg} source={require('../img/icons/detailsScreen/date.png')}/>
                                         </LinearGradient>
+                                        <Text style={styles.btnDateFirstText}>{date.month}</Text>
+                                        <Text style={styles.btnDateSecondText}>{date.year}</Text>
                                     </TouchableOpacity>
 
                                 </View>
@@ -157,8 +166,8 @@ class Add extends Component{
                                 {this.socialItem('https://www.facebook.com/','facebook')}
                                 {this.socialItem('https://www.instagram.com/','instagrame')}
                                 {this.socialItem('https://www.google.com/','webSite')}
-                                {/* disabled={!save} style={save?{opacity:1}:{opacity:0.5}} */}
-                                <TouchableOpacity onPress={this.saveEvent} >
+
+                                <TouchableOpacity onPress={this.saveEvent} disabled={!save} style={save?{opacity:1}:{opacity:0.5}}>
                                     <LinearGradient colors={['#FFF960','#E8BC4D']} style={styles.saveBtnConteiner}  >
                                         <Text style={styles.saveBtnText}>Создать</Text>
                                     </LinearGradient>
@@ -167,11 +176,71 @@ class Add extends Component{
                         </ScrollView>
                     </ImageBackground>
                 </Conteiner>
+                {saved?
+                <View style={styles.savedConteiner}>
+                    <View style={styles.savedCont}>
+                        <Text style={styles.savedText}>Создание нового события</Text>
+                        <ActivityIndicator size='large' color="rgba(255, 249, 96, 1)"/>
+                    </View>
+                </View>:null}
+            </React.Fragment>
+               
         )
     }
 };
 
 const styles = StyleSheet.create({
+    btnConteiner:{
+        justifyContent: 'flex-start',
+        alignItems: 'center'
+    },
+    btnTimeText: {
+        fontSize: 16,
+        color: '#644800',
+        padding: 0,
+        margin: 0
+    },
+    btnDateFirstText: {
+        fontSize: 13,
+        color: '#644800',
+        padding: 0,
+        margin: 0
+    },
+    btnDateSecondText: {
+        fontSize: 10,
+        color: '#644800',
+        padding: 0,
+        margin: 0
+    },
+    savedConteiner: {
+        width: width,
+        height: height,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 2000,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    savedCont: {
+        width: 250,
+        height: 170 ,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderColor: '#FFF960',
+        borderWidth: 4,
+        backgroundColor: 'rgba(232, 188, 77, 0.7)',
+        borderRadius: 20
+    },
+    savedText: {
+        fontSize: 24,
+        letterSpacing: 0.5,
+        fontWeight: 'bold',
+        color: 'rgba(100, 72, 0, 1)',
+        width: 240,
+        textAlign: 'center',
+        textAlignVertical: 'center'
+    }, 
     conteiner: {
         flex: 1,
         alignItems: 'center',
@@ -208,7 +277,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         width: width - 40,
         justifyContent: 'space-around',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         marginTop: 20,
         maxWidth: width - 40
     },
@@ -219,7 +288,8 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderRadius:10,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        flexDirection: 'column'
     },
     addBtnImg: {
         width: 40,
@@ -232,7 +302,7 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign: 'center',
         borderRadius: 10,
-        marginTop: 35
+        marginTop: 10
     },
     dopDataText: {
         color: '#644800',
@@ -286,7 +356,7 @@ const styles = StyleSheet.create({
     typePicker: {
         width: 150,
         height: 40,
-        color: '#644800'
+        color: '#644800',
     },
 })
 
@@ -303,7 +373,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        setNewData: (value,name,secondName)=> dispatch(setNewData(value,name,secondName))
+        setNewData: (value,name,secondName)=> dispatch(setNewData(value,name,secondName)),
+        setDefaultState: () => dispatch(setDefaultState())
     }
 
 }

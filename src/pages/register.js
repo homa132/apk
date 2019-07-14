@@ -77,13 +77,12 @@ class Register extends Component{
             this.setState({error: true});
             err = true;
           });
-          err?err=false:null;
           if(!err){
             const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
             await firebase.firestore().collection('users').doc(register.user.uid).set({...this.state,urlImg:image.downloadURL,heshUser:register.user.uid});
             this.props.navigation.navigate('Auth')
           }
-
+          err?err=false:null;
     }
 
     render() {

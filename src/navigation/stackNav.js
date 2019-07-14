@@ -43,7 +43,7 @@ const chatsStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
-
+    
     Main: {
       screen: mainStack,
       navigationOptions: {
@@ -61,29 +61,29 @@ const AppNavigator = createBottomTabNavigator(
         }
     },
     Add: {
-        screen: Add,
-        navigationOptions: {
-            tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../img/nav/AddIActive.png')}/>:<Image source={require('../img/nav/AddI.png')}/>;
-            }
+      screen: Add,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/AddIActive.png')}/>:<Image source={require('../img/nav/AddI.png')}/>;
           }
-      },
-      Chats: {
-        screen: chatsStack,
-        navigationOptions: {
-            tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
-            }
+        }
+    },
+    Chats: {
+      screen: chatsStack,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
           }
-      },
-      Acc: {
-        screen: Acc,
-        navigationOptions: {
-            tabBarIcon: ({focused})=> {
-                return focused?<Image source={require('../img/nav/AccIActive.png')}/>:<Image source={require('../img/nav/AccI.png')}/>;
-            }
+        }
+    },
+    Acc: {
+      screen: Acc,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/AccIActive.png')}/>:<Image source={require('../img/nav/AccI.png')}/>;
           }
-      },
+        }
+    },
   },{
     headerMode: 'none',
     mode: 'modal',

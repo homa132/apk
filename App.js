@@ -5,12 +5,13 @@ import ReduxThunk from 'redux-thunk';
 import reducer from './src/redux/reducers/reducer';
 import { createAppContainer,createSwitchNavigator,createStackNavigator } from "react-navigation";
 import StackNav from './src/navigation/stackNav';
+import { composeWithDevTools } from 'remote-redux-devtools';
 
 import AuthLoadingScreen from './src/pages/AuthLoadingScreen';
 import Auth from './src/pages/auth';
 import Register from './src/pages/register';
 
-const store = createStore(reducer,applyMiddleware(ReduxThunk));
+const store = createStore(reducer,composeWithDevTools(applyMiddleware(ReduxThunk)));
 
 const loginStack = createStackNavigator({
   Register: Register,

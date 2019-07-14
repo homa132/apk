@@ -34,8 +34,7 @@ class MarkerTypes extends React.Component {
         >
           {this.props.new?
             <Marker
-            coordinate={{latitude: LATITUDE,
-                      longitude: LONGITUDE,}}
+            coordinate={this.props.location}
             onDragEnd={e => this.props.setNewData(e.nativeEvent.coordinate,'location') }
             draggable>
               <View>

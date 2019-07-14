@@ -1,4 +1,4 @@
-import {SET_NEW_DATA,SET_NEW_IMAGES} from '../const';
+import {SET_NEW_DATA,SET_NEW_IMAGES,SET_DEFAULT_STATE} from '../const';
 
 const initState = {
     hesh: '',
@@ -49,7 +49,9 @@ export default (state = initState, action) => {
             if(action.operation=='remove'){
                 return{...state,images:[]}
             }
-        
+        case SET_DEFAULT_STATE:
+            return {...saveInitialState}
+
         default: return state
     }
 

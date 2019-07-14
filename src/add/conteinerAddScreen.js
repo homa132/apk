@@ -46,7 +46,6 @@ class Conteiner extends Component {
     }
 
     addPhoto = () => {
-        this.setState({showFirst: false})
         ImagePicker.launchImageLibrary({
             title: 'Выберите фото',
             mediaType: 'photo',
@@ -56,12 +55,21 @@ class Conteiner extends Component {
             noData: true
         },(image)=> {
             this.props.setImages(image.uri,'add');
+            this.setState({showFirst: false});
         })
     }
 
     removePhoto = () => {
         this.setState({showFirst:true});
         this.props.setImages('','remove');
+    }
+
+    componentDidUpdate(){
+
+
+        if(!this.props.images.length&&!this.state.showFirst){
+            this.setState({showFirst:true});
+        }
     }
 
     render(){
@@ -71,6 +79,7 @@ class Conteiner extends Component {
             outputRange: [width, 30]
           })
         let {scrollEnd} = this.props;
+
         return (
             <View style={styles.conteiner} 
             onStartShouldSetResponder={(e)=>{
@@ -97,10 +106,10 @@ class Conteiner extends Component {
                 }
             }}>
                         <View style={styles.conteinerImageSlider}>
-                            {showMap?<Map new={true}/>:
+                            {showMap?<Map new={true} location={this.props.location}/>:
                             <ImageSlider
                             loop
-                            images={this.state.showFirst?['https://www.tellerreport.com/images/no-image.png',...this.props.state.images]:[...this.props.state.images]}
+                            images={this.state.showFirst?['https://www.tellerreport.com/images/no-image.png',...this.props.images]:[...this.props.images]}
                             customSlide={({ index,item }) => (
                                 <Image source={{ uri: item }} style={{width:width,height:width}} key={index}/>
                             )}
@@ -219,7 +228,8 @@ mapDispatchToProps = (dispatch)=> {
 
 const mapStateToProps = (state) => {
     return {
-        state: state.new
+        images: state.new.images,
+        location: state.new.location
     }
 }
 
