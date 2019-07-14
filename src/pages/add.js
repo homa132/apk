@@ -5,7 +5,7 @@ import {connect} from 'react-redux';
 import {setNewData} from '../redux/actions';
 import Conteiner from '../add/conteinerAddScreen'
 import LinearGradient from 'react-native-linear-gradient';
-
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,9 +14,14 @@ const types = [{label:'Тип события',value:"default"},{label:"Спор�
 
 class Add extends Component{
 
-    state = {
-        scrollEnd: 0
+    constructor(props){
+        super(props);
+        this.state = {
+            scrollEnd: 0,
+        };
+        this.listCol = firebase.firestore().collection('list');
     }
+
 
     //create social inputs
     socialItem = (placeholder,name) => {
@@ -78,8 +83,33 @@ class Add extends Component{
         }
     }
 
-    saveEvent = () => {
-        console.log('save');
+    saveEvent = async () => {
+        const {images,name} = this.props.state;
+        const inList = await this.listCol.add(this.props.state);
+        const hesh = inList.path.split('/')[1];
+        let urlImg = []
+        for(let i = 0; i< images.length;i++ ){
+            const getType = images[i].split('.');
+            const typeImg = getType[getType.length - 1];
+            const imgUrl = await firebase.storage().ref().child(`list/${hesh}/${i}.${typeImg}`).put(images[i]);
+            urlImg.push(imgUrl.downloadURL)
+        }
+
+        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents} = this.props;
+
+        await this.listCol.doc(hesh).update({
+            images: urlImg,
+            autor: {
+                colorAutor:autorColor,
+                nickAutor: autorNick,
+                heshAutor: autorHesh,
+                photoAutor: autorPhoto
+            }
+        })
+        await firebase.firestore().collection('users').doc(autorHesh).update({
+            myEvents: [...autorEvents,{hesh,name}]
+        })
+        console.log('finish');
     }
 
     render(){
@@ -127,8 +157,8 @@ class Add extends Component{
                                 {this.socialItem('https://www.facebook.com/','facebook')}
                                 {this.socialItem('https://www.instagram.com/','instagrame')}
                                 {this.socialItem('https://www.google.com/','webSite')}
-
-                                <TouchableOpacity onPress={this.saveEvent} disabled={!save} style={save?{opacity:1}:{opacity:0.5}}>
+                                {/* disabled={!save} style={save?{opacity:1}:{opacity:0.5}} */}
+                                <TouchableOpacity onPress={this.saveEvent} >
                                     <LinearGradient colors={['#FFF960','#E8BC4D']} style={styles.saveBtnConteiner}  >
                                         <Text style={styles.saveBtnText}>Создать</Text>
                                     </LinearGradient>
@@ -262,7 +292,12 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-      state: state.new
+      state: state.new,
+      autorHesh: state.data.myDataAcc.heshUser,
+      autorNick: state.data.myDataAcc.nick,
+      autorColor: state.data.myDataAcc.color,
+      autorPhoto: state.data.myDataAcc.urlImg,
+      autorEvents: state.data.myDataAcc.myEvents
     }
   }
 

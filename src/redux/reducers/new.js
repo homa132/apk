@@ -18,7 +18,7 @@ const initState = {
         longitude: 30.534518,
     },
     autor: {
-        balsAutor: '',
+        colorAutor: '',
         nickAutor: '',
         heshAutor: '',
         photoAutor: ''
@@ -61,12 +61,8 @@ save = (state,action) => {
     const searchNewState = {...state,[action.name]:action.value};
     const {name,location,textMore,time,date,images,category} = searchNewState;
     if(name == ''||time==''||location.latitude==50.459793||textMore==''||date.month==''||category.name==''){
-        console.log(searchNewState);
-
         return {...searchNewState,save:false}
     }else{
-        console.log(searchNewState);
-
         return {...searchNewState,save:true}
     }
 }
