@@ -18,7 +18,30 @@ class MarkerTypes extends React.Component {
 
   render() {
     
-    return (
+    const DELTA1 = 0.0922;
+    const DELTA2 = DELTA1 * ASPECT_RATIO;
+
+    if(this.props.one){
+      return(
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: this.props.location.latitude,
+            longitude: this.props.location.longitude,
+            latitudeDelta: DELTA1,
+            longitudeDelta: DELTA2,
+          }}
+        >
+          <Marker
+            coordinate={this.props.location}>
+              <View style={[styles.conteinerItem,{backgroundColor: this.props.autor.colorAutor}]}>
+                <Image source={{uri: this.props.autor.photoAutor}} style={styles.itemImage}/>
+              </View>
+          </Marker>
+        </MapView>
+      )
+    }else{
+      return (
         <MapView
           style={styles.map}
           initialRegion={{
@@ -44,9 +67,10 @@ class MarkerTypes extends React.Component {
               )
             })
           }
-        
         </MapView>
     );
+    }
+    
   }
 }
 

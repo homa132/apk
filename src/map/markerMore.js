@@ -21,8 +21,8 @@ function MarkerMore (props) {
             style={styles.plainView}
             onPress={() => {
               props.setActiveItem(hesh);
-              props.navigation.navigate('Details');
-            }}
+              props.navigation.push('Details');
+            }}s
             >
               <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 
                             locations={[0.01,0.5,0.99]} style={styles.modalContent}>

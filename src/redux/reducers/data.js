@@ -2,7 +2,6 @@ import {FILTER_LIST,GET_MY_DATA,SET_ALL_LIST_EVENTS} from '../const';
 
 
 const initState = {
-    list : [],
     allList: [],
     myDataAcc: '',
     testList: [],

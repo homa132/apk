@@ -19,19 +19,18 @@ class Details extends Component{
 
 
     changeItem = () => {
-        const {navigation,data} = this.props.state;
-        return data.testList.find((item,index) => {
-            return navigation.heshItem == item.hesh
+        return this.props.list.find((item,index) => {
+            return this.props.heshItem == item.hesh
         })
     }
 
     render(){
         let item = this.changeItem();
-        const {name,date,time,category,contacts,images,heshMessenger,textMore}  = item;
-        const {showSocial,scrollEnd} = this.state;
+        const {name,date,time,category,contacts,images,heshMessenger,textMore,location,likesHesh,autor,hesh}  = item;
+        const {scrollEnd} = this.state;
 
         return (
-            <Conteiner scrollEnd={scrollEnd}>
+            <Conteiner scrollEnd={scrollEnd} images={images} location={location} autor={autor} likesHesh={likesHesh} hesh={hesh}>
                 <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
                     <View style={styles.line}></View>
                     <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
@@ -40,22 +39,28 @@ class Details extends Component{
                             <Text style={styles.mainText}>{name}</Text>
 
                             <View style={styles.infoConteiner}>
-                                <InfoEvent/>
+
+                                <InfoEvent date={date} time={time} category={category}/>
+
                                 <View style={styles.secondConteiner}>
-                                    <View style={styles.infoItemSecondConteiner}>
-                                        <Image source={{uri:'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
-                                                style={{width:50,height:50,borderRadius:25}}/>
-                                        <Text style={styles.nickText}>Nick Name Autor</Text>
-                                    </View>
-                                    <View style={styles.infoItemSecondConteiner}>
+
+                                    <TouchableOpacity style={styles.infoItemSecondConteiner}>
+                                        <View style={[styles.autorImageBackground,{backgroundColor:autor.colorAutor}]}>
+                                            <Image source={{uri:autor.photoAutor}}
+                                                    style={{width:50,height:50,borderRadius:25,borderColor: 'white',borderWidth:1}}/>
+                                        </View>
+                                        <Text style={styles.nickText}>{autor.nickAutor}</Text>
+                                    </TouchableOpacity>
+
+                                    {/* <View style={styles.infoItemSecondConteiner}>
                                         <Image style={{width:40,height: 40}} source={require('../img/icons/detailsScreen/people.png')}/>
                                         <Text style={styles.peopleText}>500</Text>
-                                    </View>
+                                    </View> */}
                                 </View>
                             </View>
 
-                            <Text style={styles.moreText}>Material is an adaptable system of guidelines, components, and tools that support the best practices of user interface design. Backed by open-source code, Material streamlines collaboration between designers and developers, and helps teams quickly build beautiful products.</Text>
-                            
+                            <Text style={styles.moreText}>{textMore}</Text>
+
                             <View style={styles.bottomConteiner}>
                                 <SocialLink/>
 
@@ -64,8 +69,6 @@ class Details extends Component{
                                 </TouchableOpacity>
                             </View>
                             
-
-
                         </View>
                         <Text></Text>
                     </ScrollView>
@@ -77,6 +80,13 @@ class Details extends Component{
 };
 
 const styles = StyleSheet.create({
+    autorImageBackground: {
+        width: 55,
+        height: 55,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius:27.5
+    },
     backgroundConteiner: {
         width: '100%',
         height: '100%',
@@ -126,9 +136,11 @@ const styles = StyleSheet.create({
     infoItemSecondConteiner: {
         flexDirection: 'row',
         alignItems: 'center',
+        width: width-20,
+        justifyContent: 'flex-start'
     },
     nickText: {
-        fontSize: 15,
+        fontSize: 17,
         color: '#000000',
         marginLeft: 10
     },
@@ -174,7 +186,8 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        state: state
+        list: state.data.testList,
+        heshItem: state.navigation.heshItem
     }
 }
 

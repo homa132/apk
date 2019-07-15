@@ -7,7 +7,6 @@ import InfoEvent from '../details/infoEvent';
 const { width, height } = Dimensions.get('window');
 
 function ChatEvent (props) {
-
     return(
         <View style={styles.chatEventConteiner}>
             <View style={styles.chatEventTopConteiner}>
@@ -25,7 +24,7 @@ function ChatEvent (props) {
                     <InfoEvent/>
                 </View>
 
-                <TouchableOpacity style={styles.btnConteiner} onPress={()=>props.navigation.navigate('Messenger')}>
+                <TouchableOpacity style={styles.btnConteiner} onPress={()=>props.navigation.push('Messenger')}>
                     <Image style={styles.btnImage} source={require('../img/icons/btns/messenger.png')}/>
                 </TouchableOpacity>
             </View>

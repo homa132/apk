@@ -27,7 +27,7 @@ class Likes extends Component{
                     if(+item.key%2){
                         return <ChatPeople/>
                     }else{
-                        return <ChatEvent/>
+                         return <ChatEvent/>
                     }}}/>
                     
 

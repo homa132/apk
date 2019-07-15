@@ -4,6 +4,7 @@ import ImageSlider from 'react-native-image-slider';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import Map from '../map/map';
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -12,12 +13,25 @@ class Conteiner extends Component {
     constructor(props){
         super(props);
         this.animatedTop = new Animated.Value (0);
-        this.state = {
-            scroled: false,
-            pageY:0,
-            likes: false,
-            showMap:false
+        const indexLike = props.likesHesh.findIndex(item=>item == props.heshUser);
+        
+        if(indexLike == -1){
+            this.state = {
+                scroled: false,
+                pageY:0,
+                likes: false,
+                showMap:false
+            }
+        }else{
+            this.state = {
+                scroled: false,
+                pageY:0,
+                likes: true,
+                showMap:false
+            }
         }
+
+
     }
 
     toTop = () => {
@@ -44,15 +58,29 @@ class Conteiner extends Component {
         ).start(this.setState({scroled:false}))
     }
 
+    like = async () => {
+        const {likes} = this.state;
+        if(!likes){
+            await firebase.firestore().collection('list').doc(this.props.hesh).update({
+                likesHesh: [...this.props.likesHesh,this.props.heshUser]
+            })
+        }else{
+            const newLikesHesh = this.props.likesHesh.filter(item=>item !=this.props.heshUser);
+            await firebase.firestore().collection('list').doc(this.props.hesh).update({
+                likesHesh: [...newLikesHesh]
+            })
+        }
+        await this.setState({likes:!likes});
+    }
 
-    render(){
+    render = ()=>{
         const {pageY,scroled,likes,showMap} = this.state;
         const toTop = this.animatedTop.interpolate({
             inputRange: [0, 1],
             outputRange: [width, 90]
           })
-        const {scrollEnd} = this.props;
-        
+        const {scrollEnd,images,location,autor,likesHesh} = this.props;
+
         return (
             <View style={styles.conteiner} onStartShouldSetResponder={(e)=>{
                 if(e.nativeEvent.pageY>width-40&&!scroled){
@@ -78,11 +106,10 @@ class Conteiner extends Component {
                 }
             }}>
                         <View style={styles.conteinerImageSlider}>
-                            {showMap?<Map/>:
+                            {showMap?<Map one={true} location={location} autor={autor}/>:
                             <ImageSlider
                             loop
-                            images={['https://firebasestorage.googleapis.com/v0/b/project-99846.appspot.com/o/testImage.png?alt=media&token=e4ac9402-dc9d-4621-b886-9c0ace7d903b',
-                            'https://firebasestorage.googleapis.com/v0/b/project-99846.appspot.com/o/usersImage%2FqTTXpkM9sWOYpc8GXRJ4sG6Y7wq2%2FuserImg?alt=media&token=7b69b590-d9c2-4b21-b6bc-6b8e2a216c1d']}
+                            images={images}
                             customSlide={({ index, item, style }) => (
                                 <Image source={{ uri: item }} style={{width:width,height:width}} key={index}/>
                             )}
@@ -107,7 +134,7 @@ class Conteiner extends Component {
                                     <Text style={styles.textBtn}>Киев</Text>
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity style={styles.likeBtn} onPress={()=>this.setState({likes:!likes})}>
+                            <TouchableOpacity style={styles.likeBtn} onPress={()=>this.like()}>
                                 <View style={styles.cirecleBtn}>
                                     {likes?
                                     <Image source={require('../img/icons/detailsScreen/likeActive.png')} style={{width:26,height:24}}/>:
@@ -116,7 +143,7 @@ class Conteiner extends Component {
 
                                 </View>
                                 <View style={styles.textConteinerBtn}>
-                                    <Text style={styles.textBtn}>500</Text>
+                                    <Text style={styles.textBtn}>{likesHesh.length}</Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -208,7 +235,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = (state) => {
     return {
-        state: state
+        heshUser: state.data.myDataAcc.heshUser
     }
 }
 
