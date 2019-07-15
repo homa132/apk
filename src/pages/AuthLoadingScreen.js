@@ -19,6 +19,7 @@ class AuthLoadingScreen extends React.Component {
       const myData  = await firebase.firestore().collection('users').doc(userToken).onSnapshot(
         (doc) => {
           this.props.getMyData(doc.data ());
+          
         }
       );
     }

@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import firebase from 'react-native-firebase';
 import Map from '../map/map';
 import FilterBtn from '../main/filterBtn/filterBtn';
+import {setDataAllEvents} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -11,65 +12,43 @@ class App extends Component {
   constructor(props){
     super(props);
     this.ref = firebase.firestore().collection('list');
-
-    this.state = {
-      loader: true
-    }
-  }
-
-  componentDidMount() {
     this.SearchData();
   }
 
-  SearchData(){
-    let data = [];
-    this.unsubscribe = this.ref.onSnapshot((newData) => {
+  SearchData = async ()=>{
+    await this.ref.onSnapshot((newData) => {
+      let data = [];
       newData.forEach(item => {
         data.push(item.data());
-      })
+      });
+      this.props.setDataAllEvents(data);
     });
-
-    
-    this.setState({loader:false});
   }
 
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
 
   render() {
-    let {loader} = this.state;
-    
-    if(loader){
-      return (
-        <View style={styles.container}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      )
-    }else{
       return (
         <View style={styles.container}>
           <View style={styles.containerFilterBtn}>
             <FilterBtn/>
           </View>
           <View style={styles.mapConteiner}>
-              <Map/>
+              <Map listEvents={this.props.listEvents}/>
           </View>
         </View>
       );
-    }
-
   }
 }
 
 
 const mapStateToProps = (state) => {
   return {
-    state: state.data
+    listEvents: state.data.testList
   }
 }
 const mapDispatchToProps = (dispatch) => {
   return {
+    setDataAllEvents: (events) => dispatch(setDataAllEvents(events))
   }
 }
 

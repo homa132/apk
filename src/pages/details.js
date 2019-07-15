@@ -20,14 +20,14 @@ class Details extends Component{
 
     changeItem = () => {
         const {navigation,data} = this.props.state;
-        return data.testList.filter((item,index) => {
+        return data.testList.find((item,index) => {
             return navigation.heshItem == item.hesh
         })
     }
 
     render(){
         let item = this.changeItem();
-        const {name,date,time,category,contacts,images,heshMessenger,textMore}  = item[0];
+        const {name,date,time,category,contacts,images,heshMessenger,textMore}  = item;
         const {showSocial,scrollEnd} = this.state;
 
         return (
@@ -37,7 +37,7 @@ class Details extends Component{
                     <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
                         <View style={styles.conteiner}>
                             
-                            <Text style={styles.mainText}>{name} Футбольное соревнование между студантами </Text>
+                            <Text style={styles.mainText}>{name}</Text>
 
                             <View style={styles.infoConteiner}>
                                 <InfoEvent/>

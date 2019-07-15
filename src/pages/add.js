@@ -36,7 +36,7 @@ class Add extends Component{
             <View style={styles.socialConteiner}>
                 <Image style={styles.socialImg} source={icon}/>
                 <TextInput style={styles.socialInput} placeholder={placeholder} placeholderTextColor='#644800' 
-                    value={this.props.state[name]} onChangeText={(value)=>this.setDataRedax(value,'contacts',name)}/>
+                    value={this.props.state.contacts[name]} onChangeText={(value)=>this.setDataRedax(value,'contacts',name)}/>
             </View>
         )
     }
@@ -85,14 +85,12 @@ class Add extends Component{
     }
 
     saveEvent = async () => {
-        await this.props.setNewData('','name');
+        const hesh = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+
+        await this.props.setNewData('need','saved');
         await this.setState({saved: true});
         const {images,name} = this.props.state;
         const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents} = this.props;
-        const inList = await this.listCol.add(this.props.state);
-
-
-        const hesh = inList.path.split('/')[1];
         let urlImg = []
         for(let i = 0; i< images.length;i++ ){
             const getType = images[i].split('.');
@@ -100,16 +98,16 @@ class Add extends Component{
             const imgUrl = await firebase.storage().ref().child(`list/${hesh}/${i}.${typeImg}`).put(images[i]);
             urlImg.push(imgUrl.downloadURL)
         }
-
-
-        await this.listCol.doc(hesh).update({
+        await this.listCol.doc(hesh).set({
+            ...this.props.state,
             images: urlImg,
             autor: {
                 colorAutor:autorColor,
                 nickAutor: autorNick,
                 heshAutor: autorHesh,
                 photoAutor: autorPhoto
-            }
+            },
+            hesh
         })
         await firebase.firestore().collection('users').doc(autorHesh).update({
             myEvents: [...autorEvents,{hesh,name}]
@@ -302,7 +300,8 @@ const styles = StyleSheet.create({
         fontSize: 17,
         textAlign: 'center',
         borderRadius: 10,
-        marginTop: 10
+        marginTop: 10,
+        color: '#644800'
     },
     dopDataText: {
         color: '#644800',

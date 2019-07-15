@@ -37,11 +37,12 @@ class Register extends Component{
             4: 0,
             5: 0
         },
+        register: ''
     }
 
     componentDidUpdate(){
-        const {email,password,nick,gender,img,disabledBtn} = this.state;
-        if(email==''|| password==''||nick==''||gender=='default'||img==''){
+        const {email,password,nick,gender,img,disabledBtn,register} = this.state;
+        if(email==''|| password==''||nick==''||gender=='default'||img==''||register!=''){
             disabledBtn?null:this.setState({disabledBtn:true});
         }else{
             disabledBtn?this.setState({disabledBtn:false}):null;
@@ -69,18 +70,20 @@ class Register extends Component{
     }
 
     register = async () => {
+        await this.setState({register: 'reg'});
         let err = false;
         const {email,password,img,error} = this.state;
             const register = await firebase.auth().createUserWithEmailAndPassword(email,password).catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
-            this.setState({error: true});
+            this.setState({error: true,register: ''});
             err = true;
           });
           if(!err){
             const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
             await firebase.firestore().collection('users').doc(register.user.uid).set({...this.state,urlImg:image.downloadURL,heshUser:register.user.uid});
-            this.props.navigation.navigate('Auth')
+            this.props.navigation.navigate('Auth');
+            this.setState({register: ''});
           }
           err?err=false:null;
     }

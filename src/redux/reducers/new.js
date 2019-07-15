@@ -27,6 +27,7 @@ const initState = {
     textMore:'',
     likesHesh: [],
     save: false,
+    saved: ''
 }
 
 
@@ -50,19 +51,18 @@ export default (state = initState, action) => {
                 return{...state,images:[]}
             }
         case SET_DEFAULT_STATE:
+            console.log(saveInitialState);
             return {...saveInitialState}
 
         default: return state
     }
-
-
 }
 
 
 save = (state,action) => {
     const searchNewState = {...state,[action.name]:action.value};
-    const {name,location,textMore,time,date,images,category} = searchNewState;
-    if(name == ''||time==''||location.latitude==50.459793||textMore==''||date.month==''||category.name==''){
+    const {name,location,textMore,time,date,category,saved} = searchNewState;
+    if(name == ''||time==''||location.latitude==50.459793||textMore==''||date.month==''||category.name==''||saved!=''){
         return {...searchNewState,save:false}
     }else{
         return {...searchNewState,save:true}

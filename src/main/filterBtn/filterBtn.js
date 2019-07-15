@@ -12,7 +12,6 @@ class filterBtn extends Component{
         type: 'default'
     }
 
-
     filterData = (name,value) => {
         name == 'date'?this.setState({date: value}):null;
         name == 'type'?this.setState({type: value}):null;

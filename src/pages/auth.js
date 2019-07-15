@@ -54,6 +54,7 @@ class SignInScreen extends Component {
     _signInAsync = async () => {
         try{
             const {login,password} = this.state;
+            await this.setState({password: ''})
             const singInFirebase = await firebase.auth().signInWithEmailAndPassword(login,password);
                 await AsyncStorage.setItem('userToken', singInFirebase.user.uid);
                 this.props.navigation.navigate('AuthLoading');

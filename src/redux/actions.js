@@ -1,5 +1,5 @@
 import {FILTER_LIST,SET_ACTIVE_ITEM,GET_MY_DATA,SET_DEFAULT_STATE,
-    SET_NEW_DATA,SET_NEW_IMAGES} from './const'
+    SET_NEW_DATA,SET_NEW_IMAGES,SET_ALL_LIST_EVENTS} from './const'
 
 export const filterList = (date,category) => {
     return {
@@ -8,6 +8,12 @@ export const filterList = (date,category) => {
     }
 }
 
+export const setDataAllEvents = (allList) => {
+    return {
+        type:SET_ALL_LIST_EVENTS,
+        allList
+    }
+}
 
 //active item
 export const setActiveItem = (heshItem) => {

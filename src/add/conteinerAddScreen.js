@@ -65,21 +65,19 @@ class Conteiner extends Component {
     }
 
     componentDidUpdate(){
-
-
         if(!this.props.images.length&&!this.state.showFirst){
             this.setState({showFirst:true});
         }
     }
 
     render(){
-        const {pageY,scroled,likes,showMap} = this.state;
+        const {pageY,scroled,showMap} = this.state;
         const toTop = this.animatedTop.interpolate({
             inputRange: [0, 1],
             outputRange: [width, 30]
           })
-        let {scrollEnd} = this.props;
-
+        const {scrollEnd,location,images,autorColor,autorImage} = this.props;
+          
         return (
             <View style={styles.conteiner} 
             onStartShouldSetResponder={(e)=>{
@@ -106,10 +104,10 @@ class Conteiner extends Component {
                 }
             }}>
                         <View style={styles.conteinerImageSlider}>
-                            {showMap?<Map new={true} location={this.props.location}/>:
+                            {showMap?<Map new={true} location={location} autorImage={autorImage} autorColor={autorColor}/>:
                             <ImageSlider
                             loop
-                            images={this.state.showFirst?['https://www.tellerreport.com/images/no-image.png',...this.props.images]:[...this.props.images]}
+                            images={this.state.showFirst?['https://www.tellerreport.com/images/no-image.png',...images]:[...images]}
                             customSlide={({ index,item }) => (
                                 <Image source={{ uri: item }} style={{width:width,height:width}} key={index}/>
                             )}
@@ -229,7 +227,9 @@ mapDispatchToProps = (dispatch)=> {
 const mapStateToProps = (state) => {
     return {
         images: state.new.images,
-        location: state.new.location
+        location: state.new.location,
+        autorColor: state.data.myDataAcc.color,
+        autorImage: state.data.myDataAcc.urlImg
     }
 }
 

@@ -7,16 +7,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import {withNavigation} from 'react-navigation';
 
 function MarkerMore (props) {
+  const {location,name,time,date,category,hesh,autor} = props.item;
     
-  const {location,name,time,date,category,hesh} = props.item;
-  
     return(
         <Marker
             coordinate={location}
           >
-            <View style={styles.conteinerItem}>
-              <Image source={{uri: 'https://image.shutterstock.com/image-vector/light-bulb-line-icon-vector-260nw-416374336.jpg'}}
-                    style={styles.itemImage}/>
+            <View style={[styles.conteinerItem,{backgroundColor:autor.colorAutor}]}>
+              <Image source={{uri: autor.photoAutor}} style={styles.itemImage}/>
             </View>
             
             <Callout 
@@ -24,13 +22,11 @@ function MarkerMore (props) {
             onPress={() => {
               props.setActiveItem(hesh);
               props.navigation.navigate('Details');
-              
             }}
             >
               <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 
                             locations={[0.01,0.5,0.99]} style={styles.modalContent}>
-                  <Text numberOfLines={2} style={styles.nameText}>{name}Турнир с футбoла для школьников</Text>
-
+                  <Text numberOfLines={2} style={styles.nameText}>{name}</Text>
                   <View style={styles.infoConteiner}>
                     <View style={styles.infoItemConteiner}>
                       <Image source={require('../img/icons/mapMarker/time.png')} style={styles.imgInfo}/>
@@ -43,15 +39,18 @@ function MarkerMore (props) {
                     </View>
                     <View style={styles.infoItemConteiner}>
                       <Image source={require('../img/icons/mapMarker/category.png')} style={styles.imgInfo}/>
-                      <Text style={styles.infoItemText} numberOfLines={1}>{category.name}</Text>
+                      <Text style={styles.infoItemText} numberOfLines={1}>{category.label}</Text>
                     </View>
                   </View>
 
                 <View style={styles.bottomConteiner}>
                   <View style={styles.autorConteiner}>
-                    <Image source={{uri:'https://mint-media.pl/wp-content/uploads/2018/02/client-1295901_960_720.png'}} 
-                    style={styles.autorImage}/>
-                    <Text style={styles.autorText}>автор ник</Text>
+
+                    <View style={[styles.autorImageConteiner,{backgroundColor:autor.colorAutor}]}>
+                      <Image source={{uri:autor.photoAutor}} style={styles.autorImage}/>
+                    </View>
+
+                    <Text style={styles.autorText}>autor.nickAutor</Text>
                   </View>
                   <Image source={require('../img/icons/mapMarker/btnMore.png')} style={styles.autorImage}/>
                 </View>
@@ -67,10 +66,9 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     conteinerItem: {
-      width: 30,
-      height: 30,
-      borderRadius: 15,
-      backgroundColor: 'green',
+      width: 31,
+      height: 31,
+      borderRadius: 15.5,
       justifyContent: 'center',
       alignItems: 'center'
     },
@@ -78,7 +76,7 @@ const styles = StyleSheet.create({
       width: 26,
       height: 26,
       borderRadius: 13,
-      borderColor: 'black',
+      borderColor: 'white',
       borderWidth: 0.8
     },
     modalContent: {
@@ -88,11 +86,12 @@ const styles = StyleSheet.create({
       justifyContent: 'space-between',
     },
     nameText: {
-      fontSize: 15,
+      fontSize: 16,
       color: '#644800',
       textAlign: 'center',
       width: 220,
-      height: 42
+      height: 42,
+      fontWeight: 'bold'
     },
     infoConteiner: {
       width: 240,
@@ -130,7 +129,17 @@ const styles = StyleSheet.create({
     autorImage: {
       width: 30,
       height: 30,
-      borderRadius: 15
+      borderRadius: 15,
+      borderColor: 'white',
+      borderWidth: 1
+    },
+    autorImageConteiner: {
+      width: 34,
+      height: 34,
+      borderRadius: 17,
+      justifyContent: 'center',
+      alignItems: 'center',
+
     },
     autorText: {
       color: '#000000',
@@ -147,7 +156,6 @@ const styles = StyleSheet.create({
 
   const mapStateToProps = (state) => {
     return {
-      state: state.navigation
     }
   }
 
