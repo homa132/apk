@@ -62,7 +62,7 @@ class Details extends Component{
                             <Text style={styles.moreText}>{textMore}</Text>
 
                             <View style={styles.bottomConteiner}>
-                                <SocialLink/>
+                                <SocialLink contacts={contacts}/>
 
                                 <TouchableOpacity style={styles.friendsConteiner}>
                                     <Text style={styles.friendsText}>Пригласить</Text>
