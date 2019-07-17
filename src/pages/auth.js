@@ -24,11 +24,11 @@ const state = {
     bal: 0,
     position: 0,
     ocenka:{
-        1: 0,
-        2: 0,
-        3: 0,
-        4: 0,
-        5: 0
+        one: 0,
+        two: 0,
+        three: 0,
+        four: 0,
+        five: 0
     },
 }
 
@@ -77,14 +77,17 @@ class SignInScreen extends Component {
             const register = await firebase.auth().signInWithCredential(credential);
 
             const {email,uid,displayName, photoURL} = register.user;
+            
+            const registeredUser = await firebase.firestore().collection('users').doc(uid).get();
 
-            await firebase.firestore().collection('users').doc(uid).set({email:email,
-                nick:displayName,heshUser:uid,urlImg:photoURL,...state});
-                
+            if(!registeredUser.data()){
+                await firebase.firestore().collection('users').doc(uid).set({email:email,
+                    nick:displayName,heshUser:uid,urlImg:photoURL,...state});
+            }
+            
             await AsyncStorage.setItem('userToken', uid);
             await this.props.navigation.navigate('AuthLoading');
-
-        
+            
           } catch (e) {
             console.log(e);
           }

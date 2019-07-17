@@ -1,7 +1,8 @@
 import React,{Component} from 'react';
 import {View,Text,ImageBackground,StyleSheet,TouchableOpacity,Image,Dimensions,
-    TextInput,ScrollView} from 'react-native';
+    TextInput,ScrollView,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
+import {setNewMyData} from '../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
@@ -13,11 +14,11 @@ const { width, height } = Dimensions.get('window');
 class Login extends Component{
 
     state = {
-        aboutYou: '',
         telegrame: '',
         facebook: '',
         instagrame: '',
-        webSite: ''
+        webSite: '',
+        save: false
     }
 
     _signOutAsync = async () => {
@@ -31,6 +32,8 @@ class Login extends Component{
       };
 
       socialItem = (placeholder,name) => {
+        const {contacts} = this.props.myData;
+
         let icon;
         if(name == 'telegrame'){icon=require('../img/icons/detailsScreen/telegrame.png')};
         if(name == 'facebook'){icon=require('../img/icons/detailsScreen/facebook.png')};
@@ -41,36 +44,60 @@ class Login extends Component{
             <View style={styles.socialConteiner}>
                 <Image style={styles.socialImg} source={icon}/>
                 <TextInput style={styles.socialInput} placeholder={placeholder} placeholderTextColor='#644800' 
-                    value={this.state[name]} onChangeText={(value)=>this.setState({[name]:value})}/>
+                    value={contacts[name]} onChangeText={(value)=>this.props.setNewMyData(name,value,'contacts')}/>
             </View>
         )
     }
 
+    saveNewData = async () => {
+        await this.setState({save: true})
+        const {urlImg,heshUser} = this.props.myData;
+        this.props.setNewMyData('disableBtn');
+        const img = urlImg.split(':')[0];
+        if(img=='file'){
+            const image = await firebase.storage().ref().child(`usersImage/${heshUser}/userImg`).put(urlImg);
+            await firebase.firestore().collection('users').doc(heshUser).update({...this.props.myData,urlImg:image.downloadURL});
+        }else{
+            await firebase.firestore().collection('users').doc(heshUser).update({...this.props.myData});
+        }
+        this.setState({save: false})
+    }
+
     render(){
-        const {aboutYou} = this.state;
-        
+
+        const {nick,ocenka,color,urlImg,myEvents,friends,myFriends,bal,position,aboutMe} = this.props.myData;
+        const {disableSaveBtn}  = this.props;
+        const {save} = this.state;
+
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 <ScrollView>
                     <View style={styles.container}>
 
                         <View style={styles.headerConteiner}>
-                            <View style={styles.headerTextConteiner}>
-                                <Text numberOfLines={1} style={styles.headerText}>nik name anrey</Text>
-                            </View>
+                            <TouchableOpacity style={[styles.btnSingOutConteiner,disableSaveBtn?{opacity:0.1}:{opacity: 1}]}
+                                 onPress={this.saveNewData} disabled={disableSaveBtn}>
+                                <Image source={require('../img/icons/btns/btnSave.png')} style={{width: 48,height: 48}}/>
+                            </TouchableOpacity>
+
+                            <TextInput numberOfLines={1} style={styles.headerText} value={nick} 
+                                onChangeText={(value)=> this.props.setNewMyData('nick',value)}
+                                />
+
                             <TouchableOpacity style={styles.btnSingOutConteiner} onPress={this._signOutAsync}>
-                                <Image source={require('../img/icons/btns/btnSingOut.png')} style={{width: 50,height: 50}}/>
+                                <Image source={require('../img/icons/btns/btnSingOut.png')} style={{width: 48,height: 48}}/>
                             </TouchableOpacity>
                         </View>
 
-                        <InfoUser/>
-                        <Ocenka/>
+                        <InfoUser my={true} color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
+                                bal={bal} position={position}/>
+                        <Ocenka my={true} ocenka={ocenka}/>
 
                         <View style={styles.detaisConteiner}>
                             <Text style={styles.detailsMainText}>Дополнительный данные о Вас</Text>
 
                             <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'
-                                style={styles.aboutYou} value={aboutYou} onChangeText={(aboutYou)=>this.setState({aboutYou})}/>
+                                style={styles.aboutYou} value={aboutMe} onChangeText={(value)=>this.props.setNewMyData('aboutMe',value)}/>
                             {this.socialItem('https://t.me/','telegrame')}
                             {this.socialItem('https://www.facebook.com/','facebook')}
                             {this.socialItem('https://www.instagram.com/','instagrame')}
@@ -79,12 +106,48 @@ class Login extends Component{
 
                     </View>
                 </ScrollView>
+                {save?
+                <View style={styles.saveConteiner}>
+                    <View style={styles.save}>
+                        <Text style={styles.saveText}>Именение Ваших данных</Text>
+                        <ActivityIndicator size='large' color="rgba(255, 249, 96, 1)"/>
+                    </View>
+                </View>:null}
             </ImageBackground>
         )
     }
 };
 
 const styles = StyleSheet.create({
+    saveConteiner: {
+        width: width,
+        height: height,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        zIndex: 2100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    save: {
+        width: 250,
+        height: 170 ,
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        borderColor: '#FFF960',
+        borderWidth: 4,
+        backgroundColor: 'rgba(232, 188, 77, 0.7)',
+        borderRadius: 20
+    },
+    saveText: {
+        fontSize: 24,
+        letterSpacing: 0.5,
+        fontWeight: 'bold',
+        color: 'rgba(100, 72, 0, 1)',
+        width: 240,
+        textAlign: 'center',
+        textAlignVertical: 'center'
+    },
     container: {
         flex: 1,
         justifyContent: 'flex-start',
@@ -104,15 +167,19 @@ const styles = StyleSheet.create({
         width: width,
         marginBottom: 10
     },
-    headerTextConteiner: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        width: width-60
-    },
     headerText: {
-        fontSize: 22,
+        fontSize: 18,
         color: '#644800',
-        letterSpacing: 0.5
+        borderColor:'#644800',
+        borderWidth: 1.4,
+        borderRadius: 10,
+        width: width - 150,
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        paddingVertical: 2,
+        paddingHorizontal: 5
     },
     btnSingOutConteiner: {
         width: 60,
@@ -167,4 +234,16 @@ const styles = StyleSheet.create({
     },
 })
 
-export default connect()(Login);
+mapStateToProps = (state) => {
+    return{
+        myData: state.data.myDataAcc,
+        disableSaveBtn: state.data.disableSaveBtn
+    }
+}
+
+mapDispatchToProps = (dispatch) => {
+    return {
+        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName))
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Login);

@@ -1,68 +1,106 @@
-import React from 'react';
+import React,{Component} from 'react';
 import {View,TouchableOpacity,Text,StyleSheet,Dimensions,Image} from 'react-native';
 import {connect} from 'react-redux';
+import ImagePicker from 'react-native-image-picker';
+import {setNewMyData} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
-function userInfo (props){
-    return(
-        <View style={styles.itemTopConteiner}>
-            <View style={styles.itemImageConteiner}>
-                <Image style={styles.itemImage} source={require('../img/testImage.png')}/>
-            </View>
-            
-            <View style={styles.itemTopInfoConteiner}>
+class userInfo extends Component {
 
-                <View style={styles.itemTopPersonalInfoConteiner}>
 
-                    <TouchableOpacity style={styles.topInfoItem}>
-                        <Text style={styles.infoTextNumber}>50</Text>
-                        <Text style={styles.infoText}>Подписки</Text>
-                    </TouchableOpacity>
+    changeImage = () => {
+        ImagePicker.launchImageLibrary({
+            mediaType: 'photo',
+            quality: 0.4,
+            noData: true
+        },({path,fileName})=> {
+              this.props.setNewMyData('urlImg',`file://${path}`)
+        })
+    }
 
-                    <TouchableOpacity style={styles.topInfoItem}>
-                        <Text style={styles.infoTextNumber}>180</Text>
-                        <Text style={styles.infoText}>Подписчики</Text>
-                    </TouchableOpacity>
+    render(){
+        const {my,color,urlImg,myEvents,friends,myFriends,position,bal} = this.props;
 
-                    <TouchableOpacity style={styles.topInfoItem}>
-                        <Text style={styles.infoTextNumber}>3</Text>
-                        <Text style={styles.infoText}>События</Text>
-                    </TouchableOpacity>
+        return(
+            <View style={styles.itemTopConteiner}>
+                <TouchableOpacity style={{justifyContent: 'center',alignItems: 'center'}} disabled={!my} onPress={this.changeImage}>
+                    <View style={[styles.itemImageConteiner,{backgroundColor:color}]} >
+                        <Image style={styles.itemImage} source={{uri:urlImg}}/>
+                    </View>
+                    <View style={styles.myConteiner}>
+                        <Text style={styles.myText}>изменить</Text>
+                    </View>
+                </TouchableOpacity>
+    
+                <View style={styles.itemTopInfoConteiner}>
+    
+                    <View style={styles.itemTopPersonalInfoConteiner}>
+    
+                        <TouchableOpacity style={styles.topInfoItem}>
+                            <Text style={styles.infoTextNumber}>{myFriends.length}</Text>
+                            <Text style={styles.infoText}>Подписки</Text>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity style={styles.topInfoItem}>
+                            <Text style={styles.infoTextNumber}>{friends.length}</Text>
+                            <Text style={styles.infoText}>Подписчики</Text>
+                        </TouchableOpacity>
+    
+                        <TouchableOpacity style={styles.topInfoItem}>
+                            <Text style={styles.infoTextNumber}>{myEvents.length}</Text>
+                            <Text style={styles.infoText}>События</Text>
+                        </TouchableOpacity>
+                    </View>
+    
+                    <View style={[styles.infoBalConteiner,{marginTop: 10}]}>
+                        <Text style={styles.infoBalText}>Балов: {bal}</Text>
+                        <Image style={styles.infoBAlImage} source={require('../img/icons/detailsPersonalAcc/Star.png')}/>
+                    </View>
+                    <View style={styles.infoBalConteiner}>
+                        <Text style={styles.infoBalText}>Позиция: {position}</Text>
+                        <Image style={{width:25,height: 25}} source={require('../img/icons/detailsPersonalAcc/people.png')}/>
+                    </View>
+    
                 </View>
-
-                <View style={[styles.infoBalConteiner,{marginTop: 10}]}>
-                    <Text style={styles.infoBalText}>Балов: 104</Text>
-                    <Image style={styles.infoBAlImage} source={require('../img/icons/detailsPersonalAcc/Star.png')}/>
                 </View>
-                <View style={styles.infoBalConteiner}>
-                    <Text style={styles.infoBalText}>Позиция: 70</Text>
-                    <Image style={{width:25,height: 25}} source={require('../img/icons/detailsPersonalAcc/people.png')}/>
-                </View>
-
-            </View>
-            </View>
-    )
+        )
+    }
 }
 const styles = StyleSheet.create({
+    myConteiner: {
+        position: 'relative',
+        top: -15,
+        width: 70,
+        height: 16,
+        backgroundColor: '#C4C4C4',
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderBottomLeftRadius: 20,
+        borderBottomRightRadius: 20
+    },
+    myText: {
+        fontSize: 10,
+        color: '#644800'
+    },
     itemTopConteiner: {
         flexDirection: 'row',
         width: width - 20,
         alignItems: 'center',
-        height: 120
+        height: 120,
+        marginBottom: 5
     },
     itemImage: {
         width: 100,
         height: 100,
         borderRadius: 50,
-        borderColor: 'black',
-        borderWidth: 1.5
+        borderColor: 'white',
+        borderWidth: 1.4
     },
     itemImageConteiner: {
-        width: 106,
-        height: 106,
-        borderRadius: 53,
-        backgroundColor: 'green',
+        width: 108,
+        height: 108,
+        borderRadius: 54,
         justifyContent: 'center',
         alignItems: 'center'
     },
@@ -110,4 +148,10 @@ const styles = StyleSheet.create({
     },
 })
 
-export default connect()(userInfo)
+mapDispatchToProps = (dispatch) => {
+    return {
+        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName))
+    }
+}
+
+export default connect(null,mapDispatchToProps)(userInfo)

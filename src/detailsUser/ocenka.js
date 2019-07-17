@@ -19,40 +19,59 @@ class Ocenka extends Component{
 
     renderStar = (number) => {
         let req, color;
-        if(number == 1) {req = require('../img/icons/detailsPersonalAcc/Star1.png'); color='#CB0000';}
-        if(number == 2) {req = require('../img/icons/detailsPersonalAcc/Star2.png'); color='#E8BC4D';}
-        if(number == 3) {req = require('../img/icons/detailsPersonalAcc/Star3.png'); color='#FFF960';}
-        if(number == 4) {req = require('../img/icons/detailsPersonalAcc/Star4.png'); color='#ADFF00';}
-        if(number == 5) {req = require('../img/icons/detailsPersonalAcc/Star5.png'); color='#00FF29';}
+        const {my} = this.props;
+
+        if(number == 1) {
+            if(my){req = require('../img/icons/detailsPersonalAcc/Star1Fill.png'); color='#CB0000';}
+            else{req = require('../img/icons/detailsPersonalAcc/Star1.png'); color='#CB0000';}}
+
+        if(number == 2) {
+            if(my){req = require('../img/icons/detailsPersonalAcc/Star2Fill.png'); color='#E8BC4D';}
+            else{req = require('../img/icons/detailsPersonalAcc/Star2.png'); color='#E8BC4D';}}
+
+        if(number == 3) {
+            if(my){req = require('../img/icons/detailsPersonalAcc/Star3Fill.png'); color='#FFF960';}
+            else{req = require('../img/icons/detailsPersonalAcc/Star3.png'); color='#FFF960';}}
+
+        if(number == 4) {
+            if(my){req = require('../img/icons/detailsPersonalAcc/Star4Fill.png'); color='#ADFF00';}
+            else{req = require('../img/icons/detailsPersonalAcc/Star4.png'); color='#ADFF00';}}
+
+        if(number == 5) {
+            if(my){req = require('../img/icons/detailsPersonalAcc/Star5Fill.png'); color='#00FF29';}
+            else{req = require('../img/icons/detailsPersonalAcc/Star5.png'); color='#00FF29';}}
+
         if(number == this.state.ocenka){req = require('../img/icons/detailsPersonalAcc/Star.png');}
 
         return(
             <TouchableOpacity style={[styles.starConteiner, this.state.ocenka == number?{backgroundColor:color}:null]}
-                             onPress={()=>this.setNewOcenca(number)}>
+                             onPress={()=>this.setNewOcenca(number)} disabled={my}>
                 <Image source={req} style={styles.starImage}/>
             </TouchableOpacity>
         )
     }
 
     render(){
+        const {ocenka} = this.props;
+        
         return(
             <View style={styles.ocenkaConteiner}>
-                    <View style={styles.starsConteiner}>
-                        {this.renderStar(1)}
-                        {this.renderStar(2)}
-                        {this.renderStar(3)}
-                        {this.renderStar(4)}
-                        {this.renderStar(5)}
-                    </View>
-
-                    <View style={styles.ocenkaTextConteiner}>
-                        <Text style={styles.ocenksText}>50</Text>
-                        <Text style={styles.ocenksText}>100</Text>
-                        <Text style={styles.ocenksText}>5</Text>
-                        <Text style={styles.ocenksText}>200</Text>
-                        <Text style={styles.ocenksText}>100</Text>
-                    </View>
+                <View style={styles.starsConteiner}>
+                    {this.renderStar(1)}
+                    {this.renderStar(2)}
+                    {this.renderStar(3)}
+                    {this.renderStar(4)}
+                    {this.renderStar(5)}
                 </View>
+
+                <View style={styles.ocenkaTextConteiner}>
+                    <Text style={styles.ocenksText}>{ocenka.one}</Text>
+                    <Text style={styles.ocenksText}>{ocenka.two}</Text>
+                    <Text style={styles.ocenksText}>{ocenka.three}</Text>
+                    <Text style={styles.ocenksText}>{ocenka.four}</Text>
+                    <Text style={styles.ocenksText}>{ocenka.five}</Text>
+                </View>
+            </View>
         )
     }
 }

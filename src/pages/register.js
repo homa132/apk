@@ -31,11 +31,11 @@ class Register extends Component{
         bal: 0,
         position: 0,
         ocenka:{
-            1: 0,
-            2: 0,
-            3: 0,
-            4: 0,
-            5: 0
+            one: 0,
+            two: 0,
+            three: 0,
+            four: 0,
+            five: 0
         },
         register: ''
     }
