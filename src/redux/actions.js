@@ -1,4 +1,4 @@
-import {FILTER_LIST,SET_ACTIVE_ITEM,GET_MY_DATA,SET_DEFAULT_STATE,
+import {FILTER_LIST,SET_ACTIVE,GET_MY_DATA,SET_DEFAULT_STATE,
     SET_NEW_DATA,SET_NEW_IMAGES,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA
     } from './const'
 
@@ -17,12 +17,14 @@ export const setDataAllEvents = (allList) => {
 }
 
 //active item
-export const setActiveItem = (heshItem) => {
+export const setActiveItem = (name,heshItem) => {
     return {
-        type: SET_ACTIVE_ITEM,
-        heshItem
+        type: SET_ACTIVE,
+        heshItem,name
     }
 }
+
+
 
 // create new
 export const setNewData = (value,name,secondName) => {

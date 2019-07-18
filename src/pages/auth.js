@@ -24,11 +24,11 @@ const state = {
     bal: 0,
     position: 0,
     ocenka:{
-        one: 0,
-        two: 0,
-        three: 0,
-        four: 0,
-        five: 0
+        one: [],
+        two: [],
+        three: [],
+        four: [],
+        five: [],
     },
 }
 

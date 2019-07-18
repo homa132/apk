@@ -13,7 +13,8 @@ import DetailsUser from '../pages/detailsUser';
 const mainStack = createStackNavigator({
     Main: Main,
     Details: Details,
-    Messenger:Messenger
+    Messenger:Messenger,
+    DetailsUser: DetailsUser
 },
 {
     headerMode: 'none',

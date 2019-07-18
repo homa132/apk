@@ -20,7 +20,7 @@ function MarkerMore (props) {
             <Callout 
             style={styles.plainView}
             onPress={() => {
-              props.setActiveItem(hesh);
+              props.setActiveItem('heshItem',hesh);
               props.navigation.push('Details');
             }}s
             >
@@ -50,7 +50,7 @@ function MarkerMore (props) {
                       <Image source={{uri:autor.photoAutor}} style={styles.autorImage}/>
                     </View>
 
-                    <Text style={styles.autorText}>autor.nickAutor</Text>
+                    <Text style={styles.autorText}>{autor.nickAutor}</Text>
                   </View>
                   <Image source={require('../img/icons/mapMarker/btnMore.png')} style={styles.autorImage}/>
                 </View>
@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
   
   const mapDispatchToProps = (dispatch) => {
     return {
-        setActiveItem: (hesh) => dispatch(setActiveItem(hesh))
+        setActiveItem: (name,hesh) => dispatch(setActiveItem(name,hesh))
     }
   }
 

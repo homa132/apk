@@ -28,9 +28,10 @@ class userInfo extends Component {
                     <View style={[styles.itemImageConteiner,{backgroundColor:color}]} >
                         <Image style={styles.itemImage} source={{uri:urlImg}}/>
                     </View>
+                    {my?
                     <View style={styles.myConteiner}>
                         <Text style={styles.myText}>изменить</Text>
-                    </View>
+                    </View>:null}
                 </TouchableOpacity>
     
                 <View style={styles.itemTopInfoConteiner}>

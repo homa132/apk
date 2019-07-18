@@ -89,8 +89,8 @@ class Add extends Component{
 
         await this.props.setNewData('need','saved');
         await this.setState({saved: true});
-        const {images,name} = this.props.state;
-        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents} = this.props;
+        const {images,name,category,date,time} = this.props.state;
+        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents,autorMessengers} = this.props;
         let urlImg = []
         for(let i = 0; i< images.length;i++ ){
             const getType = images[i].split('.');
@@ -110,7 +110,21 @@ class Add extends Component{
             hesh
         })
         await firebase.firestore().collection('users').doc(autorHesh).update({
-            myEvents: [...autorEvents,{hesh,name}]
+            myEvents: [...autorEvents,{hesh,name}],
+            myMessengers: [...autorMessengers,{hesh,last: 0}]
+        })
+
+        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('first').set({
+            autor: {
+                colorAutor:autorColor,
+                nickAutor: autorNick,
+                heshAutor: autorHesh,
+                photoAutor: autorPhoto
+            },
+            date,
+            time,
+            category,
+            name
         })
         await this.props.setDefaultState();
         await this.setState({saved: false});
@@ -366,7 +380,8 @@ const mapStateToProps = (state) => {
       autorNick: state.data.myDataAcc.nick,
       autorColor: state.data.myDataAcc.color,
       autorPhoto: state.data.myDataAcc.urlImg,
-      autorEvents: state.data.myDataAcc.myEvents
+      autorEvents: state.data.myDataAcc.myEvents,
+      autorMessengers: state.data.myDataAcc.myMessengers
     }
   }
 

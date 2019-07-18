@@ -4,7 +4,6 @@ import {connect} from 'react-redux';
 
 
 class SocailLink extends Component{
-
     state ={
         showSocial: false,
     }
@@ -14,12 +13,8 @@ class SocailLink extends Component{
     }
 
     render(){
-
         const {showSocial} = this.state;
         const {facebook,instagrame,telegrame,webSite} = this.props.contacts;
-
-        console.log('facebook',facebook,'instagrame',instagrame,'telegrame',telegrame,'webSite',webSite);
-        console.log(instagrame=='');
         
         return (
             <View style={styles.socialConteiner}>

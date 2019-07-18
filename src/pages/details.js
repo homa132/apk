@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import Conteiner from '../details/conteinerDetailsScreen';
 import SocialLink from '../details/socialLink';
 import InfoEvent from '../details/infoEvent';
+import {setActiveItem} from '../redux/actions';
+
 const { width, height } = Dimensions.get('window');
 
 
@@ -22,6 +24,11 @@ class Details extends Component{
         return this.props.list.find((item,index) => {
             return this.props.heshItem == item.hesh
         })
+    }
+
+    navigateToDetailsUser = (hesh) => {
+        this.props.setActiveItem('hestUser',hesh)
+        this.props.navigation.push('DetailsUser')
     }
 
     render(){
@@ -44,7 +51,7 @@ class Details extends Component{
 
                                 <View style={styles.secondConteiner}>
 
-                                    <TouchableOpacity style={styles.infoItemSecondConteiner}>
+                                    <TouchableOpacity style={styles.infoItemSecondConteiner} onPress={()=>this.navigateToDetailsUser(autor.heshAutor)}>
                                         <View style={[styles.autorImageBackground,{backgroundColor:autor.colorAutor}]}>
                                             <Image source={{uri:autor.photoAutor}}
                                                     style={{width:50,height:50,borderRadius:25,borderColor: 'white',borderWidth:1}}/>
@@ -193,6 +200,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        setActiveItem: (name,hesh)=>dispatch(setActiveItem(name,hesh))
     }
 }
 

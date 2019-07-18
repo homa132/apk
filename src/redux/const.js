@@ -3,7 +3,7 @@ export const FILTER_LIST = 'FILTER_LIST';
 export const SET_ALL_LIST_EVENTS = 'SET_ALL_LIST_EVENTS';
 
 //Active hesh
-export const SET_ACTIVE_ITEM = 'SET_ACTIVE_ITEM';
+export const SET_ACTIVE = 'SET_ACTIVE';
 
 // create new
 export const SET_NEW_DATA = 'SET_NEW_DATA'; 
