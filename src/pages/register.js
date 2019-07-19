@@ -81,8 +81,22 @@ class Register extends Component{
           });
           if(!err){
             const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
-            await firebase.firestore().collection('users').doc(register.user.uid).set({...this.state,urlImg:image.downloadURL,heshUser:register.user.uid,
-                password: ''});
+
+            const {nick,color,bal,position,email,gender,myEvents,myMessengers,aboutMe,contacts,friends,
+                myFriends,ocenka} = this.state;
+
+            await firebase.firestore().collection('users').doc(register.user.uid).collection('aboutUser').doc('little').set({
+                nick,color,urlImg:image.downloadURL
+            })
+
+            await firebase.firestore().collection('users').doc(register.user.uid).collection('aboutUser').doc('forTop').set({
+                bal,position
+            })
+
+            await firebase.firestore().collection('users').doc(register.user.uid).collection('aboutUser').doc('more').set({
+                email,gender,myEvents,myMessengers,aboutMe,contacts,friends,myFriends,ocenka
+            })
+
             this.props.navigation.navigate('Auth');
             this.setState({register: ''});
           }

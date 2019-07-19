@@ -49,16 +49,30 @@ class Login extends Component{
         )
     }
 
+    updateDataOnServer = async (data) => {
+        const {nick,urlImg,aboutMe,contacts} = data;
+        const heshUser = await AsyncStorage.getItem('userToken');
+        
+        await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('little').update({
+            nick,urlImg
+        })
+
+        await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
+            aboutMe,contacts
+        })
+    }
+
     saveNewData = async () => {
         await this.setState({save: true})
-        const {urlImg,heshUser} = this.props.myData;
+        const {urlImg} = this.props.myData;
         this.props.setNewMyData('disableBtn');
         const img = urlImg.split(':')[0];
         if(img=='file'){
+            const heshUser = await AsyncStorage.getItem('userToken');
             const image = await firebase.storage().ref().child(`usersImage/${heshUser}/userImg`).put(urlImg);
-            await firebase.firestore().collection('users').doc(heshUser).update({...this.props.myData,urlImg:image.downloadURL});
+            await this.updateDataOnServer({...this.props.myData,urlImg:image.downloadURL});
         }else{
-            await firebase.firestore().collection('users').doc(heshUser).update({...this.props.myData});
+            await this.updateDataOnServer(this.props.myData);
         }
         this.setState({save: false})
     }
