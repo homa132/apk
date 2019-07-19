@@ -7,22 +7,22 @@ import LinearGradient from 'react-native-linear-gradient';
 import {withNavigation} from 'react-navigation';
 
 function MarkerMore (props) {
-  const {location,name,time,date,category,hesh,autor} = props.item;
+  const {location,name,time,date,category,heshEvent,autor} = props.item;
     
     return(
         <Marker
             coordinate={location}
           >
-            <View style={[styles.conteinerItem,{backgroundColor:autor.colorAutor}]}>
-              <Image source={{uri: autor.photoAutor}} style={styles.itemImage}/>
+            <View style={[styles.conteinerItem,{backgroundColor:autor.autorColor}]}>
+              <Image source={{uri: autor.autorImage}} style={styles.itemImage}/>
             </View>
             
             <Callout 
             style={styles.plainView}
             onPress={() => {
-              props.setActiveItem('heshItem',hesh);
+              props.setActiveItem('heshItem',heshEvent);
               props.navigation.push('Details');
-            }}s
+            }}
             >
               <LinearGradient start={{x: 0, y: 0.5}} end={{x: 1, y: 0.5}} colors={['#FDFDFD','#EFEFEF','#FDFDFD']} 
                             locations={[0.01,0.5,0.99]} style={styles.modalContent}>
@@ -46,11 +46,11 @@ function MarkerMore (props) {
                 <View style={styles.bottomConteiner}>
                   <View style={styles.autorConteiner}>
 
-                    <View style={[styles.autorImageConteiner,{backgroundColor:autor.colorAutor}]}>
-                      <Image source={{uri:autor.photoAutor}} style={styles.autorImage}/>
+                    <View style={[styles.autorImageConteiner,{backgroundColor:autor.autorColor}]}>
+                      <Image source={{uri:autor.autorImage}} style={styles.autorImage}/>
                     </View>
 
-                    <Text style={styles.autorText}>{autor.nickAutor}</Text>
+                    <Text style={styles.autorText}>{autor.autorNick}</Text>
                   </View>
                   <Image source={require('../img/icons/mapMarker/btnMore.png')} style={styles.autorImage}/>
                 </View>

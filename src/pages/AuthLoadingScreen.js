@@ -16,7 +16,7 @@ class AuthLoadingScreen extends React.Component {
     const userToken = await AsyncStorage.getItem('userToken');
     
     if(userToken){
-      const myData  = await firebase.firestore().collection('users').doc(userToken).collection('aboutUser').onSnapshot(
+      await firebase.firestore().collection('users').doc(userToken).collection('aboutUser').onSnapshot(
         (doc) => {
           let data = {};
           
@@ -26,7 +26,6 @@ class AuthLoadingScreen extends React.Component {
               data[key] = item.data()[key]
             })
           })
-
           this.props.getMyData(data);
         }
       );

@@ -6,6 +6,7 @@ import {setNewData,setDefaultState} from '../redux/actions';
 import Conteiner from '../add/conteinerAddScreen'
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const { width, height } = Dimensions.get('window');
 
@@ -20,7 +21,6 @@ class Add extends Component{
             scrollEnd: 0,
             saved: false
         };
-        this.listCol = firebase.firestore().collection('list');
     }
 
 
@@ -86,11 +86,11 @@ class Add extends Component{
 
     saveEvent = async () => {
         const hesh = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
-
         await this.props.setNewData('need','saved');
         await this.setState({saved: true});
-        const {images,name,category,date,time} = this.props.state;
-        const {autorHesh,autorNick,autorColor,autorPhoto,autorEvents,autorMessengers} = this.props;
+
+        const {images,name,category,date,time,contacts,location,textMore,likesHesh} = this.props.state;
+
         let urlImg = []
         for(let i = 0; i< images.length;i++ ){
             const getType = images[i].split('.');
@@ -98,34 +98,37 @@ class Add extends Component{
             const imgUrl = await firebase.storage().ref().child(`list/${hesh}/${i}.${typeImg}`).put(images[i]);
             urlImg.push(imgUrl.downloadURL)
         }
-        await this.listCol.doc(hesh).set({
-            ...this.props.state,
-            images: urlImg,
-            autor: {
-                colorAutor:autorColor,
-                nickAutor: autorNick,
-                heshAutor: autorHesh,
-                photoAutor: autorPhoto
-            },
-            hesh
+
+        const {autorEvents,autorMessengers,autorColor,autorImage,autorNick} = this.props;
+        const autorHesh = await AsyncStorage.getItem('userToken');
+
+        // create new event 
+        await firebase.firestore().collection('ListEvents').doc(hesh).set({
+            name,category,date,time,heshEvent:hesh,location,autor:{autorColor,autorImage,autorNick,autorHesh}
         })
-        await firebase.firestore().collection('users').doc(autorHesh).update({
-            myEvents: [...autorEvents,{hesh,name}],
-            myMessengers: [...autorMessengers,{hesh,last: 0}]
+        await firebase.firestore().collection('MoreEvents').doc(hesh).set({
+            images: urlImg,heshMessenger: hesh,textMore,likesHesh,contacts
         })
 
-        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('first').set({
-            autor: {
-                colorAutor:autorColor,
-                nickAutor: autorNick,
-                heshAutor: autorHesh,
-                photoAutor: autorPhoto
-            },
-            date,
-            time,
-            category,
-            name
+        // add event in array autor
+        await firebase.firestore().collection('users').doc(autorHesh).collection('aboutUser').doc('more').update({
+            myEvents: [...autorEvents,{hesh,name}],
+            myMessengers: [...autorMessengers,{hesh,last: 0,newMess: false,alert: true}]
         })
+
+        // create chat
+        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('details').set({
+            name,
+            heshEvent: hesh,
+            event: true
+        })
+        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('users').set({
+            users: [autorHesh]
+        })
+        await firebase.firestore().collection('chats').doc(hesh).collection('messege').doc('messege').set({
+            messege: []
+        })
+        
         await this.props.setDefaultState();
         await this.setState({saved: false});
     }
@@ -179,7 +182,7 @@ class Add extends Component{
                                 {this.socialItem('https://www.instagram.com/','instagrame')}
                                 {this.socialItem('https://www.google.com/','webSite')}
 
-                                <TouchableOpacity onPress={this.saveEvent} disabled={!save} style={save?{opacity:1}:{opacity:0.5}}>
+                                <TouchableOpacity onPress={this.saveEvent}  style={save?{opacity:1}:{opacity:0.5}} disabled={!save}>
                                     <LinearGradient colors={['#FFF960','#E8BC4D']} style={styles.saveBtnConteiner}  >
                                         <Text style={styles.saveBtnText}>Создать</Text>
                                     </LinearGradient>
@@ -376,12 +379,11 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => {
     return {
       state: state.new,
-      autorHesh: state.data.myDataAcc.heshUser,
-      autorNick: state.data.myDataAcc.nick,
-      autorColor: state.data.myDataAcc.color,
-      autorPhoto: state.data.myDataAcc.urlImg,
       autorEvents: state.data.myDataAcc.myEvents,
-      autorMessengers: state.data.myDataAcc.myMessengers
+      autorMessengers: state.data.myDataAcc.myMessengers,
+      autorColor: state.data.myDataAcc.color,
+      autorNick: state.data.myDataAcc.nick,
+      autorImage: state.data.myDataAcc.urlImg
     }
   }
 
