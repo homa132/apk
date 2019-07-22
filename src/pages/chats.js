@@ -16,7 +16,6 @@ class Likes extends Component{
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 <View style={styles.container}>
                     <View style={styles.searchConteiner}>
-
                         <Image source={require('../img/icons/btns/search.png')} style={styles.searchImage}/>
                         <TextInput placeholder='поиск чата' placeholderTextColor='#FFF960' style={styles.searchInput} />
                     </View>

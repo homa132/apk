@@ -6,12 +6,26 @@ const { width, height } = Dimensions.get('window');
 
 class Messenger extends Component {
 
+    state = {
+        data: ['a','a','a','a','a','a','a','a','a','a','a','a','a','6','5','4']
+    }
+
+
+    addData = () => {
+        console.log('new data');
+        
+        this.setState({data: [...this.state.data,'a','a','6','5']})
+    }
+
     render(){
+
+        const {data} = this.state;
+
         return (
             <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
                 <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled >
                     <View style={styles.headerConteiner}>
-                        <TouchableOpacity style={styles.headerBtnConteiner}>
+                        <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
                             <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
                         </TouchableOpacity>
 
@@ -23,9 +37,13 @@ class Messenger extends Component {
                     </View>
 
                     <FlatList
-                        data={['a','a','a','a','a','a','a','a','a','a','a','a','a','6','5','4']}
+                        data={data}
                         renderItem={({item})=><Text style={styles.headerText} numberOfLines={1}>Название чата{item}</Text>}
                         style={{width: width,height: height - 190}}
+                        inverted={-1}
+                        data={data}
+                        onEndReachedThreshold={0.001}
+                        onEndReached={(info) => this.addData()}
                     />
 
 

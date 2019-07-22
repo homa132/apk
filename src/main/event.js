@@ -95,7 +95,7 @@ class Event extends Component {
 
                     <View style={styles.mainInfoConteiner}>
                         <InfoEvent/>
-                        <TouchableOpacity style={styles.mainInfoBtn}>
+                        <TouchableOpacity style={styles.mainInfoBtn} onPress={() => this.props.navigation.push('Messenger')}>
                             <Image source={require('../img/icons/btns/messenger.png')} style={{width:40,height: 40}}/>
                         </TouchableOpacity>
                     </View>

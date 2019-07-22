@@ -3,6 +3,7 @@ import {View,TouchableOpacity,Text,StyleSheet,Dimensions,Image} from 'react-nati
 import {connect} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
 import {setNewMyData} from '../redux/actions';
+import {withNavigation} from 'react-navigation';
 
 const { width, height } = Dimensions.get('window');
 
@@ -38,20 +39,21 @@ class userInfo extends Component {
     
                     <View style={styles.itemTopPersonalInfoConteiner}>
     
-                        <TouchableOpacity style={styles.topInfoItem}>
+                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.props.navigation.push('Friends')}>
                             <Text style={styles.infoTextNumber}>{myFriends.length}</Text>
                             <Text style={styles.infoText}>Подписки</Text>
                         </TouchableOpacity>
     
-                        <TouchableOpacity style={styles.topInfoItem}>
+                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.props.navigation.push('Friends')}>
                             <Text style={styles.infoTextNumber}>{friends.length}</Text>
                             <Text style={styles.infoText}>Подписчики</Text>
                         </TouchableOpacity>
     
-                        <TouchableOpacity style={styles.topInfoItem}>
+                        <View style={styles.topInfoItem}>
                             <Text style={styles.infoTextNumber}>{myEvents.length}</Text>
                             <Text style={styles.infoText}>События</Text>
-                        </TouchableOpacity>
+                        </View>
+                        
                     </View>
     
                     <View style={[styles.infoBalConteiner,{marginTop: 10}]}>
@@ -154,4 +156,4 @@ mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null,mapDispatchToProps)(userInfo)
+export default connect(null,mapDispatchToProps)(withNavigation(userInfo))

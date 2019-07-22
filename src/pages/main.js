@@ -54,9 +54,10 @@ class App extends Component {
                         return <Event item={item}/>
                       }
                     }}
-                    onEndReachedThreshold={0.00001}
+                    onEndReachedThreshold={0.001}
                     onEndReached={(info) => this.addData()}
                     bounces={false}
+                    initialNumToRender={2}
                   />
                 </View>
 
