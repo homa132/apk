@@ -33,8 +33,8 @@ class MarkerTypes extends React.Component {
         >
           <Marker
             coordinate={this.props.location}>
-              <View style={[styles.conteinerItem,{backgroundColor: this.props.autor.colorAutor}]}>
-                <Image source={{uri: this.props.autor.photoAutor}} style={styles.itemImage}/>
+              <View style={[styles.conteinerItem,{backgroundColor: this.props.autor.autorColor}]}>
+                <Image source={{uri: this.props.autor.autorImage}} style={styles.itemImage}/>
               </View>
           </Marker>
         </MapView>

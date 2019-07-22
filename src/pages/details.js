@@ -1,10 +1,11 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground,Image,TextInput} from 'react-native';
+import {View,Text,StyleSheet,Dimensions,TouchableOpacity,ScrollView,ImageBackground,Image,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import Conteiner from '../details/conteinerDetailsScreen';
 import SocialLink from '../details/socialLink';
 import InfoEvent from '../details/infoEvent';
 import {setActiveItem} from '../redux/actions';
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -15,16 +16,31 @@ class Details extends Component{
     constructor(props){
         super(props);
         this.state = {
-            scrollEnd: 0
+            scrollEnd: 0,
+            loader: true,
+            item: {}
         }
+
+
     }
 
+    componentDidMount = async () => {
+        const firstItem = await firebase.firestore().collection('ListEvents').doc(this.props.heshItem).get();
+        const itemSecond = await firebase.firestore().collection('MoreEvents').doc(this.props.heshItem).get();
+        const first = firstItem.data();
+        const second = itemSecond.data();
 
-    changeItem = () => {
-        return this.props.list.find((item,index) => {
-            return this.props.heshItem == item.hesh
+        await this.setState({
+            item: {...first,...second},
+            loader: false
+        })
+
+        await firebase.firestore().collection('MoreEvents').doc(this.props.heshItem).onSnapshot((detail) => {
+            let data = detail.data()
+            this.setState({item:{...this.state.item, ...data}});
         })
     }
+
 
     navigateToDetailsUser = (hesh) => {
         this.props.setActiveItem('hestUser',hesh)
@@ -32,61 +48,68 @@ class Details extends Component{
     }
 
     render(){
-        let item = this.changeItem();
-        const {name,date,time,category,contacts,images,heshMessenger,textMore,location,likesHesh,autor,hesh}  = item;
-        const {scrollEnd} = this.state;
-
+        const {scrollEnd,loader,item} = this.state;
+        const {name,date,time,category,contacts,images,heshMessenger,textMore,location,likesHesh,autor,heshEvent}  = item;
+        
         return (
-            <Conteiner scrollEnd={scrollEnd} images={images} location={location} autor={autor} likesHesh={likesHesh} hesh={hesh}>
-                <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
-                    <View style={styles.line}></View>
-                    <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
-                        <View style={styles.conteiner}>
-                            
-                            <Text style={styles.mainText}>{name}</Text>
+            <React.Fragment>
+                {loader?<View style={styles.loaderConteiner}><ActivityIndicator size="large" color="#644800" /></View>:
+                <Conteiner scrollEnd={scrollEnd} images={images} location={location} autor={autor} likesHesh={likesHesh} heshEvent={heshEvent}>
+                    <ImageBackground source={require('../img/background/background1.jpg')} style={styles.backgroundConteiner}>
+                        <View style={styles.line}></View>
+                        <ScrollView onMomentumScrollEnd={(e)=>this.setState({scrollEnd:e.nativeEvent.contentOffset.y})}>
+                            <View style={styles.conteiner}>
+                                
+                                <Text style={styles.mainText}>{name}</Text>
 
-                            <View style={styles.infoConteiner}>
+                                <View style={styles.infoConteiner}>
 
-                                <InfoEvent date={date} time={time} category={category}/>
+                                    <InfoEvent date={date} time={time} category={category}/>
 
-                                <View style={styles.secondConteiner}>
+                                    <View style={styles.secondConteiner}>
 
-                                    <TouchableOpacity style={styles.infoItemSecondConteiner} onPress={()=>this.navigateToDetailsUser(autor.heshAutor)}>
-                                        <View style={[styles.autorImageBackground,{backgroundColor:autor.colorAutor}]}>
-                                            <Image source={{uri:autor.photoAutor}}
-                                                    style={{width:50,height:50,borderRadius:25,borderColor: 'white',borderWidth:1}}/>
-                                        </View>
-                                        <Text style={styles.nickText}>{autor.nickAutor}</Text>
-                                    </TouchableOpacity>
+                                        <TouchableOpacity style={styles.infoItemSecondConteiner} onPress={()=>this.navigateToDetailsUser(autor.autorHesh)}>
+                                            <View style={[styles.autorImageBackground,{backgroundColor:autor.autorColor}]}>
+                                                <Image source={{uri:autor.autorImage}}
+                                                        style={{width:50,height:50,borderRadius:25,borderColor: 'white',borderWidth:1}}/>
+                                            </View>
+                                            <Text style={styles.nickText}>{autor.autorNick}</Text>
+                                        </TouchableOpacity>
 
-                                    {/* <View style={styles.infoItemSecondConteiner}>
-                                        <Image style={{width:40,height: 40}} source={require('../img/icons/detailsScreen/people.png')}/>
-                                        <Text style={styles.peopleText}>500</Text>
-                                    </View> */}
+                                    </View>
                                 </View>
+
+                                <Text style={styles.moreText}>{textMore}</Text>
+
+                                <View style={styles.bottomConteiner}>
+                                    <SocialLink contacts={contacts}/>
+
+                                    <TouchableOpacity style={styles.friendsConteiner}>
+                                        <Text style={styles.friendsText}>Пригласить</Text>
+                                    </TouchableOpacity>
+                                </View>
+                                
                             </View>
+                            <Text></Text>
+                        </ScrollView>
 
-                            <Text style={styles.moreText}>{textMore}</Text>
-
-                            <View style={styles.bottomConteiner}>
-                                <SocialLink contacts={contacts}/>
-
-                                <TouchableOpacity style={styles.friendsConteiner}>
-                                    <Text style={styles.friendsText}>Пригласить</Text>
-                                </TouchableOpacity>
-                            </View>
-                            
-                        </View>
-                        <Text></Text>
-                    </ScrollView>
-
-                </ImageBackground>
-            </Conteiner>
+                    </ImageBackground>
+                </Conteiner>
+                }
+            </React.Fragment>
+            
+            
         )
     }
 };
 
 const styles = StyleSheet.create({
+    loaderConteiner: {
+        width: width,
+        height: height,
+        justifyContent: 'center',
+        alignItems: "center"
+    },
     autorImageBackground: {
         width: 55,
         height: 55,

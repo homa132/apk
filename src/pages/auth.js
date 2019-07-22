@@ -78,11 +78,23 @@ class SignInScreen extends Component {
 
             const {email,uid,displayName, photoURL} = register.user;
             
-            const registeredUser = await firebase.firestore().collection('users').doc(uid).get();
+            const registeredUser = await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('little').get();
+
+            console.log(!!registeredUser.data());
+            
 
             if(!registeredUser.data()){
-                await firebase.firestore().collection('users').doc(uid).set({email:email,
-                    nick:displayName,heshUser:uid,urlImg:photoURL,...state});
+
+                const {color,bal,position,gender,myEvents,myMessengers,aboutMe,contacts,friends,
+                    myFriends,ocenka} = state;
+
+                await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('little').set({
+                    bal,position,nick:displayName,color,urlImg:photoURL,
+                })
+
+                await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('more').set({
+                    email,gender,myEvents,myMessengers,aboutMe,contacts,friends,myFriends,ocenka,heshUser: uid
+                })
             }
             
             await AsyncStorage.setItem('userToken', uid);

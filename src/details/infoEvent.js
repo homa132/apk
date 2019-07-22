@@ -19,6 +19,7 @@ function InfoEvent (props) {
             <View style={styles.infoItemConeiner}>
                  <Image source={require('../img/icons/detailsScreen/category.png')} style={{width:25,height:25}}/>
                  <Text style={styles.infoItemText}>Спорт</Text>
+
             </View>
         </React.Fragment>
     )

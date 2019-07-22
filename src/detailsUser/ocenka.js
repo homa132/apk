@@ -11,7 +11,7 @@ class Ocenka extends Component{
 
     componentDidMount = () => {
         const {ocenka,heshUser,myHeshUser} = this.props;
-
+        
         const one = ocenka.one.find(hesh=>hesh == myHeshUser);
         const two = ocenka.two.find(hesh=>hesh == myHeshUser);
         const three = ocenka.three.find(hesh=>hesh == myHeshUser);
@@ -31,7 +31,7 @@ class Ocenka extends Component{
 
         if(newOcenka == 'defoult'){
             this.setState({newOcenka: setOcenka,disabled: true});
-            await firebase.firestore().collection('users').doc(heshUser).update({
+            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
                 ocenka: {
                     ...ocenka,
                     [setOcenka]: [...ocenka[setOcenka],myHeshUser]
@@ -43,7 +43,7 @@ class Ocenka extends Component{
         if(newOcenka == setOcenka){
             this.setState({newOcenka: 'defoult',disabled: true});
             const newArray = ocenka[setOcenka].filter(hesh=>hesh != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).update({
+            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
                 ocenka: {
                     ...ocenka,
                     [setOcenka]: newArray
@@ -55,7 +55,7 @@ class Ocenka extends Component{
         if(newOcenka != setOcenka && newOcenka != 'defoult'){
             this.setState({newOcenka: setOcenka,disabled: true});
             const removeItemArray = ocenka[newOcenka].filter(hesh=>hesh != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).update({
+            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
                 ocenka: {
                     ...ocenka,
                     [setOcenka]: [...ocenka[setOcenka],myHeshUser],

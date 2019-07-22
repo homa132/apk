@@ -51,7 +51,6 @@ export default (state = initState, action) => {
                 return{...state,images:[]}
             }
         case SET_DEFAULT_STATE:
-            console.log(saveInitialState);
             return {...saveInitialState}
 
         default: return state

@@ -29,8 +29,14 @@ class DetailsUser extends Component{
     }
 
     getData = async () => {
-        this.searchData = await firebase.firestore().collection('users').doc(this.props.heshUser).onSnapshot((doc)=>{
-            const data = doc.data();
+        this.searchData = await firebase.firestore().collection('users').doc(this.props.heshUser).collection('aboutUser').onSnapshot((doc)=>{
+            let data = {};
+            doc.forEach((item)=>{
+              let keys = Object.keys(item.data())
+              keys.forEach((key) => {
+                data[key] = item.data()[key]
+              })
+            })
             this.setState({item:data,loader: false});
         })
     }
@@ -41,6 +47,7 @@ class DetailsUser extends Component{
             const {item} = this.state;
             const addOrRemove = myFriends.find((i) => i == item.heshUser);
             const myEvent = myHeshUser == item.heshUser;
+
             if(myEvent){
                 this.setState({disableBtnIfMyEvent: true})
             }
@@ -55,24 +62,26 @@ class DetailsUser extends Component{
     }
 
     addInFrends = async () => {
-        const {heshUser,friends} = this.state.item;
-        const {myHeshUser,myFriends} = this.props;
+        const {heshUser,friends,nick,urlImg} = this.state.item;
+        console.log(this.state.item);
+        
+        const {myHeshUser,myFriends,myImgUser,myNickUser} = this.props;
         const {add} = this.state;
         if(add){
-           await firebase.firestore().collection('users').doc(heshUser).update({
-                friends: [...friends,myHeshUser]
+           await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
+                friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]
            })
-           await firebase.firestore().collection('users').doc(myHeshUser).update({
-                myFriends: [...myFriends,heshUser]
+           await firebase.firestore().collection('users').doc(myHeshUser).collection('aboutUser').doc('more').update({
+                myFriends: [...myFriends,{hesh: heshUser,img: urlImg,nick}]
            })
         }else{
-            const newFriends = friends.filter(item=>item != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).update({
+            const newFriends = friends.filter(item=>item.hesh != myHeshUser);
+            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
                 friends: [...newFriends]
            });
            this.setState({item:{...this.state.item,friends: newFriends}});
-           const newMyFriends = myFriends.filter(item=>item != heshUser);
-           await firebase.firestore().collection('users').doc(myHeshUser).update({
+           const newMyFriends = myFriends.filter(item=>item.hesh != heshUser);
+           await firebase.firestore().collection('users').doc(myHeshUser).collection('aboutUser').doc('more').update({
             myFriends: [...newMyFriends]
             })
         }
@@ -82,7 +91,7 @@ class DetailsUser extends Component{
     render(){
         const {color,urlImg,myFriends,friends,myEvents,bal,position,ocenka,contacts,heshUser,nick,aboutMe} = this.state.item;
         const {disableBtnIfMyEvent} = this.state;
-
+        
         return(
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 {this.state.loader?
@@ -196,7 +205,9 @@ const mapStateToProps = (state) => {
     return {
         heshUser: state.navigation.hestUser,
         myFriends: state.data.myDataAcc.myFriends,
-        myHeshUser: state.data.myDataAcc.heshUser
+        myHeshUser: state.data.myDataAcc.heshUser,
+        myNickUser: state.data.myDataAcc.nick,
+        myImgUser:  state.data.myDataAcc.urlImg
     }
   }
 

@@ -58,13 +58,14 @@ class Conteiner extends Component {
 
     like = async () => {
         const {likes} = this.state;
+        
         if(!likes){
-            await firebase.firestore().collection('list').doc(this.props.hesh).update({
+            await firebase.firestore().collection('MoreEvents').doc(this.props.heshEvent).update({
                 likesHesh: [...this.props.likesHesh,this.props.heshUser]
             })
         }else{
             const newLikesHesh = this.props.likesHesh.filter(item=>item !=this.props.heshUser);
-            await firebase.firestore().collection('list').doc(this.props.hesh).update({
+            await firebase.firestore().collection('MoreEvents').doc(this.props.heshEvent).update({
                 likesHesh: [...newLikesHesh]
             })
         }

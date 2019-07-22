@@ -11,7 +11,6 @@ const { width, height } = Dimensions.get('window');
 class App extends Component {
   constructor(props){
     super(props);
-    this.ref = firebase.firestore().collection('list');
     this.SearchData();
     this.state ={
       data: ['1','2','3','4','5']
@@ -19,11 +18,14 @@ class App extends Component {
   }
 
   SearchData = async ()=>{
-    await this.ref.onSnapshot((newData) => {
+    await firebase.firestore().collection('ListEvents').onSnapshot((newData) => {
       let data = [];
       newData.forEach(item => {
         data.push(item.data());
       });
+
+      console.log(data);
+      
       this.props.setDataAllEvents(data);
     });
   }
