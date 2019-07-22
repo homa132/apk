@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
     imagePeople: {
         width: 60,
         height: 60,
-        borderRadius: 30,
-        borderColor: 'black',
+        borderRadius: 7,
+        borderColor: 'white',
         borderWidth: 1
     },
     imageAutorConteinerSecond: {
@@ -47,12 +47,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: 'red',
-        borderRadius: 32.5
+        borderRadius: 7
     },
     imageMessenger: {
-        width: 60,
-        height: 60,
-        borderRadius: 30
+        width: 50,
+        height: 50,
     },
     chatPeopleTextConteiner: {
         justifyContent: 'space-between',

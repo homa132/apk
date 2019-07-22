@@ -72,13 +72,12 @@ const styles = StyleSheet.create({
     myConteiner: {
         position: 'relative',
         top: -15,
-        width: 70,
+        width: 80,
         height: 16,
         backgroundColor: '#C4C4C4',
         justifyContent: 'center',
         alignItems: 'center',
-        borderBottomLeftRadius: 20,
-        borderBottomRightRadius: 20
+        borderRadius: 3
     },
     myText: {
         fontSize: 10,
@@ -94,14 +93,14 @@ const styles = StyleSheet.create({
     itemImage: {
         width: 100,
         height: 100,
-        borderRadius: 50,
+        borderRadius: 10,
         borderColor: 'white',
         borderWidth: 1.4
     },
     itemImageConteiner: {
         width: 108,
         height: 108,
-        borderRadius: 54,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },

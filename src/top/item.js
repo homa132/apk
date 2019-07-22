@@ -48,15 +48,15 @@ const styles = StyleSheet.create({
     imageUser: {
         width: 100,
         height: 100,
-        borderRadius: 50,
-        borderColor: 'black',
+        borderRadius: 10,
+        borderColor: 'white',
         borderWidth: 2
     },
     imageUserConteiner: {
         width: 106,
         height: 106,
         backgroundColor: 'red',
-        borderRadius: 53,
+        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },

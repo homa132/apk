@@ -66,9 +66,9 @@ const styles = StyleSheet.create({
     autorImage: {
         width: 50,
         height :50,
-        borderColor: 'black',
+        borderColor: 'white',
         borderWidth: 1,
-        borderRadius: 25,
+        borderRadius: 7,
         marginHorizontal: 5
     },
     chatEventBottomConteiner: {
@@ -79,8 +79,8 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     btnImage: {
-        width: 60,
-        height: 60
+        width: 50,
+        height: 50
     },
     btnConteiner: {
         width: 70,
@@ -96,7 +96,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'green',
         width:55,
         height: 55,
-        borderRadius: 27.5,
+        borderRadius: 7,
         justifyContent: 'center',
         alignItems: "center"
     }
