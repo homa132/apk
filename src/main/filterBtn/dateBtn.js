@@ -101,10 +101,10 @@ class TypeBtn extends Component {
 const styles = StyleSheet.create({
     conteinerBtn: {
         flex: 1,
-        height: 50,
+        height: 44,
         flexDirection: 'row',
         paddingLeft: 5,
-        paddingVertical: 10,
+        marginTop: 7,
     },
     btn: {
         width: 100,
@@ -112,9 +112,10 @@ const styles = StyleSheet.create({
         borderColor: '#644800',
         marginRight:10,
         borderWidth: 1.5,
-        borderRadius: 20,
+        borderRadius: 7,
         justifyContent: 'center',
         alignItems: 'center',
+        alignSelf: 'center'
     },
     btnText: {
         fontSize: 14,

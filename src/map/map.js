@@ -2,7 +2,6 @@ import React from 'react';
 import { StyleSheet, Dimensions,View,Image} from 'react-native';
 import MapView, { ProviderPropType,Marker } from 'react-native-maps';
 import {connect} from 'react-redux';
-import MarkerMore from './markerMore';
 import {setNewData} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
@@ -61,11 +60,7 @@ class MarkerTypes extends React.Component {
                       style={styles.itemImage}/>
               </View>
             </Marker>:
-            this.props.listEvents.map((item,index) => {
-              return (
-                <MarkerMore item={item} key={index}/>
-              )
-            })
+            null
           }
         </MapView>
     );

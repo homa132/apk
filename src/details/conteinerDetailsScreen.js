@@ -30,8 +30,6 @@ class Conteiner extends Component {
                 showMap:false
             }
         }
-
-
     }
 
     toTop = () => {
