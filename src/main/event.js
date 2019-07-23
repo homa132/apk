@@ -5,6 +5,7 @@ import {View,Text,TouchableOpacity,Image,StyleSheet,Dimensions} from 'react-nati
 import ImageSlider from 'react-native-image-slider';
 import Map from '../map/map';
 import InfoEvent from '../details/infoEvent';
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,40 +15,73 @@ class Event extends Component {
         this.state = {
             likes: false,
             showMap:false,
-            moreText: false
+            moreText: false,
+            likesArray: props.item.likesHesh
           }
     }
 
-    like = () => {
+    like = async () => {
         const {likes} = this.state;
+        let {heshEvent,likesHesh} = this.props.item;
         this.setState({likes:!likes});
+        const {myUserHesh} = this.props;
+        const newLikesHesh = likesHesh.filter(item=>item!=myUserHesh);
+
+        if(likes){
+          this.setState({likesArray: newLikesHesh});
+          await firebase.firestore().collection('Events').doc(heshEvent).update({
+            likesHesh: [...newLikesHesh]
+          })
+        }else{
+          this.setState({likesArray: [...newLikesHesh,myUserHesh]});
+          await firebase.firestore().collection('Events').doc(heshEvent).update({
+            likesHesh: [...newLikesHesh,myUserHesh]
+          })
+        }
+    }
+
+    goToAutor = () => {
+      console.log('autor page');
+      
+    }
+
+    componentDidMount(){
+      if(this.props.item.textMore.length < 25 ){
+        this.setState({moreText: true})
+      }
+      const {myUserHesh} = this.props;
+      const {likesHesh} = this.props.item;
+      const searchLike = likesHesh.find((item)=>item == myUserHesh);
+      
+      if(searchLike){
+        this.setState({likes: true})
+      }
     }
   
 
     render(){
         
-        const {likes,showMap,moreText} = this.state;
-        const {name} = this.props.item;
-        console.log(this.props.item);
+        const {likes,showMap,moreText,likesArray} = this.state;
+        const {name,autor,category,heshEvent,heshMessenger,date,images,likesHesh,
+              location,textMore,time} = this.props.item;
+      console.log(likesArray);
       
         return (
             <View style={styles.eventConteiner}>
 
-                <TouchableOpacity style={styles.eventHeader}>
-                    <View style={[styles.imageConteiner,{backgroundColor:'#ADFF00'}]}>
-                        <Image source={require('../img/testImage.png')} style={styles.imageUser}/>
+                <TouchableOpacity style={styles.eventHeader} onPress={this.goToAutor}>
+                    <View style={[styles.imageConteiner,{backgroundColor: autor.autorColor}]}>
+                        <Image source={{uri: autor.autorImage}} style={styles.imageUser}/>
                     </View>
-                    <Text style={styles.nickText} numberOfLines={1}>nick name user</Text>
+                    <Text style={styles.nickText} numberOfLines={1}>{autor.autorNick}</Text>
                 </TouchableOpacity>
 
                 <View style={styles.mainConteiner}>
-                    {showMap?<Map one={true} location={{latitude:50.44921745032418,
-                    longitude: 30.485897473990917}} autor={{colorAutor: '#00FF29',
-                    photoAutor: 'https://lh5.googleusercontent.com/-TtBD0qG1kcI/AAAAAAAAAAI/AAAAAAAAAAA/ACHi3rctNo1tXcBbaJwVMJp1zF-cKTZdSg/s96-c/photo.jpg'}}/>:
+                    {showMap?<Map one={true} location={location} autor={{autorColor: autor.autorColor,
+                    autorImage: autor.autorImage}}/>:
                     <ImageSlider
                     loop
-                    images={['https://imgclf.112.ua/original/2015/12/15/199925.PNG?timestamp=1450192509',
-                    'https://lumpics.ru/wp-content/uploads/2018/03/Prilozhenie-Google-ostanovleno-kak-ispravit.png']}
+                    images={images}
                     customSlide={({ index, item, style }) => (
                     <Image source={{ uri: item }} style={{width:width,height:width}} key={index}/>
                     )}
@@ -78,7 +112,7 @@ class Event extends Component {
                             }
                         </View>
                         <View style={styles.btnTextConteiner}>
-                            <Text style={styles.btnText} numberOfLines={1}>500</Text>
+                            <Text style={styles.btnText} numberOfLines={1}>{likesArray.length}</Text>
                         </View>
                     </TouchableOpacity>
 
@@ -95,7 +129,7 @@ class Event extends Component {
                     </View>
 
                     <View style={styles.mainInfoConteiner}>
-                        <InfoEvent/>
+                        <InfoEvent time={time} date={date} category={category}/>
                         <TouchableOpacity style={styles.mainInfoBtn} onPress={() => this.props.navigation.push('Messenger')}>
                             <Image source={require('../img/icons/btns/messenger.png')} style={{width:40,height: 40}}/>
                         </TouchableOpacity>
@@ -104,16 +138,15 @@ class Event extends Component {
 
                     <View style={styles.moreTextConteiner}>
                         {moreText?
-                        <Text style={styles.moreTextSecond}>dsvdsv  ds v dsvd vdsv d svd  svdsv dsvdsvds</Text>
+                        <Text style={styles.moreTextSecond}>{textMore}</Text>
                         :
                         <React.Fragment>
-                            <Text numberOfLines={1} style={styles.moreTextFirst}>dsvdsv  ds v dsvd vdsv d svd  svdsvdsvdsvds</Text>
+                            <Text numberOfLines={1} style={styles.moreTextFirst}>{textMore}</Text>
                             <TouchableOpacity onPress={() => this.setState({moreText: true})}>
                             <Text numberOfLines={1} style={styles.moreBtn}>ещё</Text>
                             </TouchableOpacity>
                         </React.Fragment>
                         }
-
                     </View>
                     
                 </View>
@@ -124,7 +157,7 @@ class Event extends Component {
 
 const mapStateToProps = (state) => {
     return {
-
+      myUserHesh: state.data.myDataAcc.heshUser
     }
 }
 
@@ -261,7 +294,8 @@ const styles = StyleSheet.create({
       width: width - 70,
       flexDirection: 'row',
       alignItems: 'flex-start',
-      justifyContent: 'space-between'
+      justifyContent: 'space-between',
+      marginTop: 7
     },
     mainInfoBtn: {
       width:45,

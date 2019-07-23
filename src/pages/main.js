@@ -14,7 +14,7 @@ class App extends Component {
     super(props);
     this.state ={
       data: ['source'],
-      lastEvent: {}
+      lastEvent: false
     }
   }
 
@@ -24,34 +24,8 @@ class App extends Component {
   }
 
   SearchData = ()=>{
-      // let getData = await firebase.firestore().collection('Events').limit(1).get();
-      // console.log(getData);
-    
-      // this.setState({
-      //   data: getData.data()
-      // })
 
-      // this.props.setDataAllEvents(getData.data());
-
-      // var first = firebase.firestore().collection("Events").orderBy('date')
-      //   .limit(2);
-
-      // first.get().then(function (documentSnapshots) {
-      //   // Get the last visible document
-      //   var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
-      //   console.log("last", lastVisible.data());
-
-      //   // Construct a new query starting at this document,
-      //   // get the next 25 cities.
-      //   var next = firebase.firestore().collection("Events").orderBy('date')
-      //           .startAfter(lastVisible)
-      //           .limit(2);
-
-      //   console.log(next.data());
-        
-      // });
-
-      const first = firebase.firestore().collection('Events').orderBy('date').limit(2);
+      const first = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(2);
       first.get().then((item) => {
         let data = [];
 
@@ -60,19 +34,17 @@ class App extends Component {
         })
 
         let lastEvent = item.docs[item.docs.length-1];
-        
-        this.setState({data: [...this.state.data,...data],lastEvent})
+        this.setState({data: [...this.state.data,...data],lastEvent});
 
       })
-
-
 
   }
 
   addData = () => {
 
-    if(this.state.lastEvent != {}){
-      const addData = firebase.firestore().collection('Events').orderBy('date').startAfter(this.state.lastEvent).limit(2);
+    if(this.state.lastEvent){
+
+      const addData = firebase.firestore().collection('Events').orderBy('dateCreate','desc').startAfter(this.state.lastEvent).limit(2);
       addData.get().then((item) => {
         let data = [];
   
@@ -85,13 +57,11 @@ class App extends Component {
       })
     }
 
-    console.log('add data');
-
   }
 
   render() {
     const {data} = this.state;
-
+    
 
       return (
         <ImageBackground style={styles.background} source={require('../img/background/background1.jpg')}>

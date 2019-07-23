@@ -21,6 +21,10 @@ class MarkerTypes extends React.Component {
     const DELTA2 = DELTA1 * ASPECT_RATIO;
 
     if(this.props.one){
+
+      console.log(this.props);
+      
+
       return(
         <MapView
           style={styles.map}
