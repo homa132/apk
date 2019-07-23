@@ -27,8 +27,9 @@ class Event extends Component {
     render(){
         
         const {likes,showMap,moreText} = this.state;
-
-
+        const {name} = this.props.item;
+        console.log(this.props.item);
+      
         return (
             <View style={styles.eventConteiner}>
 
@@ -87,7 +88,7 @@ class Event extends Component {
                 <View style={styles.infoEventConteiner}>
 
                     <View style={styles.topInfoConteiner}>
-                        <Text numberOfLines={3} style={styles.topInfoText}>Турнир с футбoла для школьников</Text>
+                        <Text numberOfLines={3} style={styles.topInfoText}>{name}</Text>
                         <TouchableOpacity style={styles.topInfoBtn}>
                             <Text style={styles.topInfoBtnText}>поделиться</Text>
                         </TouchableOpacity>

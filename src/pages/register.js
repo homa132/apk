@@ -19,12 +19,6 @@ class Register extends Component{
         myEvents: [],
         myMessengers: [],
         aboutMe: '',
-        contacts: {
-            facebook: '',
-            webSite: '',
-            telegrame: '',
-            instagrame: ''
-        },
         color: '#00FF29',
         friends: [],
         myFriends: [],
@@ -82,15 +76,12 @@ class Register extends Component{
           if(!err){
             const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
 
-            const {nick,color,bal,position,email,gender,myEvents,myMessengers,aboutMe,contacts,friends,
+            const {nick,color,bal,position,email,gender,myEvents,myMessengers,aboutMe,friends,
                 myFriends,ocenka} = this.state;
 
-            await firebase.firestore().collection('users').doc(register.user.uid).collection('aboutUser').doc('little').set({
-                nick,color,urlImg:image.downloadURL,bal,position
-            })
-
-            await firebase.firestore().collection('users').doc(register.user.uid).collection('aboutUser').doc('more').set({
-                email,gender,myEvents,myMessengers,aboutMe,contacts,friends,myFriends,ocenka,heshUser: register.user.uid
+            await firebase.firestore().collection('users').doc(register.user.uid).set({
+                nick,color,urlImg:image.downloadURL,bal,position,email,gender,myEvents,
+                myMessengers,aboutMe,friends,myFriends,ocenka,heshUser: register.user.uid
             })
 
             this.props.navigation.navigate('Auth');

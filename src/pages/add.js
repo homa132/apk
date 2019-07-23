@@ -24,22 +24,6 @@ class Add extends Component{
     }
 
 
-    //create social inputs
-    socialItem = (placeholder,name) => {
-        let icon;
-        if(name == 'telegrame'){icon=require('../img/icons/detailsScreen/telegrame.png')};
-        if(name == 'facebook'){icon=require('../img/icons/detailsScreen/facebook.png')};
-        if(name == 'instagrame'){icon=require('../img/icons/detailsScreen/inst.png')};
-        if(name == 'webSite'){icon=require('../img/icons/detailsScreen/web.png')};
-
-        return (
-            <View style={styles.socialConteiner}>
-                <Image style={styles.socialImg} source={icon}/>
-                <TextInput style={styles.socialInput} placeholder={placeholder} placeholderTextColor='#644800' 
-                    value={this.props.state.contacts[name]} onChangeText={(value)=>this.setDataRedax(value,'contacts',name)}/>
-            </View>
-        )
-    }
 
     setTime = async () => {
         try {
@@ -102,31 +86,37 @@ class Add extends Component{
         const {autorEvents,autorMessengers,autorColor,autorImage,autorNick} = this.props;
         const autorHesh = await AsyncStorage.getItem('userToken');
 
+        const dateCreate = new Date();
+
         // create new event 
-        await firebase.firestore().collection('ListEvents').doc(hesh).set({
-            name,category,date,time,heshEvent:hesh,location,autor:{autorColor,autorImage,autorNick,autorHesh}
-        })
-        await firebase.firestore().collection('MoreEvents').doc(hesh).set({
-            images: urlImg,heshMessenger: hesh,textMore,likesHesh,contacts
+        await firebase.firestore().collection('Events').doc(hesh).set({
+            name,category,date,time,heshEvent:hesh,location,autor:{autorColor,autorImage,autorNick,autorHesh},
+            images: urlImg,heshMessenger: hesh,textMore,likesHesh,date: dateCreate.getTime()
         })
 
         // add event in array autor
-        await firebase.firestore().collection('users').doc(autorHesh).collection('aboutUser').doc('more').update({
-            myEvents: [...autorEvents,{hesh,name}],
-            myMessengers: [...autorMessengers,{hesh,last: 0,newMess: false,alert: true}]
+        await firebase.firestore().collection('users').doc(autorHesh).update({
+            myEvents: [...autorEvents,hesh],
+            myMessengers: [...autorMessengers,{hesh,lastMess: 20190510105060,newMess: false,alert: true}]
         })
 
         // create chat
         await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('details').set({
-            name,
+            name,category,date,time,
             heshEvent: hesh,
-            event: true
+            event: true,
+            users: [{autorHesh,autorColor,autorImage,autorNick}],
+            autor: {autorHesh,autorColor,autorImage,autorNick},
+            lastMess: 20190510105060
         })
-        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('users').set({
-            users: [autorHesh]
-        })
-        await firebase.firestore().collection('chats').doc(hesh).collection('messege').doc('messege').set({
-            messege: []
+
+        await firebase.firestore().collection('chats').doc(hesh).collection('messege').add({
+            messege: 'hello it is first messege',
+            autor: {
+                autorImage,autorHesh
+            },
+            date: '20.02.2019 10-50:50',
+            dateSort: 20190510105060
         })
         
         await this.props.setDefaultState();
@@ -175,12 +165,6 @@ class Add extends Component{
                                     placeholderTextColor='#644800' onChangeText={(value)=>this.setDataRedax(value,'textMore')}
                                     value={textMore}/>
 
-                                <Text style={styles.dopDataText}>дополнительный данные</Text>
-
-                                {this.socialItem('https://t.me/','telegrame')}
-                                {this.socialItem('https://www.facebook.com/','facebook')}
-                                {this.socialItem('https://www.instagram.com/','instagrame')}
-                                {this.socialItem('https://www.google.com/','webSite')}
 
                                 <TouchableOpacity onPress={this.saveEvent}  style={save?{opacity:1}:{opacity:0.5}} disabled={!save}>
                                     <LinearGradient colors={['#FFF960','#E8BC4D']} style={styles.saveBtnConteiner}  >

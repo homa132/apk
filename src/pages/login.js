@@ -31,34 +31,13 @@ class Login extends Component{
         this.props.navigation.navigate('Auth');
       };
 
-      socialItem = (placeholder,name) => {
-        const {contacts} = this.props.myData;
-
-        let icon;
-        if(name == 'telegrame'){icon=require('../img/icons/detailsScreen/telegrame.png')};
-        if(name == 'facebook'){icon=require('../img/icons/detailsScreen/facebook.png')};
-        if(name == 'instagrame'){icon=require('../img/icons/detailsScreen/inst.png')};
-        if(name == 'webSite'){icon=require('../img/icons/detailsScreen/web.png')};
-
-        return (
-            <View style={styles.socialConteiner}>
-                <Image style={styles.socialImg} source={icon}/>
-                <TextInput style={styles.socialInput} placeholder={placeholder} placeholderTextColor='#644800' 
-                    value={contacts[name]} onChangeText={(value)=>this.props.setNewMyData(name,value,'contacts')}/>
-            </View>
-        )
-    }
 
     updateDataOnServer = async (data) => {
-        const {nick,urlImg,aboutMe,contacts} = data;
+        const {nick,urlImg,aboutMe} = data;
         const heshUser = await AsyncStorage.getItem('userToken');
         
-        await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('little').update({
-            nick,urlImg
-        })
-
-        await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
-            aboutMe,contacts
+        await firebase.firestore().collection('users').doc(heshUser).update({
+            nick,urlImg,aboutMe
         })
     }
 
@@ -112,10 +91,7 @@ class Login extends Component{
 
                             <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'
                                 style={styles.aboutYou} value={aboutMe} onChangeText={(value)=>this.props.setNewMyData('aboutMe',value)}/>
-                            {this.socialItem('https://t.me/','telegrame')}
-                            {this.socialItem('https://www.facebook.com/','facebook')}
-                            {this.socialItem('https://www.instagram.com/','instagrame')}
-                            {this.socialItem('https://www.google.com/','webSite')}
+
                         </View>
 
                     </View>

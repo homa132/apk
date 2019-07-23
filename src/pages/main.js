@@ -9,29 +9,84 @@ import Event from '../main/event';
 const { width, height } = Dimensions.get('window');
 
 class App extends Component {
+
   constructor(props){
     super(props);
-    this.SearchData();
     this.state ={
-      data: ['1','2','3','4','5']
+      data: ['source'],
+      lastEvent: {}
     }
   }
 
-  SearchData = async ()=>{
-    await firebase.firestore().collection('ListEvents').onSnapshot((newData) => {
-      let data = [];
-      newData.forEach(item => {
-        data.push(item.data());
-      });
+  componentDidMount(){
+    this.SearchData()
+    
+  }
 
-      console.log(data);
-      
-      this.props.setDataAllEvents(data);
-    });
+  SearchData = ()=>{
+      // let getData = await firebase.firestore().collection('Events').limit(1).get();
+      // console.log(getData);
+    
+      // this.setState({
+      //   data: getData.data()
+      // })
+
+      // this.props.setDataAllEvents(getData.data());
+
+      // var first = firebase.firestore().collection("Events").orderBy('date')
+      //   .limit(2);
+
+      // first.get().then(function (documentSnapshots) {
+      //   // Get the last visible document
+      //   var lastVisible = documentSnapshots.docs[documentSnapshots.docs.length-1];
+      //   console.log("last", lastVisible.data());
+
+      //   // Construct a new query starting at this document,
+      //   // get the next 25 cities.
+      //   var next = firebase.firestore().collection("Events").orderBy('date')
+      //           .startAfter(lastVisible)
+      //           .limit(2);
+
+      //   console.log(next.data());
+        
+      // });
+
+      const first = firebase.firestore().collection('Events').orderBy('date').limit(2);
+      first.get().then((item) => {
+        let data = [];
+
+        item.forEach((i) => {
+          data.push(i.data());
+        })
+
+        let lastEvent = item.docs[item.docs.length-1];
+        
+        this.setState({data: [...this.state.data,...data],lastEvent})
+
+      })
+
+
+
   }
 
   addData = () => {
-    this.setState({data: [...this.state.data,'10','11','12','13','14','15','16']})
+
+    if(this.state.lastEvent != {}){
+      const addData = firebase.firestore().collection('Events').orderBy('date').startAfter(this.state.lastEvent).limit(2);
+      addData.get().then((item) => {
+        let data = [];
+  
+        item.forEach((i) => {
+          data.push(i.data());
+        })
+        let lastEvent = item.docs[item.docs.length-1];
+
+        this.setState({data: [...this.state.data,...data],lastEvent})
+      })
+    }
+
+    console.log('add data');
+
   }
 
   render() {
@@ -44,6 +99,7 @@ class App extends Component {
                 <View style={{width: width,height: height - 75}}>
                   <FlatList
                     data={data}
+                    keyExtractor={(item, index) => index.toString()}
                     renderItem={({item,index}) => {
                     if(index == 0){
                       return (

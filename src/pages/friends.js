@@ -23,6 +23,7 @@ class Friends extends Component {
         return (
             <ImageBackground style={{width:width, height: height - 74}} source={require('../img/background/background1.jpg')}>
                 <FlatList
+                    keyExtractor={(item, index) => index.toString()}
                     data={data}
                     onEndReachedThreshold={0.001}
                     onEndReached={(info) => this.addData()}

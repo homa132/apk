@@ -12,12 +12,6 @@ const state = {
     myEvents: [],
     myMessengers: [],
     aboutMe: '',
-    contacts: {
-        facebook: '',
-        webSite: '',
-        telegrame: '',
-        instagrame: ''
-    },
     color: '#00FF29',
     friends: [],
     myFriends: [],
@@ -78,23 +72,20 @@ class SignInScreen extends Component {
 
             const {email,uid,displayName, photoURL} = register.user;
             
-            const registeredUser = await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('little').get();
+            const registeredUser = await firebase.firestore().collection('users').doc(uid).get();
 
-            console.log(!!registeredUser.data());
             
 
             if(!registeredUser.data()){
 
-                const {color,bal,position,gender,myEvents,myMessengers,aboutMe,contacts,friends,
+                const {color,bal,position,gender,myEvents,myMessengers,aboutMe,friends,
                     myFriends,ocenka} = state;
 
-                await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('little').set({
+                await firebase.firestore().collection('users').doc(uid).set({
                     bal,position,nick:displayName,color,urlImg:photoURL,
+                    email,gender,myEvents,myMessengers,aboutMe,friends,myFriends,ocenka,heshUser: uid
                 })
 
-                await firebase.firestore().collection('users').doc(uid).collection('aboutUser').doc('more').set({
-                    email,gender,myEvents,myMessengers,aboutMe,contacts,friends,myFriends,ocenka,heshUser: uid
-                })
             }
             
             await AsyncStorage.setItem('userToken', uid);

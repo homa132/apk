@@ -37,6 +37,7 @@ class Messenger extends Component {
                     </View>
 
                     <FlatList
+                        keyExtractor={(item, index) => index.toString()}
                         data={data}
                         renderItem={({item})=><Text style={styles.headerText} numberOfLines={1}>Название чата{item}</Text>}
                         style={{width: width,height: height - 190}}
