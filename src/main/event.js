@@ -67,7 +67,6 @@ class Event extends Component {
         const {likes,showMap,moreText,likesArray} = this.state;
         const {name,autor,category,heshEvent,heshMessenger,date,images,likesHesh,
               location,textMore,time} = this.props.item;
-      console.log(likesArray);
       
         return (
             <View style={styles.eventConteiner}>

@@ -39,7 +39,11 @@ class DetailsUser extends Component{
         if(prevState.item != this.state.item){
             const {myFriends,myHeshUser} = this.props;
             const {item} = this.state;
-            const addOrRemove = myFriends.find((i) => i.hesh == item.heshUser);
+            const addOrRemove = myFriends.find((i) => {
+                console.log(i.hesh , item.heshUser);
+                
+                return i.hesh == item.heshUser
+            });
             const myEvent = myHeshUser == item.heshUser;
 
             if(myEvent){
@@ -54,9 +58,9 @@ class DetailsUser extends Component{
 
     addInFrends = async () => {
         const {heshUser,friends,nick,urlImg} = this.state.item;
-        
         const {myHeshUser,myFriends,myImgUser,myNickUser} = this.props;
         const {add} = this.state;
+        
         if(add){
             this.setState({disableAdd: true,item: {...this.state.item, friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]}});
             await firebase.firestore().collection('users').doc(heshUser).update({

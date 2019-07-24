@@ -36,11 +36,9 @@ class App extends Component {
         this.setState({data: [...this.state.data,...data],lastEvent});
 
       })
-
   }
 
   addData = () => {
-
     if(this.state.lastEvent){
 
       const addData = firebase.firestore().collection('Events').orderBy('dateCreate','desc').startAfter(this.state.lastEvent).limit(2);
@@ -55,7 +53,6 @@ class App extends Component {
         this.setState({data: [...this.state.data,...data],lastEvent})
       })
     }
-
   }
 
   render() {

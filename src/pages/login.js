@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
 import {View,Text,ImageBackground,StyleSheet,TouchableOpacity,Image,Dimensions,
-    TextInput,ScrollView,ActivityIndicator} from 'react-native';
+    TextInput,FlatList,ActivityIndicator,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
 import {setNewMyData} from '../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -8,17 +8,22 @@ import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
 import InfoUser from '../detailsUser/infoAboutUsers'
 import Ocenka from '../detailsUser/ocenka';
+import Event from '../detailsUser/eventUser';
 
 const { width, height } = Dimensions.get('window');
 
 class Login extends Component{
 
-    state = {
-        telegrame: '',
-        facebook: '',
-        instagrame: '',
-        webSite: '',
-        save: false
+    constructor(props){
+        super(props);
+        this.state = {
+            save: false,
+            eventsHesh: ['first',...props.myData.myEvents]
+        }
+    }
+
+    addData = () => {
+        console.log('add new');
     }
 
     _signOutAsync = async () => {
@@ -60,37 +65,51 @@ class Login extends Component{
 
         const {nick,ocenka,color,urlImg,myEvents,friends,myFriends,bal,position,aboutMe} = this.props.myData;
         const {disableSaveBtn}  = this.props;
-        const {save} = this.state;
-
+        const {save,eventsHesh} = this.state;
+        
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
-                    <View style={styles.container}>
-                        <View style={styles.headerConteiner}>
-                            <TouchableOpacity style={[styles.btnSingOutConteiner,disableSaveBtn?{opacity:0.1}:{opacity: 1}]}
-                                 onPress={this.saveNewData} disabled={disableSaveBtn}>
-                                <Image source={require('../img/icons/btns/btnSave.png')} style={{width: 48,height: 48}}/>
-                            </TouchableOpacity>
-
-                            <TextInput numberOfLines={1} style={styles.headerText} value={nick} 
-                                onChangeText={(value)=> this.props.setNewMyData('nick',value)}
-                                />
-
-                            <TouchableOpacity style={styles.btnSingOutConteiner} onPress={this._signOutAsync}>
-                                <Image source={require('../img/icons/btns/btnSingOut.png')} style={{width: 48,height: 48}}/>
-                            </TouchableOpacity>
-                        </View>
-
-                        <InfoUser my={true} color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
-                                bal={bal} position={position}/>
-                        <Ocenka my={true} ocenka={ocenka}/>
-
-                        <View style={styles.detaisConteiner}>
-                            <Text style={styles.detailsMainText}>Дополнительный данные о Вас</Text>
-
-                            <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'
-                                style={styles.aboutYou} value={aboutMe} onChangeText={(value)=>this.props.setNewMyData('aboutMe',value)}/>
-                        </View>
-                    </View>
+                <FlatList
+                    keyExtractor={(item, index) => index.toString()}
+                    data={eventsHesh}
+                    renderItem={({item,index}) => {
+                        if(index == 0){
+                            return (
+                                <View style={styles.container}>
+                                    <View style={styles.headerConteiner}>
+                                        <TouchableOpacity style={[styles.btnSingOutConteiner,disableSaveBtn?{opacity:0.1}:{opacity: 1}]}
+                                            onPress={this.saveNewData} disabled={disableSaveBtn}>
+                                            <Image source={require('../img/icons/btns/btnSave.png')} style={{width: 48,height: 48}}/>
+                                        </TouchableOpacity>
+                                
+                                        <TextInput numberOfLines={1} style={styles.headerText} value={nick} 
+                                            onChangeText={(value)=> this.props.setNewMyData('nick',value)}
+                                            />
+                                
+                                        <TouchableOpacity style={styles.btnSingOutConteiner} onPress={this._signOutAsync}>
+                                            <Image source={require('../img/icons/btns/btnSingOut.png')} style={{width: 48,height: 48}}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                
+                                    <InfoUser my={true} color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
+                                            bal={bal} position={position}/>
+                                    <Ocenka my={true} ocenka={ocenka}/>
+                                
+                                    <View style={styles.detaisConteiner}>
+                                        <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'
+                                            style={styles.aboutYou} value={aboutMe} onChangeText={(value)=>this.props.setNewMyData('aboutMe',value)}/>
+                                    </View>
+                                </View>
+                            )
+                        }else{
+                            return <Event hesh={item}/>
+                        }
+                    }}
+                    onEndReachedThreshold={0.001}
+                    onEndReached={(info) => this.addData()}
+                    bounces={false}
+                    initialNumToRender={2}
+                />
                 {save?
                 <View style={styles.saveConteiner}>
                     <View style={styles.save}>
@@ -102,6 +121,8 @@ class Login extends Component{
         )
     }
 };
+
+
 
 const styles = StyleSheet.create({
     saveConteiner: {
