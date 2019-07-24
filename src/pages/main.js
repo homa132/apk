@@ -24,7 +24,6 @@ class App extends Component {
   }
 
   SearchData = ()=>{
-
       const first = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(2);
       first.get().then((item) => {
         let data = [];

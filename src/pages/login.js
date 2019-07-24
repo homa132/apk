@@ -64,9 +64,7 @@ class Login extends Component{
 
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
-                <ScrollView>
                     <View style={styles.container}>
-
                         <View style={styles.headerConteiner}>
                             <TouchableOpacity style={[styles.btnSingOutConteiner,disableSaveBtn?{opacity:0.1}:{opacity: 1}]}
                                  onPress={this.saveNewData} disabled={disableSaveBtn}>
@@ -91,11 +89,8 @@ class Login extends Component{
 
                             <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'
                                 style={styles.aboutYou} value={aboutMe} onChangeText={(value)=>this.props.setNewMyData('aboutMe',value)}/>
-
                         </View>
-
                     </View>
-                </ScrollView>
                 {save?
                 <View style={styles.saveConteiner}>
                     <View style={styles.save}>

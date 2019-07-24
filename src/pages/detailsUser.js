@@ -20,7 +20,8 @@ class DetailsUser extends Component{
             loader: true,
             add: true,
             disableBtnIfMyEvent: false,
-            my:false
+            my:false,
+            disableAdd: false
         }
     }
 
@@ -28,16 +29,9 @@ class DetailsUser extends Component{
         this.getData();
     }
 
-    getData = async () => {
-        this.searchData = await firebase.firestore().collection('users').doc(this.props.heshUser).collection('aboutUser').onSnapshot((doc)=>{
-            let data = {};
-            doc.forEach((item)=>{
-              let keys = Object.keys(item.data())
-              keys.forEach((key) => {
-                data[key] = item.data()[key]
-              })
-            })
-            this.setState({item:data,loader: false});
+    getData = () => {
+        firebase.firestore().collection('users').doc(this.props.heshUser).get().then((item) => {
+            this.setState({item:item.data(),loader: false});
         })
     }
 
@@ -45,7 +39,7 @@ class DetailsUser extends Component{
         if(prevState.item != this.state.item){
             const {myFriends,myHeshUser} = this.props;
             const {item} = this.state;
-            const addOrRemove = myFriends.find((i) => i == item.heshUser);
+            const addOrRemove = myFriends.find((i) => i.hesh == item.heshUser);
             const myEvent = myHeshUser == item.heshUser;
 
             if(myEvent){
@@ -57,40 +51,38 @@ class DetailsUser extends Component{
         }
     }
 
-    componentWillUnmount(){
-        this.searchData();
-    }
 
     addInFrends = async () => {
         const {heshUser,friends,nick,urlImg} = this.state.item;
-        console.log(this.state.item);
         
         const {myHeshUser,myFriends,myImgUser,myNickUser} = this.props;
         const {add} = this.state;
         if(add){
-           await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
-                friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]
-           })
-           await firebase.firestore().collection('users').doc(myHeshUser).collection('aboutUser').doc('more').update({
-                myFriends: [...myFriends,{hesh: heshUser,img: urlImg,nick}]
-           })
+            this.setState({disableAdd: true,item: {...this.state.item, friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]}});
+            await firebase.firestore().collection('users').doc(heshUser).update({
+                    friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]
+            })
+            await firebase.firestore().collection('users').doc(myHeshUser).update({
+                    myFriends: [...myFriends,{hesh: heshUser,img: urlImg,nick}]
+            })
         }else{
             const newFriends = friends.filter(item=>item.hesh != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
+            this.setState({disableAdd: true,item:{...this.state.item,friends: newFriends}});
+            await firebase.firestore().collection('users').doc(heshUser).update({
                 friends: [...newFriends]
            });
-           this.setState({item:{...this.state.item,friends: newFriends}});
            const newMyFriends = myFriends.filter(item=>item.hesh != heshUser);
-           await firebase.firestore().collection('users').doc(myHeshUser).collection('aboutUser').doc('more').update({
+           await firebase.firestore().collection('users').doc(myHeshUser).update({
             myFriends: [...newMyFriends]
             })
         }
-        this.setState({add: !add});
+        this.setState({disableAdd: false,add: !add});
     }
 
     render(){
         const {color,urlImg,myFriends,friends,myEvents,bal,position,ocenka,contacts,heshUser,nick,aboutMe} = this.state.item;
-        const {disableBtnIfMyEvent} = this.state;
+        const {disableBtnIfMyEvent,disableAdd} = this.state;
+        console.log(this.state);
         
         return(
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
@@ -105,7 +97,7 @@ class DetailsUser extends Component{
                                 <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtnImg}/>
                             </TouchableOpacity>
                             <Text numberOfLines={1} style={styles.headerText}>{nick}</Text>
-                            <TouchableOpacity style={styles.headerBtnConteiner}>
+                            <TouchableOpacity style={styles.headerBtnConteiner} disabled={disableBtnIfMyEvent}>
                                 <Image source={require('../img/icons/btns/messenger.png')} style={styles.headerBtnImg}/>
                             </TouchableOpacity>
                         </View>
@@ -115,7 +107,7 @@ class DetailsUser extends Component{
                             <View style={styles.ocenkaConteiner}>
                                 <Ocenka ocenka={ocenka}  heshUser={heshUser} my={disableBtnIfMyEvent}/>
                                 {this.state.add?
-                                    <TouchableOpacity onPress={this.addInFrends} disabled={disableBtnIfMyEvent}>
+                                    <TouchableOpacity onPress={this.addInFrends} disabled={disableBtnIfMyEvent || disableAdd}>
                                         <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnAdd.png')}/>
                                     </TouchableOpacity>:
                                     <TouchableOpacity onPress={this.addInFrends} >
@@ -125,9 +117,6 @@ class DetailsUser extends Component{
 
                             </View>
                             <Text style={styles.moreText}>{aboutMe}</Text>
-                            <View style={styles.socialLinkConnteiner}>
-                                <SocialLink contacts={contacts}/>
-                            </View>
                         </View>
                     </View>
                 </ScrollView>

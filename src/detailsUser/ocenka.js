@@ -4,10 +4,15 @@ import { connect } from 'react-redux';
 import firebase from 'react-native-firebase';
 
 class Ocenka extends Component{
-    state = {
-        newOcenka: 'defoult',
-        disabled: false
+    constructor(props) {
+        super(props);
+        this.state = {
+            newOcenka: 'defoult',
+            disabled: false,
+            ocenka: props.ocenka
+        }
     }
+
 
     componentDidMount = () => {
         const {ocenka,heshUser,myHeshUser} = this.props;
@@ -28,43 +33,41 @@ class Ocenka extends Component{
     setNewOcenca = async (setOcenka) => {
         const {ocenka,heshUser,myHeshUser} = this.props;
         const {newOcenka} = this.state;
-
+        
         if(newOcenka == 'defoult'){
-            this.setState({newOcenka: setOcenka,disabled: true});
-            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
-                ocenka: {
-                    ...ocenka,
-                    [setOcenka]: [...ocenka[setOcenka],myHeshUser]
-                }
+            this.setState({newOcenka: setOcenka,disabled: true,
+                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser]}});
+                
+            await firebase.firestore().collection('users').doc(heshUser).update({
+                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser]}
             })
             this.setState({disabled: false})
         }
 
         if(newOcenka == setOcenka){
-            this.setState({newOcenka: 'defoult',disabled: true});
             const newArray = ocenka[setOcenka].filter(hesh=>hesh != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
-                ocenka: {
-                    ...ocenka,
-                    [setOcenka]: newArray
-                }
+            this.setState({newOcenka: 'defoult',disabled: true,
+            ocenka: {...ocenka,[setOcenka]: newArray}});
+
+            await firebase.firestore().collection('users').doc(heshUser).update({
+                ocenka: {...ocenka,[setOcenka]: newArray}
             })
             this.setState({disabled: false})
         }
 
         if(newOcenka != setOcenka && newOcenka != 'defoult'){
-            this.setState({newOcenka: setOcenka,disabled: true});
             const removeItemArray = ocenka[newOcenka].filter(hesh=>hesh != myHeshUser);
-            await firebase.firestore().collection('users').doc(heshUser).collection('aboutUser').doc('more').update({
-                ocenka: {
-                    ...ocenka,
-                    [setOcenka]: [...ocenka[setOcenka],myHeshUser],
-                    [newOcenka]: removeItemArray
-                }
+            this.setState({newOcenka: setOcenka,disabled: true,
+                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser],
+                    [newOcenka]: removeItemArray}
+            });
+            
+            await firebase.firestore().collection('users').doc(heshUser).update({
+                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser],
+                    [newOcenka]: removeItemArray}
             })
             this.setState({disabled: false})
         }
-
     }
 
     renderStar = (number) => {
@@ -103,7 +106,7 @@ class Ocenka extends Component{
     }
 
     render(){
-        const {ocenka} = this.props;
+        const {ocenka} = this.state;
         return(
             <View style={styles.ocenkaConteiner}>
                 <View style={styles.starsConteiner}>

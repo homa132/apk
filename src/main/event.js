@@ -6,6 +6,7 @@ import ImageSlider from 'react-native-image-slider';
 import Map from '../map/map';
 import InfoEvent from '../details/infoEvent';
 import firebase from 'react-native-firebase';
+import {setActiveItem} from '../redux/actions'; 
 
 const { width, height } = Dimensions.get('window');
 
@@ -42,7 +43,9 @@ class Event extends Component {
 
     goToAutor = () => {
       console.log('autor page');
-      
+      const {autorHesh} = this.props.item.autor;
+      this.props.setActiveItem('hestUser',autorHesh)
+      this.props.navigation.push('DetailsUser')
     }
 
     componentDidMount(){
@@ -163,7 +166,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+      setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
     }
 }
 

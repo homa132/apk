@@ -6,14 +6,12 @@ import Top from '../pages/top';
 import Add from '../pages/add';
 import Chats from '../pages/chats';
 import Acc from '../pages/login';
-import Details from '../pages/details';
 import Messenger from '../pages/messenger';
 import DetailsUser from '../pages/detailsUser';
 import Friends from '../pages/friends';
 
 const mainStack = createStackNavigator({
     Main: Main,
-    Details: Details,
     Messenger: Messenger,
     DetailsUser: DetailsUser,
     Friends: Friends
