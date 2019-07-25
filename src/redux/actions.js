@@ -1,5 +1,5 @@
 import {FILTER_LIST,SET_ACTIVE,GET_MY_DATA,SET_DEFAULT_STATE,
-    SET_NEW_DATA,SET_NEW_IMAGES,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA
+    SET_NEW_DATA,SET_NEW_IMAGES,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA,SET_MY_DATA
     } from './const'
 
 export const filterList = (date,category) => {
@@ -58,5 +58,12 @@ export const setNewMyData = (name,value,secondName) => {
     return {
         type: SET_NEW_MY_DATA,
         name,value,secondName
+    }
+}
+
+export const setMyData = (name,value) => {
+    return {
+        type: SET_MY_DATA,
+        name,value
     }
 }

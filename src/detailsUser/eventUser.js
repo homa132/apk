@@ -17,27 +17,27 @@ class Event extends Component {
             likes: false,
             showMap:false,
             moreText: false,
-            // likesArray: props.item.likesHesh,
             loader: true,
-            event: {}
+            event: {},
+            likesHesh: []
           }
     }
 
     like = async () => {
         const {likes} = this.state;
-        let {heshEvent,likesHesh} = this.props.item;
+        const {hesh,myUserHesh} = this.props;
+        const {likesHesh} = this.state;
         this.setState({likes:!likes});
-        const {myUserHesh} = this.props;
         const newLikesHesh = likesHesh.filter(item=>item!=myUserHesh);
 
         if(likes){
-          this.setState({likesArray: newLikesHesh});
-          await firebase.firestore().collection('Events').doc(heshEvent).update({
+          this.setState({likesHesh: newLikesHesh});
+          await firebase.firestore().collection('Events').doc(hesh).update({
             likesHesh: [...newLikesHesh]
           })
         }else{
-          this.setState({likesArray: [...newLikesHesh,myUserHesh]});
-          await firebase.firestore().collection('Events').doc(heshEvent).update({
+          this.setState({likesHesh: [...newLikesHesh,myUserHesh]});
+          await firebase.firestore().collection('Events').doc(hesh).update({
             likesHesh: [...newLikesHesh,myUserHesh]
           })
         }
@@ -64,7 +64,7 @@ class Event extends Component {
                 this.setState({likes: true})
               }
 
-            this.setState({event: data, loader: false});
+            this.setState({event: data, loader: false,likesHesh: data.likesHesh});
         })
 
 
@@ -73,13 +73,15 @@ class Event extends Component {
 
     render(){
         
-        const {likes,showMap,moreText,loader,event} = this.state;
+        const {likes,showMap,moreText,loader,event,likesHesh} = this.state;
         const {myUserHesh} = this.props;
         
         if(loader){
-            return (<ActivityIndicator size="large" color="#0000ff" />)
+            return (<View style={{width: width,height: 450,justifyContent: 'center',alignItems: 'center'}}>
+                      <ActivityIndicator size="large" color="#0000ff" />
+                    </View>)
         }else{
-            const {name,autor,category,date,images,heshMessenger,likesHesh,location,
+            const {name,autor,category,date,images,heshMessenger,location,
                 textMore,time} = event;
             return (
                 <View style={styles.eventConteiner}>

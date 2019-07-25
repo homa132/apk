@@ -16,14 +16,31 @@ class Login extends Component{
 
     constructor(props){
         super(props);
+        let startArrayEvent = this.props.dataAbutMe.myEvents.filter((item,index) => index < 3)
         this.state = {
             save: false,
-            eventsHesh: ['first',...props.myData.myEvents]
+            eventsHesh: ['first',...startArrayEvent],
+            lastEvent: 3
         }
     }
 
     addData = () => {
-        console.log('add new');
+        const i = 3;
+        const {eventsHesh,lastEvent} = this.state;
+        console.log(this.props.dataAbutMe.myEvents);
+        
+        let arraEvent  = this.props.dataAbutMe.myEvents;
+        
+
+        if(arraEvent.length != 0){
+            let array = arraEvent.filter((item,index) => lastEvent <= index&& index < lastEvent + i )
+            console.log('add new');
+            this.setState({
+                eventsHesh: [...eventsHesh,...array],
+                lastEvent: lastEvent + i
+            })
+        }
+
     }
 
     _signOutAsync = async () => {
@@ -54,6 +71,9 @@ class Login extends Component{
         if(img=='file'){
             const heshUser = await AsyncStorage.getItem('userToken');
             const image = await firebase.storage().ref().child(`usersImage/${heshUser}/userImg`).put(urlImg);
+            this.props.setNewMyData('urlImg',image.downloadURL)
+            this.props.setNewMyData('saveData');
+
             await this.updateDataOnServer({...this.props.myData,urlImg:image.downloadURL});
         }else{
             await this.updateDataOnServer(this.props.myData);
@@ -105,10 +125,8 @@ class Login extends Component{
                             return <Event hesh={item}/>
                         }
                     }}
-                    onEndReachedThreshold={0.001}
-                    onEndReached={(info) => this.addData()}
-                    bounces={false}
-                    initialNumToRender={2}
+                    onEndReachedThreshold={0.0001}
+                    onEndReached={(info) => this.addData()} 
                 />
                 {save?
                 <View style={styles.saveConteiner}>
@@ -242,8 +260,9 @@ const styles = StyleSheet.create({
 
 mapStateToProps = (state) => {
     return{
-        myData: state.data.myDataAcc,
-        disableSaveBtn: state.data.disableSaveBtn
+        myData: state.data.myChangeDataAcc,
+        disableSaveBtn: state.data.disableSaveBtn,
+        dataAbutMe: state.data.myDataAcc
     }
 }
 

@@ -14,3 +14,4 @@ export const SET_DEFAULT_STATE = 'SET_DEFAULT_STATE';
 export const GET_MY_DATA  = 'GET_MY_DATA';
 // new data about me
 export const SET_NEW_MY_DATA = 'SET_NEW_MY_DATA';
+export const SET_MY_DATA = 'SET_MY_DATA';

@@ -1,10 +1,11 @@
-import {FILTER_LIST,GET_MY_DATA,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA} from '../const';
+import {FILTER_LIST,GET_MY_DATA,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA,SET_MY_DATA} from '../const';
 
 
 const initState = {
     allList: [],
     myDataAcc: {},
     testList: [],
+    myChangeDataAcc: [],
     filter: {
         date: 'default',
         category: 'default'
@@ -21,7 +22,7 @@ export default (state = initState, action) => {
             const newTestList = filterDate(date,category,allList)
             return {...state,testList: newTestList,filter:{date,category}}
         case GET_MY_DATA: 
-            return {...state,myDataAcc: action.myDataAcc}
+            return {...state,myDataAcc: action.myDataAcc,myChangeDataAcc: action.myDataAcc}
         case SET_ALL_LIST_EVENTS:
             const newList = filterDate(filter.date,filter.category,action.allList);
             return {...state,allList:action.allList,testList: newList}
@@ -29,11 +30,16 @@ export default (state = initState, action) => {
             if(name == 'disableBtn'){
                 return{...state,disableSaveBtn: true}
             }
-            if(secondName == 'contacts'){
-                return {...state,myDataAcc:{ ...state.myDataAcc,contacts:{...state.myDataAcc.contacts,[name]:value}},disableSaveBtn:false}
-            }else{
-                return {...state,myDataAcc:{ ...state.myDataAcc,[name]: value},disableSaveBtn:false}
+            if(name == 'saveData'){
+                return {...state,myDataAcc: state.myChangeDataAcc}
             }
+            if(secondName == 'contacts'){
+                return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,contacts:{...state.myChangeDataAcc.contacts,[name]:value}},disableSaveBtn:false}
+            }else{
+                return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,[name]: value},disableSaveBtn:false}
+            }
+        case SET_MY_DATA :
+            return {...state,myDataAcc:{[name]: value,...state.myDataAcc}}
         default: return state
     }
 }

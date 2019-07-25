@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,TouchableOpacity,StyleSheet,ScrollView,Dimensions,ImageBackground,TextInput,Image,Text,
     TimePickerAndroid,Picker,DatePickerAndroid,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
-import {setNewData,setDefaultState} from '../redux/actions';
+import {setNewData,setDefaultState, setMyData} from '../redux/actions';
 import Conteiner from '../add/conteinerAddScreen'
 import LinearGradient from 'react-native-linear-gradient';
 import firebase from 'react-native-firebase';
@@ -95,9 +95,13 @@ class Add extends Component{
         })
 
         // add event in array autor
+
+        this.props.setMyData('myEvents',[...autorEvents,hesh]);
+        this.props.setMyData('myMessengers',[...autorMessengers,{hesh,lastMess: 20190510105060,newMess: false,alert: true}])
+        
         await firebase.firestore().collection('users').doc(autorHesh).update({
-            myEvents: [...autorEvents,hesh],
-            myMessengers: [...autorMessengers,{hesh,lastMess: 20190510105060,newMess: false,alert: true}]
+            myEvents: [hesh,...autorEvents],
+            myMessengers: [{hesh,lastMess: 20190510105060,newMess: false,alert: true}, ...autorMessengers]
         })
 
         // create chat
@@ -374,7 +378,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         setNewData: (value,name,secondName)=> dispatch(setNewData(value,name,secondName)),
-        setDefaultState: () => dispatch(setDefaultState())
+        setDefaultState: () => dispatch(setDefaultState()),
+        setMyData: (name,value,secondName) => dispatch(setMyData(name,value,secondName))
     }
 
 }
