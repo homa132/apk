@@ -1,33 +1,37 @@
 import React, {Component} from 'react';
 import {View,Text,TouchableOpacity,StyleSheet,ImageBackground,Image,FlatList,Dimensions,TextInput} from 'react-native';
 import {connect} from 'react-redux';
+import {withNavigation} from 'react-navigation';
+import {setActiveItem} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
 class Friends extends Component {
-
-    state = {
-        data: ['a','a','a','a','a','a','a','a','6','5','4']
+    constructor(props){
+        super(props);
+        this.state = {
+            data: ['first',...props.arrayFrineds]
+        }
     }
 
-    addData = () => {
-        console.log('new data');
+    // покаместь не нужно, если будет лагать при бальшом количеству  пользователей то добавить
+    // addData = () => {
+    //     console.log('new data');
         
-        this.setState({data: [...this.state.data,'a','a','6','5']})
-    }
+    //     this.setState({data: [...this.state.data,'a','a','6','5']})
+    // }
 
     render(){
 
         const {data} = this.state;
-
+        
         return (
             <ImageBackground style={{width:width, height: height - 74}} source={require('../img/background/background1.jpg')}>
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     data={data}
-                    onEndReachedThreshold={0.001}
-                    onEndReached={(info) => this.addData()}
-                    bounces={false}
+                    // onEndReachedThreshold={0.001}
+                    // onEndReached={(info) => this.addData()}
                     renderItem={({item,index}) => {
                         if(index == 0 ){
                             return (
@@ -42,11 +46,12 @@ class Friends extends Component {
                         }else{
                             return (
                                 <View style={styles.conteinerItem}>
-                                    <View style={[styles.imgUserConteiner,{backgroundColor: 'red'}]}>
-                                        <Image source={require('../img/testImage.png')} style={styles.imgUser}/>
-                                    </View>
-                                    <Text style={styles.itemText}>Nick name use{item}r</Text>
-                                    <TouchableOpacity style={styles.btnMoreConteiner}>
+                                    <Image source={{uri: item.img}} style={styles.imgUser}/>
+                                    <Text style={styles.itemText}>{item.nick}</Text>
+                                    <TouchableOpacity style={styles.btnMoreConteiner} onPress={() => {
+                                        this.props.setActiveItem('hestUser',item.hesh);
+                                        this.props.navigation.push('DetailsUser')
+                                    }}>
                                         <Image source={require('../img/icons/btns/btnMore.png')} style={styles.btnMore}/>
                                     </TouchableOpacity>
                                 </View>
@@ -68,7 +73,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 65,
         borderBottomColor: '#E8BC4D',
-        borderBottomWidth: 2
+        borderBottomWidth: 2,
+        paddingHorizontal: 15
     },
     imgUser: {
         width: 50,
@@ -77,15 +83,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 7
     },
-    imgUserConteiner: {
-        borderRadius: 7,
-        width: 54,
-        height: 54,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
     itemText: {
-        fontSize: 16,
+        fontSize: 20,
         color: '#644800',
     },
     btnMore: {
@@ -129,4 +128,16 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect()(Friends);
+mapStateToProps = (state) => {
+    return {
+        arrayFrineds: state.navigation.arrayFriends
+    }
+}
+
+mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(Friends));

@@ -2,7 +2,8 @@ import {SET_ACTIVE} from '../const';
 
 const initState = {
     heshItem: '',
-    hestUser: ''
+    hestUser: '',
+    arrayFriends: []
 }
 
 export default (state = initState, action) => {

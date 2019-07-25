@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,TouchableOpacity,Text,StyleSheet,Dimensions,Image} from 'react-native';
 import {connect} from 'react-redux';
 import ImagePicker from 'react-native-image-picker';
-import {setNewMyData} from '../redux/actions';
+import {setNewMyData,setActiveItem} from '../redux/actions';
 import {withNavigation} from 'react-navigation';
 
 const { width, height } = Dimensions.get('window');
@@ -18,6 +18,11 @@ class userInfo extends Component {
         },({path,fileName})=> {
               this.props.setNewMyData('urlImg',`file://${path}`)
         })
+    }
+
+    goToFriends = (array) => {
+        this.props.setActiveItem('arrayFriends',array)
+        this.props.navigation.push('Friends');
     }
 
     render(){
@@ -39,12 +44,12 @@ class userInfo extends Component {
     
                     <View style={styles.itemTopPersonalInfoConteiner}>
     
-                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.props.navigation.push('Friends')}>
+                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.goToFriends(myFriends)}>
                             <Text style={styles.infoTextNumber}>{myFriends.length}</Text>
                             <Text style={styles.infoText}>Подписки</Text>
                         </TouchableOpacity>
     
-                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.props.navigation.push('Friends')}>
+                        <TouchableOpacity style={styles.topInfoItem} onPress={()=>this.goToFriends(friends)}>
                             <Text style={styles.infoTextNumber}>{friends.length}</Text>
                             <Text style={styles.infoText}>Подписчики</Text>
                         </TouchableOpacity>
@@ -152,7 +157,8 @@ const styles = StyleSheet.create({
 
 mapDispatchToProps = (dispatch) => {
     return {
-        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName))
+        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName)),
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
     }
 }
 

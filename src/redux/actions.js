@@ -61,9 +61,9 @@ export const setNewMyData = (name,value,secondName) => {
     }
 }
 
-export const setMyData = (name,value) => {
+export const setMyData = (nameSecond,valueSecond) => {
     return {
         type: SET_MY_DATA,
-        name,value
+        nameSecond,valueSecond
     }
 }

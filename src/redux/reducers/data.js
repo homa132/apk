@@ -14,7 +14,7 @@ const initState = {
 }
 
 export default (state = initState, action) => {
-    const {category,date,type,value,name,secondName} = action;
+    const {category,date,type,value,name,secondName,nameSecond,valueSecond} = action;
     const {allList,filter} = state;
     
     switch (type) {
@@ -39,7 +39,7 @@ export default (state = initState, action) => {
                 return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,[name]: value},disableSaveBtn:false}
             }
         case SET_MY_DATA :
-            return {...state,myDataAcc:{[name]: value,...state.myDataAcc}}
+            return {...state,myDataAcc:{...state.myDataAcc,[nameSecond]: valueSecond}}
         default: return state
     }
 }

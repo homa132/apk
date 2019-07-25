@@ -95,9 +95,8 @@ class Add extends Component{
         })
 
         // add event in array autor
-
-        this.props.setMyData('myEvents',[...autorEvents,hesh]);
-        this.props.setMyData('myMessengers',[...autorMessengers,{hesh,lastMess: 20190510105060,newMess: false,alert: true}])
+        this.props.setMyData('myEvents',[hesh,...autorEvents]);
+        this.props.setMyData('myMessengers',[{hesh,lastMess: 20190510105060,newMess: false,alert: true}, ...autorMessengers])
         
         await firebase.firestore().collection('users').doc(autorHesh).update({
             myEvents: [hesh,...autorEvents],
@@ -379,7 +378,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         setNewData: (value,name,secondName)=> dispatch(setNewData(value,name,secondName)),
         setDefaultState: () => dispatch(setDefaultState()),
-        setMyData: (name,value,secondName) => dispatch(setMyData(name,value,secondName))
+        setMyData: (name,value) => dispatch(setMyData(name,value))
     }
 
 }

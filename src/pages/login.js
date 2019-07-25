@@ -34,13 +34,11 @@ class Login extends Component{
 
         if(arraEvent.length != 0){
             let array = arraEvent.filter((item,index) => lastEvent <= index&& index < lastEvent + i )
-            console.log('add new');
             this.setState({
                 eventsHesh: [...eventsHesh,...array],
                 lastEvent: lastEvent + i
             })
         }
-
     }
 
     _signOutAsync = async () => {

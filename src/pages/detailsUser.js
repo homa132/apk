@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import {View,StyleSheet,Text,TouchableOpacity,Image,ImageBackground,Dimensions,ScrollView,
+import {View,StyleSheet,Text,TouchableOpacity,Image,ImageBackground,Dimensions,FlatList,
     ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import firebase from 'react-native-firebase';
 import InfoUser from '../detailsUser/infoAboutUsers';
 import Ocenka from '../detailsUser/ocenka';
-import SocialLink from '../details/socialLink';
+import Event from '../detailsUser/eventUser';
 
 
 const { width, height } = Dimensions.get('window');
@@ -21,7 +21,10 @@ class DetailsUser extends Component{
             add: true,
             disableBtnIfMyEvent: false,
             my:false,
-            disableAdd: false
+            disableAdd: false,
+            eventsHesh: ['first'],
+            lastEvent: 2,
+            arrayEvent: []
         }
     }
 
@@ -31,7 +34,12 @@ class DetailsUser extends Component{
 
     getData = () => {
         firebase.firestore().collection('users').doc(this.props.heshUser).get().then((item) => {
-            this.setState({item:item.data(),loader: false});
+            const data = item.data();
+            let startArrayEvent = data.myEvents.filter((item,index) => index < 2)
+
+            this.setState({item:data,loader: false,arrayEvent: data.myEvents,
+                eventsHesh: ['first',...startArrayEvent]
+            });
         })
     }
 
@@ -83,47 +91,73 @@ class DetailsUser extends Component{
         this.setState({disableAdd: false,add: !add});
     }
 
+    addData = () => {
+        const i = 2;
+        const {eventsHesh,lastEvent,arrayEvent} = this.state;
+        let arraEvent  = arrayEvent;
+
+        if(arraEvent.length != 0){
+            let array = arraEvent.filter((item,index) => lastEvent <= index&& index < lastEvent + i )
+            this.setState({
+                eventsHesh: [...eventsHesh,...array],
+                lastEvent: lastEvent + i
+            })
+        }
+    }
+
     render(){
         const {color,urlImg,myFriends,friends,myEvents,bal,position,ocenka,contacts,heshUser,nick,aboutMe} = this.state.item;
-        const {disableBtnIfMyEvent,disableAdd} = this.state;
-        console.log(this.state);
-        
+        const {disableBtnIfMyEvent,disableAdd,eventsHesh} = this.state;
+
         return(
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 {this.state.loader?
                 <View style={{width: width,height: height,justifyContent:'center',alignItems: 'center'}}>
                     <ActivityIndicator size="large" color="#644800" />
                 </View>:
-                <ScrollView>
-                    <View style={styles.conteiner}>
-                        <View style={styles.headerConteiner}>
-                            <TouchableOpacity style={styles.headerBtnConteiner} onPress={()=>this.props.navigation.goBack()}>
-                                <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtnImg}/>
-                            </TouchableOpacity>
-                            <Text numberOfLines={1} style={styles.headerText}>{nick}</Text>
-                            <TouchableOpacity style={styles.headerBtnConteiner} disabled={disableBtnIfMyEvent}>
-                                <Image source={require('../img/icons/btns/messenger.png')} style={styles.headerBtnImg}/>
-                            </TouchableOpacity>
-                        </View>
-                        <View style={styles.mainConteiner}>
-                            <InfoUser color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
-                                bal={bal} position={position}/>
-                            <View style={styles.ocenkaConteiner}>
-                                <Ocenka ocenka={ocenka}  heshUser={heshUser} my={disableBtnIfMyEvent}/>
-                                {this.state.add?
-                                    <TouchableOpacity onPress={this.addInFrends} disabled={disableBtnIfMyEvent || disableAdd}>
-                                        <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnAdd.png')}/>
-                                    </TouchableOpacity>:
-                                    <TouchableOpacity onPress={this.addInFrends} >
-                                        <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnDelete.png')}/>
-                                    </TouchableOpacity>
-                                }
-
-                            </View>
-                            <Text style={styles.moreText}>{aboutMe}</Text>
-                        </View>
-                    </View>
-                </ScrollView>
+                <FlatList
+                    keyExtractor={(item, index) => index.toString()}
+                    data={eventsHesh}
+                    onEndReachedThreshold={0.0001}
+                    onEndReached={(info) => this.addData()} 
+                    renderItem={({item,index}) => {
+                        if(index == 0){
+                            return (
+                                <View style={styles.conteiner}>
+                                    <View style={styles.headerConteiner}>
+                                        <TouchableOpacity style={styles.headerBtnConteiner} onPress={()=>this.props.navigation.goBack()}>
+                                            <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtnImg}/>
+                                        </TouchableOpacity>
+                                        <Text numberOfLines={1} style={styles.headerText}>{nick}</Text>
+                                        <TouchableOpacity style={styles.headerBtnConteiner} disabled={disableBtnIfMyEvent}>
+                                            <Image source={require('../img/icons/btns/messenger.png')} style={styles.headerBtnImg}/>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={styles.mainConteiner}>
+                                        <InfoUser color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
+                                            bal={bal} position={position}/>
+                                        <View style={styles.ocenkaConteiner}>
+                                            <Ocenka ocenka={ocenka}  heshUser={heshUser} my={disableBtnIfMyEvent}/>
+                                            {this.state.add?
+                                                <TouchableOpacity onPress={this.addInFrends} disabled={disableBtnIfMyEvent || disableAdd}>
+                                                    <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnAdd.png')}/>
+                                                </TouchableOpacity>:
+                                                <TouchableOpacity onPress={this.addInFrends} >
+                                                    <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnDelete.png')}/>
+                                                </TouchableOpacity>
+                                            }
+            
+                                        </View>
+                                        <Text style={styles.moreText}>{aboutMe}</Text>
+                                    </View>
+                                </View>
+                            )
+                        }else{
+                            return (<Event hesh={item}/>)
+                        }
+                    }}
+                />
+                   
                 }
             </ImageBackground>
         )

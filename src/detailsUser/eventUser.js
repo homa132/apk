@@ -19,7 +19,7 @@ class Event extends Component {
             moreText: false,
             loader: true,
             event: {},
-            likesHesh: []
+            likesHesh: [],
           }
     }
 
@@ -85,13 +85,6 @@ class Event extends Component {
                 textMore,time} = event;
             return (
                 <View style={styles.eventConteiner}>
-    
-                    <TouchableOpacity style={styles.eventHeader} onPress={this.goToAutor}>
-                        <View style={[styles.imageConteiner,{backgroundColor: autor.autorColor}]}>
-                            <Image source={{uri: autor.autorImage}} style={styles.imageUser}/>
-                        </View>
-                        <Text style={styles.nickText} numberOfLines={1}>{autor.autorNick}</Text>
-                    </TouchableOpacity>
     
                     <View style={styles.mainConteiner}>
                         {showMap?<Map one={true} location={location} autor={{autorColor: autor.autorColor,
@@ -196,42 +189,9 @@ const styles = StyleSheet.create({
       justifyContent: 'flex-start',
       alignItems: 'center',
       padding: 0,
-      margin: 0
-    },
-    eventHeader: {
-      width: width - 50,
-      height: 55,
-      borderColor: '#E8BC4D',
-      borderWidth: 2,
-      borderRadius: 10,
-      backgroundColor: 'rgba(217, 217, 217, 0.7)',
-      flexDirection: 'row',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      position: 'relative',
-      top: 15,
-      zIndex: 1000,
-      margin: 0
-    },
-    imageConteiner: {
-      width: 42,
-      height: 42,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 10,
-      marginLeft: 10
-    },
-    imageUser: {
-      width: 38,
-      height: 38,
-      borderRadius: 10,
-      borderColor: 'white',
-      borderWidth: 1
-    },
-    nickText: {
-      fontSize: 20,
-      color: 'black',
-      marginLeft: 20
+      margin: 0,
+      paddingTop: 15,
+      paddingBottom: 5
     },
     mainConteiner: {
       width: width,
