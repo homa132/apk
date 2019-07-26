@@ -1,13 +1,40 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet,TextInput,Dimensions,TouchableOpacity,Image,ImageBackground,KeyboardAvoidingView,FlatList} from 'react-native';
+import {View,Text,StyleSheet,TextInput,Dimensions,TouchableOpacity,Image,ImageBackground,KeyboardAvoidingView,FlatList,
+    ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
+import firebase from 'react-native-firebase';
+
 
 const { width, height } = Dimensions.get('window');
 
 class Messenger extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            data: [],
+            loader: true,
+            aboutChat: false,
+            lastMessege: ''
+        }
+    }
 
-    state = {
-        data: ['a','a','a','a','a','a','a','a','a','a','a','a','a','6','5','4']
+    componentDidMount(){
+        const {heshChat,dataChat} = this.props;
+
+        if(dataChat){
+            const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').limit(15);
+            messenge.get().then((item) => {
+                let data = [];
+
+                item.forEach((i) => {
+                    data.push(i.data());
+                })
+
+                let lastMessege = item.docs[item.docs.length-1];
+
+                this.setState({aboutChat: dataChat,loader: false,lastMessege,data})
+            })
+        }
     }
 
 
@@ -19,44 +46,51 @@ class Messenger extends Component {
 
     render(){
 
-        const {data} = this.state;
-
+        const {data,loader,aboutChat} = this.state;
+        console.log(this.state);
+        
         return (
             <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
-                <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled >
-                    <View style={styles.headerConteiner}>
-                        <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
-                        </TouchableOpacity>
-
-                        <Text style={styles.headerText} numberOfLines={1}>Название чата</Text>
-
-                        <TouchableOpacity style={styles.headerBtnConteiner}>
-                            <Image source={require('../img/icons/btns/btnDetailsChat.png')} style={styles.headerBtn}/>
-                        </TouchableOpacity>
+                {loader?
+                    <View style={{width: width,height: height,justifyContent: 'center',alignItems: 'center'}}>
+                        <ActivityIndicator size="large" color="#644800" />
                     </View>
+                    :
+                    <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled >
+                        <View style={styles.headerConteiner}>
+                            <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
+                                <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
+                            </TouchableOpacity>
 
-                    <FlatList
-                        keyExtractor={(item, index) => index.toString()}
-                        data={data}
-                        renderItem={({item})=><Text style={styles.headerText} numberOfLines={1}>Название чата{item}</Text>}
-                        style={{width: width,height: height - 190}}
-                        inverted={-1}
-                        data={data}
-                        onEndReachedThreshold={0.001}
-                        onEndReached={(info) => this.addData()}
-                    />
+                            <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
+
+                            <TouchableOpacity style={styles.headerBtnConteiner}>
+                                <Image source={require('../img/icons/btns/btnDetailsChat.png')} style={styles.headerBtn}/>
+                            </TouchableOpacity>
+                        </View>
+
+                        <FlatList
+                            keyExtractor={(item, index) => index.toString()}
+                            data={data}
+                            renderItem={({item})=><Text style={styles.headerText} numberOfLines={1}>Название чата</Text>}
+                            style={{width: width,height: height - 190}}
+                            inverted={-1}
+                            data={data}
+                            // onEndReachedThreshold={0.001}
+                            // onEndReached={(info) => this.addData()}
+                        />
 
 
 
-                    <View style={styles.bottomConteiner}>
-                        <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D'/>
-                        <TouchableOpacity style={styles.btnMessConteiner}>
-                            <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
-                        </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
-
+                        <View style={styles.bottomConteiner}>
+                            <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D'/>
+                            <TouchableOpacity style={styles.btnMessConteiner}>
+                                <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
+                            </TouchableOpacity>
+                        </View>
+                    </KeyboardAvoidingView>
+                    }
+                
             </ImageBackground>
            
         )
@@ -126,4 +160,11 @@ const styles = StyleSheet.create({
     }
 })
 
-export default connect()(Messenger);
+mapStateToProps = (state) => {
+    return {
+        heshChat: state.navigation.heshChat,
+        dataChat: state.navigation.dataChat
+    }
+}
+
+export default connect(mapStateToProps)(Messenger);

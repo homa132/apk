@@ -3,7 +3,9 @@ import {SET_ACTIVE} from '../const';
 const initState = {
     heshItem: '',
     hestUser: '',
-    arrayFriends: []
+    arrayFriends: [],
+    heshChat: '',
+    dataChat: false
 }
 
 export default (state = initState, action) => {

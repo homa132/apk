@@ -1,19 +1,53 @@
 import React,{Component} from 'react';
-import {View,Text,StyleSheet,FlatList,Image,ImageBackground,Dimensions,TextInput} from 'react-native';
+import {View,Text,StyleSheet,FlatList,Image,ImageBackground,Dimensions,TextInput,ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import ChatEvent from '../chats/chatEvent';
 import ChatPeople from '../chats/chatPeople';
-
+import firebase from 'react-native-firebase';
 
 const { width, height } = Dimensions.get('window');
 
 
-class Likes extends Component{
+class Chats extends Component{
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            loader: true,
+            chats: [],
+            lastChat: ''
+        }
+    }
+
+    componentDidMount(){
+        const {myUserHesh} = this.props;
+        const chats = firebase.firestore().collection('chats').where('arrayUsers',"array-contains",myUserHesh).orderBy('lastMess','desc').limit(7);
+
+        chats.get().then((item) => {
+            let chats = [];
+
+            item.forEach((i) => {
+                chats.push(i.data());
+            })
+
+            let lastChat = item.docs[item.docs.length-1];
+            this.setState({loader: false,lastChat,chats})
+        })
+    }
 
 
     render(){
+        const {loader,chats} = this.state;
+
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
+                {loader?
+                <View style={{width: width,height: height,justifyContent: 'center',
+                        alignItems: 'center'}}>
+                    <ActivityIndicator size="large" color="#0000ff" />
+                </View>
+                :
                 <View style={styles.container}>
                     <View style={styles.searchConteiner}>
                         <Image source={require('../img/icons/btns/search.png')} style={styles.searchImage}/>
@@ -21,16 +55,16 @@ class Likes extends Component{
                     </View>
             
                     <FlatList
-                    data={[{key:'1'},{key:'2'},{key:'3'},{key:'4'},{key:'5'},{key:'6'},{key:'7'}]}
-                    renderItem={({item,index})=>{
-                    if(+item.key%2){
-                        return <ChatPeople/>
-                    }else{
-                         return <ChatEvent/>
-                    }}}/>
-                    
-
+                        keyExtractor={(item, index) => index.toString()}
+                        data={chats}
+                        renderItem={({item,index})=>{
+                            if(!item.event){
+                                return <ChatPeople item={item}/>
+                            }else{
+                                return <ChatEvent item={item}/>
+                            }}}/>
                 </View>
+                }
             </ImageBackground>
 
         )
@@ -73,5 +107,10 @@ const styles = StyleSheet.create({
     },
 })
 
+const mapStateToProps = (state) => {
+    return {
+        myUserHesh: state.data.myDataAcc.heshUser
+    }
+}
 
-export default connect()(Likes);
+export default connect(mapStateToProps)(Chats);

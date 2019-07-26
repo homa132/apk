@@ -3,28 +3,38 @@ import {View,Image,Text,StyleSheet,Dimensions,TouchableOpacity} from 'react-nati
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import InfoEvent from '../details/infoEvent';
+import {setActiveItem} from '../redux/actions';
+
 
 const { width, height } = Dimensions.get('window');
 
 function ChatEvent (props) {
+    const {item} = props;
+    const {name,category,autor,date,time,heshMessenger} = item;
+    console.log(item);
+    
     return(
         <View style={styles.chatEventConteiner}>
             <View style={styles.chatEventTopConteiner}>
-                <Text numberOfLines={2} style={styles.topText}>Турнир с футбoла для школьников </Text>
+                <Text numberOfLines={2} style={styles.topText}>{name}</Text>
                 <View style={styles.autorConteiner}>
-                    <View style={styles.imageAutorConteiner}>
-                        <Image style={styles.autorImage} source={require('../img/testImage.png')}/>
+                    <View style={[styles.imageAutorConteiner,{backgroundColor: autor.autorColor}]}>
+                        <Image style={styles.autorImage} source={{uri: autor.autorImage}}/>
                     </View>
-                    <Text style={styles.autorText} numberOfLines={2}>nik_name esdc</Text>
+                    <Text style={styles.autorText} numberOfLines={2}>{autor.autorNick}</Text>
                 </View>
             </View>
 
             <View style={styles.chatEventBottomConteiner}>
                 <View style={styles.infoEventConteiner}>
-                    <InfoEvent/>
+                    <InfoEvent time={time} date={date} category={category}/>
                 </View>
 
-                <TouchableOpacity style={styles.btnConteiner} onPress={()=>props.navigation.push('Messenger')}>
+                <TouchableOpacity style={styles.btnConteiner} onPress={()=>{
+                    props.setActiveItem('heshChat',heshMessenger);
+                    props.setActiveItem('dataChat',item);
+                    props.navigation.push('Messenger');
+                    }}>
                     <Image style={styles.btnImage} source={require('../img/icons/btns/messenger.png')}/>
                 </TouchableOpacity>
             </View>
@@ -93,7 +103,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     imageAutorConteiner: {
-        backgroundColor: 'green',
         width:55,
         height: 55,
         borderRadius: 7,
@@ -102,5 +111,11 @@ const styles = StyleSheet.create({
     }
 })
 
+mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
 
-export default connect()(withNavigation(ChatEvent));
+
+export default connect(null,mapDispatchToProps)(withNavigation(ChatEvent));

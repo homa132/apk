@@ -97,21 +97,23 @@ class Add extends Component{
 
         // add event in array autor
         this.props.setMyData('myEvents',[hesh,...autorEvents]);
-        this.props.setMyData('myMessengers',[{hesh,lastMess: 20190510105060,newMess: false,alert: true}, ...autorMessengers])
+        this.props.setMyData('myMessengers',[{hesh,lastMess: dateCreate.getTime(),newMess: false,alert: true}, ...autorMessengers])
         
         await firebase.firestore().collection('users').doc(autorHesh).update({
             myEvents: [hesh,...autorEvents],
-            myMessengers: [{hesh,lastMess: 20190510105060,newMess: false,alert: true}, ...autorMessengers]
+            myMessengers: [{hesh,newMess: false,alert: true}, ...autorMessengers]
         })
 
         // create chat
-        await firebase.firestore().collection('chats').doc(hesh).collection('data').doc('details').set({
+        await firebase.firestore().collection('chats').doc(hesh).set({
             name,category,date,time,
             heshEvent: hesh,
             event: true,
             users: [{autorHesh,autorColor,autorImage,autorNick}],
             autor: {autorHesh,autorColor,autorImage,autorNick},
-            lastMess: 20190510105060
+            arrayUsers: [autorHesh],
+            lastMess: dateCreate.getTime(),
+            heshMessenger: hesh
         })
 
         await firebase.firestore().collection('chats').doc(hesh).collection('messege').add({
@@ -120,9 +122,10 @@ class Add extends Component{
                 autorImage,autorHesh
             },
             date: '20.02.2019 10-50:50',
-            dateSort: 20190510105060
+            dateCreate: dateCreate.getTime()
         })
         
+
         await this.props.setDefaultState();
         await this.setState({saved: false});
     }
