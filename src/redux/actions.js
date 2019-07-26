@@ -1,18 +1,19 @@
-import {FILTER_LIST,SET_ACTIVE,GET_MY_DATA,SET_DEFAULT_STATE,
-    SET_NEW_DATA,SET_NEW_IMAGES,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA,SET_MY_DATA
-    } from './const'
+import {SET_ACTIVE,GET_MY_DATA,SET_DEFAULT_STATE,GET_EVENTS,
+    SET_NEW_DATA,SET_NEW_IMAGES,SET_NEW_MY_DATA,SET_MY_DATA,
+    SET_FILTER} from './const'
 
-export const filterList = (date,category) => {
+// get events
+export const getEvents = (arrayEvent,lastEvent) => {
     return {
-        type: FILTER_LIST,
-        date,category
+        type:GET_EVENTS,
+        arrayEvent,lastEvent
     }
-}
+}   
 
-export const setDataAllEvents = (allList) => {
+export const setFilter = (nameFilter,valueFilter) => {
     return {
-        type:SET_ALL_LIST_EVENTS,
-        allList
+        type: SET_FILTER,
+        nameFilter,valueFilter
     }
 }
 
@@ -23,7 +24,6 @@ export const setActiveItem = (name,heshItem) => {
         heshItem,name
     }
 }
-
 
 
 // create new
@@ -46,6 +46,7 @@ export const setDefaultState = () => {
         type:SET_DEFAULT_STATE
     }
 }
+
 // get data about my accaunt
 export const getMyData = (myDataAcc) => {
     return {

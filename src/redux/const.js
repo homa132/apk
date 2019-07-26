@@ -1,7 +1,6 @@
 // data with events
-export const FILTER_LIST = 'FILTER_LIST';
-export const SET_ALL_LIST_EVENTS = 'SET_ALL_LIST_EVENTS';
-
+export const GET_EVENTS = 'GET_EVENTS';
+export const SET_FILTER = 'SET_FILTER';
 //Active hesh
 export const SET_ACTIVE = 'SET_ACTIVE';
 

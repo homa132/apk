@@ -1,31 +1,28 @@
-import {FILTER_LIST,GET_MY_DATA,SET_ALL_LIST_EVENTS,SET_NEW_MY_DATA,SET_MY_DATA} from '../const';
+import {GET_MY_DATA,SET_NEW_MY_DATA,SET_MY_DATA,GET_EVENTS,SET_FILTER} from '../const';
 
 
 const initState = {
-    allList: [],
     myDataAcc: {},
-    testList: [],
     myChangeDataAcc: [],
-    filter: {
-        date: 'default',
-        category: 'default'
-    },
-    disableSaveBtn: true
+    disableSaveBtn: true,
+    arrayEvent: [],
+    lastEvent: '',
+    date: 'default',
+    type: 'default'
 }
 
 export default (state = initState, action) => {
-    const {category,date,type,value,name,secondName,nameSecond,valueSecond} = action;
-    const {allList,filter} = state;
+    const {type,value,name,secondName,nameSecond,valueSecond,arrayEvent,lastEvent,
+        valueFilter,nameFilter} = action;
     
     switch (type) {
-        case FILTER_LIST:
-            const newTestList = filterDate(date,category,allList)
-            return {...state,testList: newTestList,filter:{date,category}}
+        case GET_EVENTS:
+            return {...state,arrayEvent,lastEvent}
+        case SET_FILTER: 
+            return {...state,[nameFilter]:valueFilter}
+
         case GET_MY_DATA: 
             return {...state,myDataAcc: action.myDataAcc,myChangeDataAcc: action.myDataAcc}
-        case SET_ALL_LIST_EVENTS:
-            const newList = filterDate(filter.date,filter.category,action.allList);
-            return {...state,allList:action.allList,testList: newList}
         case SET_NEW_MY_DATA:
             if(name == 'disableBtn'){
                 return{...state,disableSaveBtn: true}

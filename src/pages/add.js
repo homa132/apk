@@ -91,7 +91,8 @@ class Add extends Component{
         // create new event 
         await firebase.firestore().collection('Events').doc(hesh).set({
             autorHesh,name,category,date,time,heshEvent:hesh,location,autor:{autorColor,autorImage,autorNick,autorHesh},
-            images: urlImg,heshMessenger: hesh,textMore,likesHesh,dateCreate: dateCreate.getTime()
+            images: urlImg,heshMessenger: hesh,textMore,likesHesh,dateCreate: dateCreate.getTime(),fullDate: `${date.month}.${date.year}`,
+            type: category.value
         })
 
         // add event in array autor

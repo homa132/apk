@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {connect} from 'react-redux';
 import DateBtn from './dateBtn';
 import TypeBtn from './typeBtn';
-import {filterList} from '../../redux/actions';
+import {setFilter} from '../../redux/actions';
 
 
 class filterBtn extends Component{
@@ -17,9 +17,18 @@ class filterBtn extends Component{
         name == 'type'?this.setState({type: value}):null;
     }
 
-    render(){
+    componentDidUpdate(prevProps,prevState){
         const {date,type} = this.state;
-        this.props.filterList(date,type);
+        if(prevState.type != this.state.type){
+            this.props.setFilter('type',type)
+        }
+        if(prevState.date != this.state.date){
+            this.props.setFilter('date',date)
+        }
+    }
+
+    render(){
+        
 
         return (
             <React.Fragment>
@@ -37,7 +46,7 @@ class filterBtn extends Component{
 
 mapDispatchToProps = (dispatch) => {
     return {
-        filterList: (date,type) => dispatch(filterList(date,type))
+        setFilter: (name,value) => dispatch(setFilter(name,value))
     }
 }
 
