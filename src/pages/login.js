@@ -81,7 +81,7 @@ class Login extends Component{
 
     render(){
 
-        const {nick,ocenka,color,urlImg,myEvents,friends,myFriends,bal,position,aboutMe} = this.props.myData;
+        const {nick,one,two,three,four,five,color,urlImg,myEvents,friends,myFriends,bal,position,aboutMe} = this.props.myData;
         const {disableSaveBtn}  = this.props;
         const {save,eventsHesh} = this.state;
         
@@ -111,7 +111,7 @@ class Login extends Component{
                                 
                                     <InfoUser my={true} color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
                                             bal={bal} position={position}/>
-                                    <Ocenka my={true} ocenka={ocenka}/>
+                                    <Ocenka my={true} one={one} two={two} three={three} four={four} five={five}/>
                                 
                                     <View style={styles.detaisConteiner}>
                                         <TextInput numberOfLines={1} multiline={true} placeholder='Роскажите о себе' placeholderTextColor='#644800'

@@ -72,20 +72,23 @@ class DetailsUser extends Component{
         if(add){
             this.setState({disableAdd: true,item: {...this.state.item, friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]}});
             await firebase.firestore().collection('users').doc(heshUser).update({
-                    friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]
+                    friends: firebase.firestore.FieldValue.arrayUnion({hesh: myHeshUser,img: myImgUser,nick: myNickUser})
             })
             await firebase.firestore().collection('users').doc(myHeshUser).update({
-                    myFriends: [...myFriends,{hesh: heshUser,img: urlImg,nick}]
+                    myFriends: firebase.firestore.FieldValue.arrayUnion({hesh: heshUser,img: urlImg,nick})
             })
         }else{
+            const removeData = {hesh: myHeshUser,img: myImgUser,nick: myNickUser}
             const newFriends = friends.filter(item=>item.hesh != myHeshUser);
+
             this.setState({disableAdd: true,item:{...this.state.item,friends: newFriends}});
             await firebase.firestore().collection('users').doc(heshUser).update({
-                friends: [...newFriends]
+                friends: firebase.firestore.FieldValue.arrayRemove(removeData)
            });
-           const newMyFriends = myFriends.filter(item=>item.hesh != heshUser);
+
+           const removeSecondData = {hesh: heshUser,img: urlImg,nick};
            await firebase.firestore().collection('users').doc(myHeshUser).update({
-            myFriends: [...newMyFriends]
+            myFriends: firebase.firestore.FieldValue.arrayRemove(removeSecondData)
             })
         }
         this.setState({disableAdd: false,add: !add});
@@ -106,7 +109,7 @@ class DetailsUser extends Component{
     }
 
     render(){
-        const {color,urlImg,myFriends,friends,myEvents,bal,position,ocenka,contacts,heshUser,nick,aboutMe} = this.state.item;
+        const {color,urlImg,myFriends,friends,myEvents,bal,position,one,two,three,four,five,heshUser,nick,aboutMe} = this.state.item;
         const {disableBtnIfMyEvent,disableAdd,eventsHesh} = this.state;
 
         return(
@@ -137,7 +140,7 @@ class DetailsUser extends Component{
                                         <InfoUser color={color} urlImg={urlImg} myFriends={myFriends} friends={friends} myEvents={myEvents}
                                             bal={bal} position={position}/>
                                         <View style={styles.ocenkaConteiner}>
-                                            <Ocenka ocenka={ocenka}  heshUser={heshUser} my={disableBtnIfMyEvent}/>
+                                            <Ocenka one={one} two={two} three={three} four={four} five={five}  heshUser={heshUser} my={disableBtnIfMyEvent}/>
                                             {this.state.add?
                                                 <TouchableOpacity onPress={this.addInFrends} disabled={disableBtnIfMyEvent || disableAdd}>
                                                     <Image style={{width: 50,height: 50}} source={require('../img/icons/detailsPersonalAcc/btnAdd.png')}/>

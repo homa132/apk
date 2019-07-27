@@ -11,7 +11,6 @@ const { width, height } = Dimensions.get('window');
 function ChatEvent (props) {
     const {item} = props;
     const {name,category,autor,date,time,heshMessenger} = item;
-    console.log(item);
     
     return(
         <View style={styles.chatEventConteiner}>

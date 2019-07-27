@@ -24,13 +24,11 @@ class Register extends Component{
         myFriends: [],
         bal: 0,
         position: 0,
-        ocenka:{
-            one: [],
-            two: [],
-            three: [],
-            four: [],
-            five: [],
-        },
+        one: [],
+        two: [],
+        three: [],
+        four: [],
+        five: [],
         register: ''
     }
 
@@ -77,11 +75,11 @@ class Register extends Component{
             const image = await firebase.storage().ref().child(`usersImage/${register.user.uid}/userImg`).put(img);
 
             const {nick,color,bal,position,email,gender,myEvents,myMessengers,aboutMe,friends,
-                myFriends,ocenka} = this.state;
+                myFriends,one,two,three,four,five} = this.state;
 
             await firebase.firestore().collection('users').doc(register.user.uid).set({
                 nick,color,urlImg:image.downloadURL,bal,position,email,gender,myEvents,
-                myMessengers,aboutMe,friends,myFriends,ocenka,heshUser: register.user.uid
+                myMessengers,aboutMe,friends,myFriends,one,two,three,four,five,heshUser: register.user.uid
             })
 
             this.props.navigation.navigate('Auth');

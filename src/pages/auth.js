@@ -17,13 +17,11 @@ const state = {
     myFriends: [],
     bal: 0,
     position: 0,
-    ocenka:{
-        one: [],
-        two: [],
-        three: [],
-        four: [],
-        five: [],
-    },
+    one: [],
+    two: [],
+    three: [],
+    four: [],
+    five: [],
 }
 
 class SignInScreen extends Component {
@@ -79,11 +77,12 @@ class SignInScreen extends Component {
             if(!registeredUser.data()){
 
                 const {color,bal,position,gender,myEvents,myMessengers,aboutMe,friends,
-                    myFriends,ocenka} = state;
+                    myFriends,one,two,three,four,five} = state;
 
                 await firebase.firestore().collection('users').doc(uid).set({
                     bal,position,nick:displayName,color,urlImg:photoURL,
-                    email,gender,myEvents,myMessengers,aboutMe,friends,myFriends,ocenka,heshUser: uid
+                    email,gender,myEvents,myMessengers,aboutMe,friends,myFriends,heshUser: uid,
+                    one,two,three,four,five
                 })
 
             }

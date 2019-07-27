@@ -3,7 +3,7 @@ import {View,Text,StyleSheet,TextInput,Dimensions,TouchableOpacity,Image,ImageBa
     ActivityIndicator} from 'react-native';
 import {connect} from 'react-redux';
 import firebase from 'react-native-firebase';
-
+import ItemMesseg from '../messenger/itemMessege';
 
 const { width, height } = Dimensions.get('window');
 
@@ -14,16 +14,16 @@ class Messenger extends Component {
             data: [],
             loader: true,
             aboutChat: false,
-            lastMessege: ''
+            lastMessege: '',
+            newMesseg: '',
         }
     }
 
     componentDidMount(){
         const {heshChat,dataChat} = this.props;
-
         if(dataChat){
             const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').limit(15);
-            messenge.get().then((item) => {
+            this.searchData = messenge.onSnapshot((item) => {
                 let data = [];
 
                 item.forEach((i) => {
@@ -39,15 +39,51 @@ class Messenger extends Component {
 
 
     addData = () => {
-        console.log('new data');
+        console.log('add ');
+        const {heshChat} = this.props;
         
-        this.setState({data: [...this.state.data,'a','a','6','5']})
+        const {lastMessege,data} = this.state;
+        const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').startAfter(lastMessege).limit(15);
+        messenge.get().then((item) => {
+            console.log(item);
+            let newData = [];
+
+            item.forEach((i) => {
+                newData.push(i.data());
+            })
+  
+            let lastDoc = item.docs[item.docs.length-1];
+            console.log(newData);
+            this.setState({lastMessege: lastDoc,
+            data: [...data,...newData]})
+        })
+
+    }
+
+    componentWillUnmount(){
+        this.searchData();
+    }
+
+    newMess = () => {
+        const date = new Date;
+        const {myHesh,myImage,heshChat} = this.props;
+        
+        firebase.firestore().collection('chats').doc(heshChat).collection('messege').add({
+            dateCreate: date.getTime(),
+            date: '20.02.2019 10-50:50',
+            autor: {
+                autorHesh: myHesh,
+                autorImage: myImage
+            },
+            messege: this.state.newMesseg
+        })
+        this.setState({newMesseg: ''})
+        
     }
 
     render(){
 
-        const {data,loader,aboutChat} = this.state;
-        console.log(this.state);
+        const {data,loader,aboutChat,newMesseg} = this.state;
         
         return (
             <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
@@ -65,26 +101,26 @@ class Messenger extends Component {
                             <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
 
                             <TouchableOpacity style={styles.headerBtnConteiner}>
-                                <Image source={require('../img/icons/btns/btnDetailsChat.png')} style={styles.headerBtn}/>
+                                <Image source={require('../img/icons/btns/settingBtn.png')} style={styles.headerBtn}/>
                             </TouchableOpacity>
                         </View>
 
                         <FlatList
                             keyExtractor={(item, index) => index.toString()}
                             data={data}
-                            renderItem={({item})=><Text style={styles.headerText} numberOfLines={1}>Название чата</Text>}
+                            renderItem={({item,index})=><ItemMesseg item={item} data={data} index={index}/>}
                             style={{width: width,height: height - 190}}
                             inverted={-1}
-                            data={data}
-                            // onEndReachedThreshold={0.001}
-                            // onEndReached={(info) => this.addData()}
+                            onEndReachedThreshold={0.001}
+                            onEndReached={(info) => this.addData()}
                         />
 
 
 
                         <View style={styles.bottomConteiner}>
-                            <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D'/>
-                            <TouchableOpacity style={styles.btnMessConteiner}>
+                            <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D' value={newMesseg} 
+                                onChangeText={(newMesseg) => this.setState({newMesseg})}/>
+                            <TouchableOpacity style={styles.btnMessConteiner} onPress={this.newMess}>
                                 <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
                             </TouchableOpacity>
                         </View>
@@ -163,7 +199,9 @@ const styles = StyleSheet.create({
 mapStateToProps = (state) => {
     return {
         heshChat: state.navigation.heshChat,
-        dataChat: state.navigation.dataChat
+        dataChat: state.navigation.dataChat,
+        myHesh: state.data.myDataAcc.heshUser,
+        myImage: state.data.myDataAcc.urlImg
     }
 }
 

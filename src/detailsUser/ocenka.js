@@ -9,63 +9,71 @@ class Ocenka extends Component{
         this.state = {
             newOcenka: 'defoult',
             disabled: false,
-            ocenka: props.ocenka
+            one: props.one.length,
+            two: props.two.length,
+            three: props.three.length,
+            four: props.four.length,
+            five: props.five.length
         }
     }
 
 
     componentDidMount = () => {
-        const {ocenka,heshUser,myHeshUser} = this.props;
+        const {one,two,three,four,five,heshUser,myHeshUser} = this.props;
         
-        const one = ocenka.one.find(hesh=>hesh == myHeshUser);
-        const two = ocenka.two.find(hesh=>hesh == myHeshUser);
-        const three = ocenka.three.find(hesh=>hesh == myHeshUser);
-        const four = ocenka.four.find(hesh=>hesh == myHeshUser);
-        const five = ocenka.five.find(hesh=>hesh == myHeshUser);
+        const oneS =one.find(hesh=>hesh == myHeshUser);
+        const twoS =two.find(hesh=>hesh == myHeshUser);
+        const threeS =three.find(hesh=>hesh == myHeshUser);
+        const fourS =four.find(hesh=>hesh == myHeshUser);
+        const fiveS =five.find(hesh=>hesh == myHeshUser);
 
-        one?this.setState({newOcenka: 'one'}):null;
-        two?this.setState({newOcenka: 'two'}):null;
-        three?this.setState({newOcenka: 'three'}):null;
-        four?this.setState({newOcenka: 'four'}):null;
-        five?this.setState({newOcenka: 'five'}):null;
+        oneS?this.setState({newOcenka: 'one'}):null;
+        twoS?this.setState({newOcenka: 'two'}):null;
+        threeS?this.setState({newOcenka: 'three'}):null;
+        fourS?this.setState({newOcenka: 'four'}):null;
+        fiveS?this.setState({newOcenka: 'five'}):null;
     }
 
     setNewOcenca = async (setOcenka) => {
-        const {ocenka,heshUser,myHeshUser} = this.props;
+        const {one,two,three,four,five,heshUser,myHeshUser} = this.props;
         const {newOcenka} = this.state;
         
         if(newOcenka == 'defoult'){
+            console.log('first');
+            
             this.setState({newOcenka: setOcenka,disabled: true,
-                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser]}});
+                [setOcenka]: this.state[setOcenka] + 1});
                 
             await firebase.firestore().collection('users').doc(heshUser).update({
-                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser]}
+                [setOcenka]:firebase.firestore.FieldValue.arrayUnion(myHeshUser) 
             })
             this.setState({disabled: false})
         }
 
         if(newOcenka == setOcenka){
-            const newArray = ocenka[setOcenka].filter(hesh=>hesh != myHeshUser);
+            console.log('second');
+
             this.setState({newOcenka: 'defoult',disabled: true,
-            ocenka: {...ocenka,[setOcenka]: newArray}});
+            [setOcenka]: this.state[setOcenka] - 1});
 
             await firebase.firestore().collection('users').doc(heshUser).update({
-                ocenka: {...ocenka,[setOcenka]: newArray}
+                [setOcenka]: firebase.firestore.FieldValue.arrayRemove(myHeshUser)
             })
             this.setState({disabled: false})
         }
 
         if(newOcenka != setOcenka && newOcenka != 'defoult'){
-            const removeItemArray = ocenka[newOcenka].filter(hesh=>hesh != myHeshUser);
+            console.log('three');
+
             this.setState({newOcenka: setOcenka,disabled: true,
-                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser],
-                    [newOcenka]: removeItemArray}
-            });
+                [setOcenka]: this.state[setOcenka] + 1,
+                [newOcenka]: this.state[newOcenka] - 1}
+            );
             
             await firebase.firestore().collection('users').doc(heshUser).update({
-                ocenka: {...ocenka,[setOcenka]: [...ocenka[setOcenka],myHeshUser],
-                    [newOcenka]: removeItemArray}
-            })
+                [setOcenka]: firebase.firestore.FieldValue.arrayUnion(myHeshUser),
+                [newOcenka]: firebase.firestore.FieldValue.arrayRemove(myHeshUser)})
+
             this.setState({disabled: false})
         }
     }
@@ -106,7 +114,8 @@ class Ocenka extends Component{
     }
 
     render(){
-        const {ocenka} = this.state;
+        const {one,two,three,four,five} = this.state;
+        
         return(
             <View style={styles.ocenkaConteiner}>
                 <View style={styles.starsConteiner}>
@@ -118,11 +127,11 @@ class Ocenka extends Component{
                 </View>
 
                 <View style={styles.ocenkaTextConteiner}>
-                    <Text style={styles.ocenksText}>{ocenka.one.length}</Text>
-                    <Text style={styles.ocenksText}>{ocenka.two.length}</Text>
-                    <Text style={styles.ocenksText}>{ocenka.three.length}</Text>
-                    <Text style={styles.ocenksText}>{ocenka.four.length}</Text>
-                    <Text style={styles.ocenksText}>{ocenka.five.length}</Text>
+                    <Text style={styles.ocenksText}>{one}</Text>
+                    <Text style={styles.ocenksText}>{two}</Text>
+                    <Text style={styles.ocenksText}>{three}</Text>
+                    <Text style={styles.ocenksText}>{four}</Text>
+                    <Text style={styles.ocenksText}>{five}</Text>
                 </View>
             </View>
         )

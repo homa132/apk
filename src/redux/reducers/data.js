@@ -30,30 +30,11 @@ export default (state = initState, action) => {
             if(name == 'saveData'){
                 return {...state,myDataAcc: state.myChangeDataAcc}
             }
-            if(secondName == 'contacts'){
-                return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,contacts:{...state.myChangeDataAcc.contacts,[name]:value}},disableSaveBtn:false}
-            }else{
-                return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,[name]: value},disableSaveBtn:false}
-            }
+            return {...state,myChangeDataAcc:{ ...state.myChangeDataAcc,[name]: value},disableSaveBtn:false}
         case SET_MY_DATA :
-            return {...state,myDataAcc:{...state.myDataAcc,[nameSecond]: valueSecond}}
+            return {...state,myDataAcc:{...state.myDataAcc,[nameSecond]: valueSecond},
+            myChangeDataAcc:{ ...state.myChangeDataAcc,[nameSecond]: valueSecond}}
         default: return state
     }
 }
 
-
-
-const filterDate = (date,category,allList) => {
-    let filtredList = allList;
-    if(date != 'default'){
-        filtredList = filtredList.filter((item,index) => {
-            return date == `${item.date.month}.${item.date.year}`
-        })
-    }
-    if(category != 'default'){
-        filtredList = filtredList.filter((item,index) => {
-            return item.category.value == category
-        })
-    }
-    return filtredList
-}
