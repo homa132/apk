@@ -9,29 +9,15 @@ const { width, height } = Dimensions.get('window');
 function ItemMesseg (props){
 
     const {item,myHesh,data,index} = props;
-    if(index!=0&&data[index - 1].autor.autorHesh == item.autor.autorHesh){
-        console.log(data[index - 1]);
-
         return (
             <View style={styles.conteinerMess}>
-                <View style={styles.imageUser}>
-                </View>
-
-
-                <View style={[styles.conteinerTextMesseg,myHesh == item.autor.autorHesh?{borderColor: '#644800',borderWidth: 2}:null]}>
-                    <Text style={styles.textMesseg}>
-                        {item.messege}
-                    </Text>
-                </View>
-            </View>
-        )
-    }else{
-        return (
-            <View style={styles.conteinerMess}>
-                <TouchableOpacity>
-                    <Image style={styles.imageUser} source={{uri: item.autor.autorImage}}/>
-                </TouchableOpacity>
-    
+                {index!=0&&data.autor.autorHesh == item.autor.autorHesh?
+                    <View style={styles.imageUser}>
+                    </View>:
+                    <TouchableOpacity>
+                        <Image style={styles.imageUser} source={{uri: item.autor.autorImage}}/>
+                    </TouchableOpacity>
+                }
     
                 <View style={[styles.conteinerTextMesseg,myHesh == item.autor.autorHesh?{borderColor: '#644800',borderWidth: 2}:null]}>
                     <Text style={styles.textMesseg}>
@@ -40,7 +26,7 @@ function ItemMesseg (props){
                 </View>
             </View>
         )
-    }
+    
 
 }
 

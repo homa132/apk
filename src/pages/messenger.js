@@ -34,18 +34,33 @@ class Messenger extends Component {
 
                 this.setState({aboutChat: dataChat,loader: false,lastMessege,data})
             })
+        }else{
+            firebase.firestore().collection('chats').doc(heshChat).get().then((item) => {
+                this.setState({aboutChat: item.data()});
+                const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').limit(15);
+                this.searchData = messenge.onSnapshot((item) => {
+                    let data = [];
+    
+                    item.forEach((i) => {
+                        data.push(i.data());
+                    })
+    
+                    let lastMessege = item.docs[item.docs.length-1];
+    
+                    this.setState({loader: false,lastMessege,data})
+                })
+            });
+
         }
     }
 
 
     addData = () => {
-        console.log('add ');
         const {heshChat} = this.props;
         
         const {lastMessege,data} = this.state;
         const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').startAfter(lastMessege).limit(15);
         messenge.get().then((item) => {
-            console.log(item);
             let newData = [];
 
             item.forEach((i) => {
@@ -53,9 +68,11 @@ class Messenger extends Component {
             })
   
             let lastDoc = item.docs[item.docs.length-1];
-            console.log(newData);
-            this.setState({lastMessege: lastDoc,
-            data: [...data,...newData]})
+            if(lastDoc != lastMessege){
+
+                this.setState({lastMessege: lastDoc,
+                    data: [...data,...newData]})
+            }
         })
 
     }
@@ -78,11 +95,9 @@ class Messenger extends Component {
             messege: this.state.newMesseg
         })
         this.setState({newMesseg: ''})
-        
     }
 
     render(){
-
         const {data,loader,aboutChat,newMesseg} = this.state;
         
         return (
@@ -108,11 +123,13 @@ class Messenger extends Component {
                         <FlatList
                             keyExtractor={(item, index) => index.toString()}
                             data={data}
-                            renderItem={({item,index})=><ItemMesseg item={item} data={data} index={index}/>}
-                            style={{width: width,height: height - 190}}
+                            refreshing={true}
+                            renderItem={({item,index})=><ItemMesseg item={item} data={data[index - 1]} index={index}/>}
+                            style={{width: width,height: height - 190,zIndex: 10000}}
                             inverted={-1}
                             onEndReachedThreshold={0.001}
                             onEndReached={(info) => this.addData()}
+                            viewabilityConfig={this.viewabilityConfig}
                         />
 
 
@@ -120,7 +137,7 @@ class Messenger extends Component {
                         <View style={styles.bottomConteiner}>
                             <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D' value={newMesseg} 
                                 onChangeText={(newMesseg) => this.setState({newMesseg})}/>
-                            <TouchableOpacity style={styles.btnMessConteiner} onPress={this.newMess}>
+                            <TouchableOpacity style={[styles.btnMessConteiner,newMesseg == ''?{opacity: 0.3}:{opacity:1}]} onPress={this.newMess} disabled={newMesseg == ''}>
                                 <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
                             </TouchableOpacity>
                         </View>

@@ -109,7 +109,7 @@ class Add extends Component{
             name,category,date,time,
             heshEvent: hesh,
             event: true,
-            users: [{autorHesh,autorColor,autorImage,autorNick}],
+            users: [{autorHesh,autorImage,autorNick}],
             autor: {autorHesh,autorColor,autorImage,autorNick},
             arrayUsers: [autorHesh],
             lastMess: dateCreate.getTime(),

@@ -10,6 +10,11 @@ const { width, height } = Dimensions.get('window');
 
 class App extends Component {
 
+  constructor(props){
+    super(props);
+
+  }
+  
   componentDidMount(){
     this.firstEvents()
   }
@@ -30,9 +35,11 @@ class App extends Component {
 
   addData = () => {
     const {arrayEvent,lastEvent,date,type} = this.props;
+    
     if(date == 'default' || type == 'default'){
 
       if(date == 'default' && type != 'default'){
+
         const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(2);
         first.get().then((item) => {
           let data = [];
@@ -42,7 +49,9 @@ class App extends Component {
           })
 
           let lastEvent = item.docs[item.docs.length-1];
-          this.props.getEvents([...arrayEvent,...data],lastEvent)
+          if(lastEvent != this.props.lastEvent){
+            this.props.getEvents([...arrayEvent,...data],lastEvent)
+          }
         })
       }
 
@@ -56,7 +65,10 @@ class App extends Component {
           })
 
           let lastEvent = item.docs[item.docs.length-1];
-          this.props.getEvents([...arrayEvent,...data],lastEvent)
+          if(lastEvent != this.props.lastEvent){
+            this.props.getEvents([...arrayEvent,...data],lastEvent)
+          }
+
         })
       }
 
@@ -70,7 +82,10 @@ class App extends Component {
           })
 
           let lastEvent = item.docs[item.docs.length-1];
-          this.props.getEvents([...arrayEvent,...data],lastEvent)
+          if(lastEvent != this.props.lastEvent){
+            this.props.getEvents([...arrayEvent,...data],lastEvent)
+            
+          }
         })
       }
     }else{
@@ -134,6 +149,7 @@ class App extends Component {
           })
           
           let lastEvent = item.docs[item.docs.length-1];
+
           this.props.getEvents(['filter',...data],lastEvent);
           
         })
@@ -163,7 +179,7 @@ class App extends Component {
 
   render() {
     const {arrayEvent,type,date} = this.props;
-      console.log(type,date);
+
       return (
         <ImageBackground style={styles.background} source={require('../img/background/background1.jpg')}>
             <View style={styles.container}>
@@ -183,8 +199,7 @@ class App extends Component {
                     }}
                     onEndReachedThreshold={0.001}
                     onEndReached={(info) => this.addData()}
-                    bounces={false}
-                    initialNumToRender={2}
+                    refreshing={true}
                   />
                 </View>
 

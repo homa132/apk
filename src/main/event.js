@@ -6,7 +6,7 @@ import ImageSlider from 'react-native-image-slider';
 import Map from '../map/map';
 import InfoEvent from '../details/infoEvent';
 import firebase from 'react-native-firebase';
-import {setActiveItem} from '../redux/actions'; 
+import {setActiveItem,setMyData} from '../redux/actions'; 
 
 const { width, height } = Dimensions.get('window');
 
@@ -31,12 +31,12 @@ class Event extends Component {
         if(likes){
           this.setState({likesArray: newLikesHesh});
           await firebase.firestore().collection('Events').doc(heshEvent).update({
-            likesHesh: [...newLikesHesh]
+            likesHesh: firebase.firestore.FieldValue.arrayRemove(myUserHesh)
           })
         }else{
           this.setState({likesArray: [...newLikesHesh,myUserHesh]});
           await firebase.firestore().collection('Events').doc(heshEvent).update({
-            likesHesh: [...newLikesHesh,myUserHesh]
+            likesHesh: firebase.firestore.FieldValue.arrayUnion(myUserHesh)
           })
         }
     }
@@ -65,9 +65,11 @@ class Event extends Component {
     render(){
         
         const {likes,showMap,moreText,likesArray} = this.state;
-        const {name,autor,category,heshEvent,heshMessenger,date,images,likesHesh,
+        const {name,autor,category,heshEvent,heshMessenger,date,images,
               location,textMore,time} = this.props.item;
-      
+            
+        const {myUserHesh,myNick,myImage} = this.props;
+
         return (
             <View style={styles.eventConteiner}>
 
@@ -132,7 +134,28 @@ class Event extends Component {
 
                     <View style={styles.mainInfoConteiner}>
                         <InfoEvent time={time} date={date} category={category}/>
-                        <TouchableOpacity style={styles.mainInfoBtn} onPress={() => this.props.navigation.push('Messenger')}>
+                        <TouchableOpacity style={styles.mainInfoBtn} onPress={() => {
+
+                          this.props.setActiveItem('heshChat',heshMessenger);
+                          this.props.navigation.push('Messenger');
+                          const findMess = this.props.myMessengers.findIndex((item)=>item.hesh == heshMessenger);
+
+                          if(findMess == -1){
+                            this.props.setMyData('myMessengers',[...this.props.myMessengers,{alert: true,hesh: heshMessenger,newMess: false}]);
+
+                            firebase.firestore().collection('users').doc(myUserHesh).update({
+                                myMessengers: firebase.firestore.FieldValue.arrayUnion({
+                                  alert: true,hesh: heshMessenger,newMess: false
+                                })
+                            })
+
+                            firebase.firestore().collection('chats').doc(heshMessenger).update({
+                              arrayUsers: firebase.firestore.FieldValue.arrayUnion(myUserHesh),
+                              users: firebase.firestore.FieldValue.arrayUnion({autorHesh:myUserHesh,autorImage:myImage,autorNick:myNick})
+                            })
+                          }
+
+                          }}>
                             <Image source={require('../img/icons/btns/messenger.png')} style={{width:40,height: 40}}/>
                         </TouchableOpacity>
                     </View>
@@ -159,13 +182,17 @@ class Event extends Component {
 
 const mapStateToProps = (state) => {
     return {
-      myUserHesh: state.data.myDataAcc.heshUser
+      myUserHesh: state.data.myDataAcc.heshUser,
+      myMessengers: state.data.myDataAcc.myMessengers,
+      myImage: state.data.myDataAcc.urlImg,
+      myNick: state.data.myDataAcc.nick,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+      setActiveItem: (name,value) => dispatch(setActiveItem(name,value)),
+      setMyData: (nameSecond,valueSecond) => dispatch(setMyData(nameSecond,valueSecond))
     }
 }
 

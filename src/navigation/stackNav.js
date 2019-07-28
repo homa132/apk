@@ -54,14 +54,7 @@ const AccStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
-    Chats: {
-      screen: chatsStack,
-      navigationOptions: {
-          tabBarIcon: ({focused})=> {
-              return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
-          }
-        }
-    },
+
     Main: {
       screen: mainStack,
       navigationOptions: {
@@ -86,7 +79,14 @@ const AppNavigator = createBottomTabNavigator(
           }
         }
     },
-
+    Chats: {
+      screen: chatsStack,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
+          }
+        }
+    },
     Acc: {
       screen: AccStack,
       navigationOptions: {
