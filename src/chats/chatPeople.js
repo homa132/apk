@@ -2,21 +2,26 @@ import React from 'react';
 import {View,StyleSheet,Image,Text,Dimensions,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
+import {setActiveItem} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
 function ChatPeople(props){
-
+    const user = props.item.users.filter(item=> item.autorHesh != props.myHesh);
+    const {autorHesh,autorImage,autorNick,autorColor} = user[0];
+    
     return(
         <View style={styles.chatPeopleConteiner}>
-            <View style={styles.imageAutorConteinerSecond}>
-                <Image style={styles.imagePeople} source={require('../img/testImage.png')}/>
+            <View style={[styles.imageAutorConteinerSecond,{backgroundColor: autorColor}]}>
+                <Image style={styles.imagePeople} source={{uri: autorImage}}/>
             </View>
             <View style={styles.chatPeopleTextConteiner}>
-                <Text style={styles.chatPeopleAutorText} numberOfLines={1}>nik_name cdsvsd</Text>
-                <Text style={styles.chatPeopleMessegText} numberOfLines={2}>nik_name: привет!</Text>
+                <Text style={styles.chatPeopleAutorText} numberOfLines={1}>{autorNick}</Text>
             </View>
-            <TouchableOpacity onPress={()=>props.navigation.navigate('Messenger')}>
+            <TouchableOpacity onPress={()=>{
+                props.setActiveItem('heshChat',props.item.heshMessenger);
+                props.setActiveItem('dataChat',props.item);
+                props.navigation.navigate('Messenger')}}>
                 <Image style={styles.imageMessenger} source={require('../img/icons/btns/messenger.png')}/>
             </TouchableOpacity>
         </View>
@@ -46,7 +51,6 @@ const styles = StyleSheet.create({
         height: 65,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: 'red',
         borderRadius: 7
     },
     imageMessenger: {
@@ -68,5 +72,16 @@ const styles = StyleSheet.create({
     },
 })
 
+const mapStateToProps = (state) => {
+    return {
+        myHesh: state.data.myDataAcc.heshUser
+    }
+}
 
-export default connect()(withNavigation(ChatPeople));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(ChatPeople));

@@ -99,6 +99,11 @@ class Messenger extends Component {
 
     render(){
         const {data,loader,aboutChat,newMesseg} = this.state;
+        let user;
+        if(aboutChat.users != undefined){
+            user = aboutChat.users.filter(item=>item.autorHesh != this.props.myHesh);
+            console.log(user);
+        }
         
         return (
             <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
@@ -112,8 +117,18 @@ class Messenger extends Component {
                             <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
                                 <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
                             </TouchableOpacity>
-
+                        
+                            {aboutChat.event?
                             <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
+                            :
+                            <React.Fragment>
+                                <View style={[styles.imageAutorConteinerSecond,{backgroundColor: user[0].autorColor}]}>
+                                    <Image source={{uri: user[0].autorImage}} style={styles.imagePeople}/>
+                                </View>
+                                <Text style={styles.headerText} numberOfLines={1}>{user[0].autorNick}</Text>
+                            </React.Fragment>
+                            }
+
 
                             <TouchableOpacity style={styles.headerBtnConteiner}>
                                 <Image source={require('../img/icons/btns/settingBtn.png')} style={styles.headerBtn}/>
@@ -151,6 +166,20 @@ class Messenger extends Component {
 }
 
 const styles = StyleSheet.create({
+    imagePeople: {
+        width: 40,
+        height: 40,
+        borderRadius: 5,
+        borderColor: 'white',
+        borderWidth: 1
+    },
+    imageAutorConteinerSecond: {
+        width:45,
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 5
+    },
     conteiner: {
         flex: 1,
         justifyContent: 'flex-start',

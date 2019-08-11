@@ -32,6 +32,7 @@ class Chats extends Component{
             })
 
             let lastChat = item.docs[item.docs.length-1];
+
             this.setState({loader: false,lastChat,chats})
         })
     }
@@ -39,7 +40,7 @@ class Chats extends Component{
 
     render(){
         const {loader,chats} = this.state;
-
+        
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 {loader?
@@ -58,6 +59,7 @@ class Chats extends Component{
                         keyExtractor={(item, index) => index.toString()}
                         data={chats}
                         renderItem={({item,index})=>{
+                            
                             if(!item.event){
                                 return <ChatPeople item={item}/>
                             }else{

@@ -7,7 +7,7 @@ import firebase from 'react-native-firebase';
 import InfoUser from '../detailsUser/infoAboutUsers';
 import Ocenka from '../detailsUser/ocenka';
 import Event from '../detailsUser/eventUser';
-
+import {setActiveItem} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -48,8 +48,6 @@ class DetailsUser extends Component{
             const {myFriends,myHeshUser} = this.props;
             const {item} = this.state;
             const addOrRemove = myFriends.find((i) => {
-                console.log(i.hesh , item.heshUser);
-                
                 return i.hesh == item.heshUser
             });
             const myEvent = myHeshUser == item.heshUser;
@@ -108,10 +106,94 @@ class DetailsUser extends Component{
         }
     }
 
+
+    newChat = async () => {
+        const {myHeshUser,myNickUser,myImgUser,myColor} = this.props;
+        const {heshUser,nick,urlImg,color} = this.state.item;
+        
+        const dateCreate = new Date();
+        let arrayUsers;
+        if(heshUser < myHeshUser){
+            arrayUsers = [heshUser,myHeshUser]
+        }else{
+            arrayUsers = [myHeshUser,heshUser]
+        }
+
+        const searchChat = await firebase.firestore().collection('chats').where('event','==',false)
+            .where('arrayUsers','=',arrayUsers).get();
+
+
+        if(searchChat.docs.length == 0){
+
+            const token = Math.random().toString(36).substr(2) + Math.random().toString(36).substr(2);
+
+            const newChat = {
+                heshMessenger: token,
+                lastMess: dateCreate.getTime(),
+                event: false,
+                arrayUsers: arrayUsers,
+                users: [
+                {
+                    autorHesh:myHeshUser,
+                    autorImage:myImgUser,
+                    autorNick: myNickUser,
+                    autorColor: myColor
+                },
+                {
+                    autorHesh:heshUser,
+                    autorImage: urlImg,
+                    autorNick: nick,
+                    autorColor: color
+                }
+                ]
+            };
+
+            const createNewChat = await firebase.firestore().collection('chats').doc(token).set(newChat);
+    
+            await firebase.firestore().collection('users').doc(myHeshUser).update({
+                myMessengers: firebase.firestore.FieldValue.arrayUnion({
+                    alert: true,
+                    hesh: token,
+                    newMess: false,
+                })
+            })
+            
+            await firebase.firestore().collection('users').doc(heshUser).update({
+                myMessengers: firebase.firestore.FieldValue.arrayUnion({
+                    alert: true,
+                    hesh: token,
+                    newMess: false,
+                })
+            })
+    
+            await firebase.firestore().collection('chats').doc(token).collection('messege').add({
+                messege: 'hello it is first messege',
+                autor: {
+                    autorImage:myImgUser,autorHesh:myHeshUser
+                },
+                date: '20.02.2019 10-50:50',
+                dateCreate: dateCreate.getTime()
+            })
+
+            this.props.setActiveItem('heshChat',token);
+            this.props.setActiveItem('dataChat',newChat);
+            this.props.navigation.push('Messenger');
+
+        }else{
+            searchChat.forEach(item => {
+                this.props.setActiveItem('heshChat',item.id);
+                this.props.setActiveItem('dataChat',item.data());
+                this.props.navigation.push('Messenger');
+            })
+        }
+
+    }
+
+
     render(){
         const {color,urlImg,myFriends,friends,myEvents,bal,position,one,two,three,four,five,heshUser,nick,aboutMe} = this.state.item;
         const {disableBtnIfMyEvent,disableAdd,eventsHesh} = this.state;
-
+        
         return(
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 {this.state.loader?
@@ -132,7 +214,7 @@ class DetailsUser extends Component{
                                             <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtnImg}/>
                                         </TouchableOpacity>
                                         <Text numberOfLines={1} style={styles.headerText}>{nick}</Text>
-                                        <TouchableOpacity style={styles.headerBtnConteiner} disabled={disableBtnIfMyEvent}>
+                                        <TouchableOpacity style={styles.headerBtnConteiner} disabled={disableBtnIfMyEvent} onPress={this.newChat}>
                                             <Image source={require('../img/icons/btns/messenger.png')} style={styles.headerBtnImg}/>
                                         </TouchableOpacity>
                                     </View>
@@ -237,9 +319,16 @@ const mapStateToProps = (state) => {
         myFriends: state.data.myDataAcc.myFriends,
         myHeshUser: state.data.myDataAcc.heshUser,
         myNickUser: state.data.myDataAcc.nick,
-        myImgUser:  state.data.myDataAcc.urlImg
+        myImgUser:  state.data.myDataAcc.urlImg,
+        myColor: state.data.myDataAcc.color,
     }
   }
 
-export default connect(mapStateToProps)(withNavigation(DetailsUser));
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(DetailsUser));
 
