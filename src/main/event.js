@@ -42,7 +42,6 @@ class Event extends Component {
     }
 
     goToAutor = () => {
-      console.log('autor page');
       const {autorHesh} = this.props.item.autor;
       this.props.setActiveItem('hestUser',autorHesh)
       this.props.navigation.push('DetailsUser')

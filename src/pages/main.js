@@ -12,7 +12,9 @@ class App extends Component {
 
   constructor(props){
     super(props);
-
+    this.state = {
+      refresh: false
+    }
   }
   
   componentDidMount(){
@@ -105,9 +107,9 @@ class App extends Component {
 
   }
 
-  getFilterData = () => {
+  getFilterData = (refresh) => {
     const {date,type} = this.props;
-
+    
     if(date == 'default' || type == 'default'){
       if(date == 'default' && type != 'default'){
         const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').limit(2);
@@ -119,7 +121,8 @@ class App extends Component {
           })
 
           let lastEvent = item.docs[item.docs.length-1];
-          this.props.getEvents(['filter',...data],lastEvent)
+          this.props.getEvents(['filter',...data],lastEvent);
+          refresh?this.setState({refresh: false}):null;
         })
       }
 
@@ -134,7 +137,8 @@ class App extends Component {
           })
 
           let lastEvent = item.docs[item.docs.length-1];
-          this.props.getEvents(['filter',...data],lastEvent)
+          this.props.getEvents(['filter',...data],lastEvent);
+          refresh?this.setState({refresh: false}):null;
         })
       }
           // get all list
@@ -151,7 +155,7 @@ class App extends Component {
           let lastEvent = item.docs[item.docs.length-1];
 
           this.props.getEvents(['filter',...data],lastEvent);
-          
+          refresh?this.setState({refresh: false}):null;
         })
       }
     }else{
@@ -165,6 +169,7 @@ class App extends Component {
         
         let lastEvent = item.docs[item.docs.length-1];
         this.props.getEvents(['filter',...data],lastEvent);
+        refresh?this.setState({refresh: false}):null;
       })
     }
 
@@ -175,6 +180,11 @@ class App extends Component {
     if(prevProps.date != this.props.date || prevProps.type != this.props.type){
       this.getFilterData();
     }
+  }
+
+  refreshData = () => {
+    this.setState({refresh: true});
+    this.getFilterData(true);
   }
 
   render() {
@@ -199,7 +209,8 @@ class App extends Component {
                     }}
                     onEndReachedThreshold={0.001}
                     onEndReached={(info) => this.addData()}
-                    refreshing={true}
+                    refreshing={this.state.refresh}
+                    onRefresh={this.refreshData}
                   />
                 </View>
 

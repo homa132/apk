@@ -44,7 +44,6 @@ class Event extends Component {
     }
 
     goToAutor = () => {
-      console.log('autor page');
       const {autorHesh} = this.props.item.autor;
       this.props.setActiveItem('hestUser',autorHesh)
       this.props.navigation.push('DetailsUser')
@@ -83,6 +82,7 @@ class Event extends Component {
         }else{
             const {name,autor,category,date,images,heshMessenger,location,
                 textMore,time} = event;
+
             return (
                 <View style={styles.eventConteiner}>
     
@@ -140,7 +140,10 @@ class Event extends Component {
     
                         <View style={styles.mainInfoConteiner}>
                             <InfoEvent time={time} date={date} category={category}/>
-                            <TouchableOpacity style={styles.mainInfoBtn} onPress={() => this.props.navigation.push('Messenger')}>
+                            <TouchableOpacity style={styles.mainInfoBtn} onPress={() => {
+                              this.props.setActiveItem('heshChat',heshMessenger)
+                              this.props.navigation.push('Messenger')
+                              }}>
                                 <Image source={require('../img/icons/btns/messenger.png')} style={{width:40,height: 40}}/>
                             </TouchableOpacity>
                         </View>
@@ -175,7 +178,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-      
+      setActiveItem: (name,value) => dispatch(setActiveItem(name,value)),
     }
 }
 

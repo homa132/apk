@@ -102,7 +102,6 @@ class Messenger extends Component {
         let user;
         if(aboutChat.users != undefined){
             user = aboutChat.users.filter(item=>item.autorHesh != this.props.myHesh);
-            console.log(user);
         }
         
         return (
@@ -138,7 +137,6 @@ class Messenger extends Component {
                         <FlatList
                             keyExtractor={(item, index) => index.toString()}
                             data={data}
-                            refreshing={true}
                             renderItem={({item,index})=><ItemMesseg item={item} data={data[index - 1]} index={index}/>}
                             style={{width: width,height: height - 190,zIndex: 10000}}
                             inverted={-1}

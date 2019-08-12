@@ -16,13 +16,15 @@ class Chats extends Component{
         this.state = {
             loader: true,
             chats: [],
-            lastChat: ''
+            lastChat: '',
+            refresh: false,
+            allList: false
         }
     }
 
-    componentDidMount(){
+    getData = () => {
         const {myUserHesh} = this.props;
-        const chats = firebase.firestore().collection('chats').where('arrayUsers',"array-contains",myUserHesh).orderBy('lastMess','desc').limit(7);
+        const chats = firebase.firestore().collection('chats').where('arrayUsers',"array-contains",myUserHesh).orderBy('lastMess','desc').limit(5);
 
         chats.get().then((item) => {
             let chats = [];
@@ -33,13 +35,46 @@ class Chats extends Component{
 
             let lastChat = item.docs[item.docs.length-1];
 
-            this.setState({loader: false,lastChat,chats})
+            this.setState({loader: false,lastChat,chats,refresh: false})
         })
     }
 
+    componentDidMount(){
+        this.getData();
+    }
+
+    refresh = () => {
+        this.setState({refresh: true})
+        this.getData()
+    }
+
+    addData = () => {
+        const {myUserHesh} = this.props;
+        const {chats,lastChat,allList} = this.state;
+        if(allList){
+
+        }else{
+            const newChats = firebase.firestore().collection('chats').where('arrayUsers',"array-contains",myUserHesh).orderBy('lastMess','desc')
+            .startAfter(lastChat).limit(5);
+            
+            newChats.get().then((item) => {
+                let data = [];
+    
+                item.forEach((i) => {
+                  data.push(i.data());
+                })
+                let newLastChat = item.docs[item.docs.length-1];
+                if(chats.length == [...chats,...data].length){
+                    this.setState({allList: true});
+                }
+                this.setState({lastChat:newLastChat,chats:[...chats,...data]});
+            })
+        }
+
+    }
 
     render(){
-        const {loader,chats} = this.state;
+        const {loader,chats,refresh,lastChat} = this.state;
         
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
@@ -58,6 +93,10 @@ class Chats extends Component{
                     <FlatList
                         keyExtractor={(item, index) => index.toString()}
                         data={chats}
+                        refreshing={refresh}
+                        onRefresh={this.refresh}
+                        onEndReachedThreshold={0.001}
+                        onEndReached={(info) => this.addData()}
                         renderItem={({item,index})=>{
                             
                             if(!item.event){

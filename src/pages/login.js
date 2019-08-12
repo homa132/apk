@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {View,Text,ImageBackground,StyleSheet,TouchableOpacity,Image,Dimensions,
     TextInput,FlatList,ActivityIndicator,ScrollView} from 'react-native';
 import {connect} from 'react-redux';
-import {setNewMyData} from '../redux/actions';
+import {setNewMyData,getMyData} from '../redux/actions';
 import AsyncStorage from '@react-native-community/async-storage';
 import firebase from 'react-native-firebase';
 import { StackActions } from 'react-navigation';
@@ -20,14 +20,14 @@ class Login extends Component{
         this.state = {
             save: false,
             eventsHesh: ['first',...startArrayEvent],
-            lastEvent: 3
+            lastEvent: 3,
+            refresh: false
         }
     }
 
     addData = () => {
         const i = 3;
         const {eventsHesh,lastEvent} = this.state;
-        console.log(this.props.dataAbutMe.myEvents);
         
         let arraEvent  = this.props.dataAbutMe.myEvents;
         
@@ -79,17 +79,30 @@ class Login extends Component{
         this.setState({save: false})
     }
 
-    render(){
+    refresh = async () => {
+        this.setState({refresh: true});
+        const userToken = await AsyncStorage.getItem('userToken');
+        await firebase.firestore().collection('users').doc(userToken).get().then((doc) => {
+            let data = doc.data();
+            this.props.getMyData(data);
+          })
+        this.props.navigation.push('Acc');
+        this.setState({refresh: false});
+    }
 
+
+    render(){
         const {nick,one,two,three,four,five,color,urlImg,myEvents,friends,myFriends,bal,position,aboutMe} = this.props.myData;
         const {disableSaveBtn}  = this.props;
-        const {save,eventsHesh} = this.state;
+        const {save,eventsHesh,refresh} = this.state;
         
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
                 <FlatList
                     keyExtractor={(item, index) => index.toString()}
                     data={eventsHesh}
+                    refreshing={refresh}
+                    onRefresh={this.refresh}
                     renderItem={({item,index}) => {
                         if(index == 0){
                             return (
@@ -266,7 +279,8 @@ mapStateToProps = (state) => {
 
 mapDispatchToProps = (dispatch) => {
     return {
-        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName))
+        setNewMyData: (name,value,secondName)=>dispatch(setNewMyData(name,value,secondName)),
+        getMyData: (myDataAcc) => dispatch(getMyData(myDataAcc))
     }
 }
 export default connect(mapStateToProps,mapDispatchToProps)(Login);
