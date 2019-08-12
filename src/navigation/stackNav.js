@@ -9,6 +9,7 @@ import Acc from '../pages/login';
 import Messenger from '../pages/messenger';
 import DetailsUser from '../pages/detailsUser';
 import Friends from '../pages/friends';
+import SettingChat from '../pages/settingsChat';
 
 const mainStack = createStackNavigator({
     Main: Main,
@@ -35,12 +36,13 @@ const topStack = createStackNavigator({
 
 const chatsStack = createStackNavigator({
   Chats: Chats,
-  Messenger:Messenger
+  Messenger:Messenger,
+  SettingChat: SettingChat
 },
 {
   headerMode: 'none',
   mode: 'modal',
-  initialRouteName: 'Chats'
+  initialRouteName: 'SettingChat'
 })
 
 const AccStack = createStackNavigator({
@@ -54,7 +56,14 @@ const AccStack = createStackNavigator({
 
 const AppNavigator = createBottomTabNavigator(
   {
-
+    Chats: {
+      screen: chatsStack,
+      navigationOptions: {
+          tabBarIcon: ({focused})=> {
+              return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
+          }
+        }
+    },
     Main: {
       screen: mainStack,
       navigationOptions: {
@@ -79,14 +88,7 @@ const AppNavigator = createBottomTabNavigator(
           }
         }
     },
-    Chats: {
-      screen: chatsStack,
-      navigationOptions: {
-          tabBarIcon: ({focused})=> {
-              return focused?<Image source={require('../img/nav/ChatIActive.png')}/>:<Image source={require('../img/nav/ChaI.png')}/>;
-          }
-        }
-    },
+
     Acc: {
       screen: AccStack,
       navigationOptions: {
