@@ -140,11 +140,11 @@ class Event extends Component {
                           const findMess = this.props.myMessengers.findIndex((item)=>item.hesh == heshMessenger);
 
                           if(findMess == -1){
-                            this.props.setMyData('myMessengers',[...this.props.myMessengers,{alert: true,hesh: heshMessenger,newMess: false}]);
+                            this.props.setMyData('myMessengers',[...this.props.myMessengers,{hesh: heshMessenger}]);
 
                             firebase.firestore().collection('users').doc(myUserHesh).update({
                                 myMessengers: firebase.firestore.FieldValue.arrayUnion({
-                                  alert: true,hesh: heshMessenger,newMess: false
+                                  hesh: heshMessenger
                                 })
                             })
 

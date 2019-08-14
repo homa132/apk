@@ -113,7 +113,8 @@ class Add extends Component{
             autor: {autorHesh,autorColor,autorImage,autorNick},
             arrayUsers: [autorHesh],
             lastMess: dateCreate.getTime(),
-            heshMessenger: hesh
+            heshMessenger: hesh,
+            noAlert: []
         })
 
         await firebase.firestore().collection('chats').doc(hesh).collection('messege').add({

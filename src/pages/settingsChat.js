@@ -20,6 +20,7 @@ class SettingsChat extends Component {
         return (
             <ImageBackground style={{width: '100%',height: '100%'}} source={require('../img/background/background1.jpg')}>
                 <FlatList
+                keyExtractor={(item, index) => index.toString()}
                 data={['first','first','first','first','first','first','first','first','first','first','first','first','last']}
                 renderItem={({item,index}) => {
                     if(index == 0){

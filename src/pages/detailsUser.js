@@ -120,7 +120,7 @@ class DetailsUser extends Component{
         }
 
         const searchChat = await firebase.firestore().collection('chats').where('event','==',false)
-            .where('arrayUsers','=',arrayUsers).get();
+            .where('arrayUsers','==',arrayUsers).get();
 
 
         if(searchChat.docs.length == 0){
@@ -132,6 +132,7 @@ class DetailsUser extends Component{
                 lastMess: dateCreate.getTime(),
                 event: false,
                 arrayUsers: arrayUsers,
+                noAlert: [],
                 users: [
                 {
                     autorHesh:myHeshUser,
@@ -148,21 +149,18 @@ class DetailsUser extends Component{
                 ]
             };
 
-            const createNewChat = await firebase.firestore().collection('chats').doc(token).set(newChat);
+            await firebase.firestore().collection('chats').doc(token).set(newChat)
     
+
             await firebase.firestore().collection('users').doc(myHeshUser).update({
                 myMessengers: firebase.firestore.FieldValue.arrayUnion({
-                    alert: true,
                     hesh: token,
-                    newMess: false,
                 })
             })
             
             await firebase.firestore().collection('users').doc(heshUser).update({
                 myMessengers: firebase.firestore.FieldValue.arrayUnion({
-                    alert: true,
                     hesh: token,
-                    newMess: false,
                 })
             })
     
