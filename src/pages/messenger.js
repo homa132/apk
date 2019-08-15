@@ -6,6 +6,7 @@ import firebase from 'react-native-firebase';
 import ItemMesseg from '../messenger/itemMessege';
 import SettingScreen from '../pages/settingsChat';
 import {setActiveItem} from '../redux/actions';
+import Loader from '../messenger/loader';
 
 const { width, height } = Dimensions.get('window');
 
@@ -111,6 +112,14 @@ class Messenger extends Component {
         this.props.navigation.push('DetailsUserChat')
     }
 
+    newUser = () => {
+        const {myFriends} = this.props;
+        this.props.setActiveItem('arrayFriends',myFriends);
+        this.props.setActiveItem('eventHeshForMessege',this.state.aboutChat.heshEvent);
+        this.props.setActiveItem('messege',true);
+        this.props.navigation.push('Friends');
+    }
+
     render(){
         const {data,loader,aboutChat,newMesseg,settingsScreen,alert} = this.state;
         
@@ -120,7 +129,7 @@ class Messenger extends Component {
         }
         if(settingsScreen){
             return <SettingScreen back={()=>this.setState({settingsScreen: false})} alert={this.alert} alertData={alert} 
-                     event={aboutChat.event} users={aboutChat.users} goToUser={(hesh) => this.goToUser(hesh)}/>
+                     event={aboutChat.event} users={aboutChat.users} goToUser={(hesh) => this.goToUser(hesh)} newUser={this.newUser}/>
         }else{
             return (
                 <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
@@ -155,7 +164,15 @@ class Messenger extends Component {
                             <FlatList
                                 keyExtractor={(item, index) => index.toString()}
                                 data={data}
-                                renderItem={({item,index})=><ItemMesseg item={item} data={data[index - 1]} index={index}/>}
+                                renderItem={({item,index})=>{
+                                if(item.event){
+                                    return (<Loader hesh={item.messege}/>)
+                                }else{
+                                    return (
+                                        <ItemMesseg item={item} data={data[index - 1]} index={index}/>
+                                    )
+                                }
+                            }}
                                 style={{width: width,height: height - 190,zIndex: 10000}}
                                 inverted={-1}
                                 onEndReachedThreshold={0.001}
@@ -264,7 +281,9 @@ mapStateToProps = (state) => {
         heshChat: state.navigation.heshChat,
         dataChat: state.navigation.dataChat,
         myHesh: state.data.myDataAcc.heshUser,
-        myImage: state.data.myDataAcc.urlImg
+        myImage: state.data.myDataAcc.urlImg,
+        myFriends: state.data.myDataAcc.friends
+
     }
 }
 

@@ -21,7 +21,8 @@ class userInfo extends Component {
     }
 
     goToFriends = (array) => {
-        this.props.setActiveItem('arrayFriends',array)
+        this.props.setActiveItem('arrayFriends',array);
+        this.props.setActiveItem('messege',false);
         this.props.navigation.push('Friends');
     }
 

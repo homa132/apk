@@ -67,7 +67,7 @@ class Event extends Component {
         const {name,autor,category,heshEvent,heshMessenger,date,images,
               location,textMore,time} = this.props.item;
             
-        const {myUserHesh,myNick,myImage} = this.props;
+        const {myUserHesh,myNick,myImage,myFriends} = this.props;
 
         return (
             <View style={styles.eventConteiner}>
@@ -126,7 +126,12 @@ class Event extends Component {
 
                     <View style={styles.topInfoConteiner}>
                         <Text numberOfLines={3} style={styles.topInfoText}>{name}</Text>
-                        <TouchableOpacity style={styles.topInfoBtn}>
+                        <TouchableOpacity style={styles.topInfoBtn} onPress={() => {
+                                  this.props.setActiveItem('arrayFriends',myFriends);
+                                  this.props.setActiveItem('eventHeshForMessege',heshEvent);
+                                  this.props.setActiveItem('messege',true);
+                                  this.props.navigation.push('Friends');
+                        }}>
                             <Text style={styles.topInfoBtnText}>поделиться</Text>
                         </TouchableOpacity>
                     </View>
@@ -185,6 +190,7 @@ const mapStateToProps = (state) => {
       myMessengers: state.data.myDataAcc.myMessengers,
       myImage: state.data.myDataAcc.urlImg,
       myNick: state.data.myDataAcc.nick,
+      myFriends: state.data.myDataAcc.friends
     }
 }
 

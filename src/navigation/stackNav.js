@@ -37,6 +37,8 @@ const chatsStack = createStackNavigator({
   Chats: Chats,
   Messenger:Messenger,
   DetailsUserChat: DetailsUser,
+  Friends: Friends,
+  DetailsUser: DetailsUser,
 },
 {
   headerMode: 'none',

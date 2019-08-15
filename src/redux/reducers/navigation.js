@@ -5,7 +5,9 @@ const initState = {
     hestUser: '',
     arrayFriends: [],
     heshChat: '',
-    dataChat: false
+    dataChat: false,
+    messege: false,
+    eventHeshForMessege: false
 }
 
 export default (state = initState, action) => {

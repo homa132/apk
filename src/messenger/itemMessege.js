@@ -2,6 +2,7 @@ import React from 'react';
 import {View,StyleSheet,Text,Image,Dimensions,TouchableOpacity} from 'react-native';
 import {withNavigation} from 'react-navigation';
 import {connect} from 'react-redux';
+import {setActiveItem} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -9,12 +10,16 @@ const { width, height } = Dimensions.get('window');
 function ItemMesseg (props){
 
     const {item,myHesh,data,index} = props;
+    
         return (
             <View style={styles.conteinerMess}>
                 {index!=0&&data.autor.autorHesh == item.autor.autorHesh?
                     <View style={styles.imageUser}>
                     </View>:
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => {
+                        props.setActiveItem('hestUser',item.autor.autorHesh);
+                        props.navigation.push('DetailsUser');
+                    }}>
                         <Image style={styles.imageUser} source={{uri: item.autor.autorImage}}/>
                     </TouchableOpacity>
                 }
@@ -63,5 +68,9 @@ mapStateToProps = (state) => {
         myHesh: state.data.myDataAcc.heshUser,
     }
 }
-
-export default connect(mapStateToProps)(withNavigation(ItemMesseg));
+mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(withNavigation(ItemMesseg));

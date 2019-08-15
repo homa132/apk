@@ -63,20 +63,20 @@ class DetailsUser extends Component{
 
 
     addInFrends = async () => {
-        const {heshUser,friends,nick,urlImg} = this.state.item;
-        const {myHeshUser,myFriends,myImgUser,myNickUser} = this.props;
+        const {heshUser,friends,nick,urlImg,color} = this.state.item;
+        const {myHeshUser,myFriends,myImgUser,myNickUser,myColor} = this.props;
         const {add} = this.state;
         
         if(add){
-            this.setState({disableAdd: true,item: {...this.state.item, friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser}]}});
+            this.setState({disableAdd: true,item: {...this.state.item, friends: [...friends,{hesh: myHeshUser,img: myImgUser,nick: myNickUser,color:myColor}]}});
             await firebase.firestore().collection('users').doc(heshUser).update({
-                    friends: firebase.firestore.FieldValue.arrayUnion({hesh: myHeshUser,img: myImgUser,nick: myNickUser})
+                    friends: firebase.firestore.FieldValue.arrayUnion({hesh: myHeshUser,img: myImgUser,nick: myNickUser,color:myColor})
             })
             await firebase.firestore().collection('users').doc(myHeshUser).update({
-                    myFriends: firebase.firestore.FieldValue.arrayUnion({hesh: heshUser,img: urlImg,nick})
+                    myFriends: firebase.firestore.FieldValue.arrayUnion({hesh: heshUser,img: urlImg,nick,color})
             })
         }else{
-            const removeData = {hesh: myHeshUser,img: myImgUser,nick: myNickUser}
+            const removeData = {hesh: myHeshUser,img: myImgUser,nick: myNickUser,color:myColor}
             const newFriends = friends.filter(item=>item.hesh != myHeshUser);
 
             this.setState({disableAdd: true,item:{...this.state.item,friends: newFriends}});
@@ -84,7 +84,7 @@ class DetailsUser extends Component{
                 friends: firebase.firestore.FieldValue.arrayRemove(removeData)
            });
 
-           const removeSecondData = {hesh: heshUser,img: urlImg,nick};
+           const removeSecondData = {hesh: heshUser,img: urlImg,nick,color};
            await firebase.firestore().collection('users').doc(myHeshUser).update({
             myFriends: firebase.firestore.FieldValue.arrayRemove(removeSecondData)
             })
@@ -191,6 +191,7 @@ class DetailsUser extends Component{
     render(){
         const {color,urlImg,myFriends,friends,myEvents,bal,position,one,two,three,four,five,heshUser,nick,aboutMe} = this.state.item;
         const {disableBtnIfMyEvent,disableAdd,eventsHesh} = this.state;
+        console.log(this.state.item);
         
         return(
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>

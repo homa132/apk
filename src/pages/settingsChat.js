@@ -21,7 +21,7 @@ const settings = (props) =>  (
                                     </View>
                                 </View>
                                 <View style={styles.btnsConteiner}>
-                                    <TouchableOpacity disabled={!props.event} style={props.event?{opacity: 1}:{opacity: 0.2}}>
+                                    <TouchableOpacity disabled={!props.event} style={props.event?{opacity: 1}:{opacity: 0.2}} onPress={() =>props.newUser()}>
                                         <Image source={require('../img/icons/btns/addUserInChat.png')} style={styles.btnImage}/>
                                     </TouchableOpacity>
                                     <TouchableOpacity onPress={() => props.alert()}>
