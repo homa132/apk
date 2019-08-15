@@ -9,7 +9,6 @@ import Acc from '../pages/login';
 import Messenger from '../pages/messenger';
 import DetailsUser from '../pages/detailsUser';
 import Friends from '../pages/friends';
-import SettingChat from '../pages/settingsChat';
 
 const mainStack = createStackNavigator({
     Main: Main,
@@ -37,7 +36,7 @@ const topStack = createStackNavigator({
 const chatsStack = createStackNavigator({
   Chats: Chats,
   Messenger:Messenger,
-  SettingChat: SettingChat
+  DetailsUserChat: DetailsUser,
 },
 {
   headerMode: 'none',

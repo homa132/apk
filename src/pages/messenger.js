@@ -4,6 +4,8 @@ import {View,Text,StyleSheet,TextInput,Dimensions,TouchableOpacity,Image,ImageBa
 import {connect} from 'react-redux';
 import firebase from 'react-native-firebase';
 import ItemMesseg from '../messenger/itemMessege';
+import SettingScreen from '../pages/settingsChat';
+import {setActiveItem} from '../redux/actions';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,42 +18,33 @@ class Messenger extends Component {
             aboutChat: false,
             lastMessege: '',
             newMesseg: '',
+            settingsScreen: false,
+            alert: true
         }
     }
 
     componentDidMount(){
-        const {heshChat,dataChat} = this.props;
-        if(dataChat){
+        const {heshChat,myHesh} = this.props;
+        firebase.firestore().collection('chats').doc(heshChat).get().then((item) => {
+            const searchAlert = item.data().noAlert.find(item => item == myHesh);
+            if(searchAlert){
+                this.setState({aboutChat: item.data(),alert: false})
+            }else{
+                this.setState({aboutChat: item.data(),alert: true})
+            }
             const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').limit(15);
             this.searchData = messenge.onSnapshot((item) => {
                 let data = [];
-
+    
                 item.forEach((i) => {
                     data.push(i.data());
                 })
-
+    
                 let lastMessege = item.docs[item.docs.length-1];
-
-                this.setState({aboutChat: dataChat,loader: false,lastMessege,data})
+    
+                this.setState({loader: false,lastMessege,data})
             })
-        }else{
-            firebase.firestore().collection('chats').doc(heshChat).get().then((item) => {
-                this.setState({aboutChat: item.data()});
-                const messenge = firebase.firestore().collection('chats').doc(heshChat).collection('messege').orderBy('dateCreate','desc').limit(15);
-                this.searchData = messenge.onSnapshot((item) => {
-                    let data = [];
-    
-                    item.forEach((i) => {
-                        data.push(i.data());
-                    })
-    
-                    let lastMessege = item.docs[item.docs.length-1];
-    
-                    this.setState({loader: false,lastMessege,data})
-                })
-            });
-
-        }
+        });
     }
 
 
@@ -69,7 +62,6 @@ class Messenger extends Component {
   
             let lastDoc = item.docs[item.docs.length-1];
             if(lastDoc != lastMessege){
-
                 this.setState({lastMessege: lastDoc,
                     data: [...data,...newData]})
             }
@@ -97,69 +89,96 @@ class Messenger extends Component {
         this.setState({newMesseg: ''})
     }
 
+    alert = () => {
+        const {alert} = this.state;
+        const {heshChat,myHesh} = this.props;
+        this.setState({alert: !alert})
+
+        if(alert){
+            firebase.firestore().collection('chats').doc(heshChat).update({
+                noAlert: firebase.firestore.FieldValue.arrayUnion(myHesh)
+            })
+        }else{
+            firebase.firestore().collection('chats').doc(heshChat).update({
+                noAlert: firebase.firestore.FieldValue.arrayRemove(myHesh)
+            })
+        }
+    }
+
+
+    goToUser = (hesh) => {
+        this.props.setActiveItem('hestUser',hesh);
+        this.props.navigation.push('DetailsUserChat')
+    }
+
     render(){
-        const {data,loader,aboutChat,newMesseg} = this.state;
+        const {data,loader,aboutChat,newMesseg,settingsScreen,alert} = this.state;
+        
         let user;
         if(aboutChat.users != undefined){
             user = aboutChat.users.filter(item=>item.autorHesh != this.props.myHesh);
         }
-        
-        return (
-            <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
-                {loader?
-                    <View style={{width: width,height: height,justifyContent: 'center',alignItems: 'center'}}>
-                        <ActivityIndicator size="large" color="#644800" />
-                    </View>
-                    :
-                    <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled >
-                        <View style={styles.headerConteiner}>
-                            <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
-                                <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
-                            </TouchableOpacity>
-                        
-                            {aboutChat.event?
-                            <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
-                            :
-                            <React.Fragment>
-                                <View style={[styles.imageAutorConteinerSecond,{backgroundColor: user[0].autorColor}]}>
-                                    <Image source={{uri: user[0].autorImage}} style={styles.imagePeople}/>
-                                </View>
-                                <Text style={styles.headerText} numberOfLines={1}>{user[0].autorNick}</Text>
-                            </React.Fragment>
-                            }
-
-
-                            <TouchableOpacity style={styles.headerBtnConteiner}>
-                                <Image source={require('../img/icons/btns/settingBtn.png')} style={styles.headerBtn}/>
-                            </TouchableOpacity>
+        if(settingsScreen){
+            return <SettingScreen back={()=>this.setState({settingsScreen: false})} alert={this.alert} alertData={alert} 
+                     event={aboutChat.event} users={aboutChat.users} goToUser={(hesh) => this.goToUser(hesh)}/>
+        }else{
+            return (
+                <ImageBackground style={{width: width,height: height}} source={require('../img/background/background1.jpg')}>
+                    {loader?
+                        <View style={{width: width,height: height,justifyContent: 'center',alignItems: 'center'}}>
+                            <ActivityIndicator size="large" color="#644800" />
                         </View>
-
-                        <FlatList
-                            keyExtractor={(item, index) => index.toString()}
-                            data={data}
-                            renderItem={({item,index})=><ItemMesseg item={item} data={data[index - 1]} index={index}/>}
-                            style={{width: width,height: height - 190,zIndex: 10000}}
-                            inverted={-1}
-                            onEndReachedThreshold={0.001}
-                            onEndReached={(info) => this.addData()}
-                            viewabilityConfig={this.viewabilityConfig}
-                        />
-
-
-
-                        <View style={styles.bottomConteiner}>
-                            <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D' value={newMesseg} 
-                                onChangeText={(newMesseg) => this.setState({newMesseg})}/>
-                            <TouchableOpacity style={[styles.btnMessConteiner,newMesseg == ''?{opacity: 0.3}:{opacity:1}]} onPress={this.newMess} disabled={newMesseg == ''}>
-                                <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
-                            </TouchableOpacity>
-                        </View>
-                    </KeyboardAvoidingView>
-                    }
-                
-            </ImageBackground>
-           
-        )
+                        :
+                        <KeyboardAvoidingView style={{flex: 1}} behavior="position" enabled >
+                            <View style={styles.headerConteiner}>
+                                <TouchableOpacity style={styles.headerBtnConteiner} onPress={() => this.props.navigation.goBack()}>
+                                    <Image source={require('../img/icons/btns/btnBack.png')} style={styles.headerBtn}/>
+                                </TouchableOpacity>
+                            
+                                {aboutChat.event?
+                                <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
+                                :
+                                <React.Fragment>
+                                    <View style={[styles.imageAutorConteinerSecond,{backgroundColor: user[0].autorColor}]}>
+                                        <Image source={{uri: user[0].autorImage}} style={styles.imagePeople}/>
+                                    </View>
+                                    <Text style={styles.headerText} numberOfLines={1}>{user[0].autorNick}</Text>
+                                </React.Fragment>
+                                }
+    
+    
+                                <TouchableOpacity style={styles.headerBtnConteiner} onPress={()=>this.setState({settingsScreen: true})}>
+                                    <Image source={require('../img/icons/btns/settingBtn.png')} style={styles.headerBtn}/>
+                                </TouchableOpacity>
+                            </View>
+    
+                            <FlatList
+                                keyExtractor={(item, index) => index.toString()}
+                                data={data}
+                                renderItem={({item,index})=><ItemMesseg item={item} data={data[index - 1]} index={index}/>}
+                                style={{width: width,height: height - 190,zIndex: 10000}}
+                                inverted={-1}
+                                onEndReachedThreshold={0.001}
+                                onEndReached={(info) => this.addData()}
+                                viewabilityConfig={this.viewabilityConfig}
+                            />
+    
+    
+    
+                            <View style={styles.bottomConteiner}>
+                                <TextInput placeholder='Сообщение' style={styles.input} placeholderTextColor='#E8BC4D' value={newMesseg} 
+                                    onChangeText={(newMesseg) => this.setState({newMesseg})}/>
+                                <TouchableOpacity style={[styles.btnMessConteiner,newMesseg == ''?{opacity: 0.3}:{opacity:1}]} onPress={this.newMess} disabled={newMesseg == ''}>
+                                    <Image source={require('../img/icons/btns/btnMesseng.png')} style={styles.btnMess}/>
+                                </TouchableOpacity>
+                            </View>
+                        </KeyboardAvoidingView>
+                        }
+                    
+                </ImageBackground>
+               
+            )
+        }
     }
 }
 
@@ -249,4 +268,10 @@ mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps)(Messenger);
+mapDispatchToProps = (dispatch) => {
+    return {
+        setActiveItem: (name,value) => dispatch(setActiveItem(name,value))
+    }
+}
+
+export default connect(mapStateToProps,mapDispatchToProps)(Messenger);

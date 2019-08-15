@@ -85,11 +85,15 @@ class Chats extends Component{
                 </View>
                 :
                 <View style={styles.container}>
-                    <View style={styles.searchConteiner}>
+                    {/* <View style={styles.searchConteiner}>
                         <Image source={require('../img/icons/btns/search.png')} style={styles.searchImage}/>
                         <TextInput placeholder='поиск чата' placeholderTextColor='#FFF960' style={styles.searchInput} />
+                    </View> */}
+
+                    <View style={styles.headerConteiner}>
+                        <Text style={styles.headerText} numberOfLines={1}>Обсуждение событий</Text>
                     </View>
-            
+
                     <FlatList
                         keyExtractor={(item, index) => index.toString()}
                         data={chats}
@@ -146,6 +150,20 @@ const styles = StyleSheet.create({
         color: '#644800',
         fontSize: 16,
     },
+    headerConteiner: {
+        width: width,
+        height: 60,
+        borderBottomColor: '#E8BC4D',
+        borderBottomWidth: 2,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    headerText: { 
+        color: '#644800',
+        fontSize: 22,
+        letterSpacing: 1,
+        fontWeight: 'bold'
+    }
 })
 
 const mapStateToProps = (state) => {
