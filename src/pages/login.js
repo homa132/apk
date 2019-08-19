@@ -85,9 +85,9 @@ class Login extends Component{
         await firebase.firestore().collection('users').doc(userToken).get().then((doc) => {
             let data = doc.data();
             this.props.getMyData(data);
+            this.props.navigation.push('Acc');
+            this.setState({refresh: false});
           })
-        this.props.navigation.push('Acc');
-        this.setState({refresh: false});
     }
 
 

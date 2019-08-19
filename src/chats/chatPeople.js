@@ -12,7 +12,7 @@ function ChatPeople(props){
     
     return(
         <View style={styles.chatPeopleConteiner}>
-            <View style={[styles.imageAutorConteinerSecond,{backgroundColor: autorColor}]}>
+            <View style={styles.imageAutorConteinerSecond}>
                 <Image style={styles.imagePeople} source={{uri: autorImage}}/>
             </View>
             <View style={styles.chatPeopleTextConteiner}>

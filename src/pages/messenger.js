@@ -148,7 +148,7 @@ class Messenger extends Component {
                                 <Text style={styles.headerText} numberOfLines={1}>{aboutChat.name}</Text>
                                 :
                                 <React.Fragment>
-                                    <View style={[styles.imageAutorConteinerSecond,{backgroundColor: user[0].autorColor}]}>
+                                    <View style={styles.imageAutorConteinerSecond}>
                                         <Image source={{uri: user[0].autorImage}} style={styles.imagePeople}/>
                                     </View>
                                     <Text style={styles.headerText} numberOfLines={1}>{user[0].autorNick}</Text>

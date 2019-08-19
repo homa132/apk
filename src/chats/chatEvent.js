@@ -17,7 +17,7 @@ function ChatEvent (props) {
             <View style={styles.chatEventTopConteiner}>
                 <Text numberOfLines={2} style={styles.topText}>{name}</Text>
                 <View style={styles.autorConteiner}>
-                    <View style={[styles.imageAutorConteiner,{backgroundColor: autor.autorColor}]}>
+                    <View style={styles.imageAutorConteiner}>
                         <Image style={styles.autorImage} source={{uri: autor.autorImage}}/>
                     </View>
                     <Text style={styles.autorText} numberOfLines={2}>{autor.autorNick}</Text>

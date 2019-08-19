@@ -36,7 +36,7 @@ const settings = (props) =>  (
                     }else{
                         return (
                             <View style={styles.conteinerItem}>
-                                <View style={[styles.imageUserConteiner,{backgroundColor: item.autorColor}]}>
+                                <View style={styles.imageUserConteiner}>
                                     <Image source={{uri: item.autorImage}} style={styles.imgUser}/>
                                 </View>
                                 <Text style={styles.itemText}>{item.autorNick}</Text>
