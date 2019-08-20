@@ -114,7 +114,7 @@ class Login extends Component{
                                         </TouchableOpacity>
                                 
                                         <TextInput numberOfLines={1} style={styles.headerText} value={nick} 
-                                            onChangeText={(value)=> this.props.setNewMyData('nick',value)}
+                                            editable={false}
                                             />
                                 
                                         <TouchableOpacity style={styles.btnSingOutConteiner} onPress={this._signOutAsync}>
@@ -203,10 +203,10 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     headerText: {
-        fontSize: 18,
+        fontSize: 20,
         color: '#644800',
         borderColor:'#644800',
-        borderWidth: 1.4,
+        borderWidth: 2,
         borderRadius: 10,
         width: width - 150,
         textAlign: 'center',
@@ -214,7 +214,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         paddingVertical: 2,
-        paddingHorizontal: 5
+        paddingHorizontal: 5,
+        fontWeight: 'bold'
     },
     btnSingOutConteiner: {
         width: 60,

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View,Text,TouchableOpacity,StyleSheet,ImageBackground,Image,FlatList,Dimensions,TextInput} from 'react-native';
+import {View,Text,TouchableOpacity,StyleSheet,ImageBackground,Image,FlatList,Dimensions} from 'react-native';
 import {connect} from 'react-redux';
 import {withNavigation} from 'react-navigation';
 import {setActiveItem} from '../redux/actions';
@@ -35,7 +35,10 @@ class Friends extends Component {
                                     {this.props.messege?
                                     <View style={styles.headerTextConteiner}>
                                         <Text style={styles.headerText}>Ваши подписчики</Text>
-                                    </View>:null
+                                    </View>:
+                                    <View style={styles.headerTextConteiner}>
+                                        <Text style={styles.headerText}>Пользователи</Text>
+                                    </View>
                                     }
                                 </View>
                             )
