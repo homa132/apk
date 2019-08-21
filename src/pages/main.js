@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   firstEvents = () => {
-      const first = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(2);
+      const first = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(5);
       first.get().then((item) => {
         let data = [];
 
@@ -42,7 +42,7 @@ class App extends Component {
 
       if(date == 'default' && type != 'default'){
 
-        const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(2);
+        const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(5);
         first.get().then((item) => {
           let data = [];
 
@@ -58,7 +58,7 @@ class App extends Component {
       }
 
       if(date != 'default' && type == 'default'){
-        const second = firebase.firestore().collection('Events').where('fullDate','==',date).orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(2);
+        const second = firebase.firestore().collection('Events').where('fullDate','==',date).orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(5);
         second.get().then((item) => {
           let data = [];
 
@@ -76,7 +76,7 @@ class App extends Component {
 
       // get all data
       if(date == 'default' && type == 'default'){
-        const addData = firebase.firestore().collection('Events').orderBy('dateCreate','desc').startAfter(lastEvent).limit(2);
+        const addData = firebase.firestore().collection('Events').orderBy('dateCreate','desc').startAfter(lastEvent).limit(5);
         addData.get().then((item) => {
           let data = [];
           item.forEach((i) => {
@@ -92,7 +92,7 @@ class App extends Component {
       }
     }else{
       const four = firebase.firestore().collection('Events').where('fullDate','==',date).where('type','==',type)
-      .orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(2)
+      .orderBy('dateCreate', 'desc').startAfter(lastEvent).limit(5)
       four.get().then((item) => {
         let data = [];
 
@@ -112,7 +112,7 @@ class App extends Component {
     
     if(date == 'default' || type == 'default'){
       if(date == 'default' && type != 'default'){
-        const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').limit(2);
+        const first = firebase.firestore().collection('Events').where('type','==',type).orderBy('dateCreate', 'desc').limit(5);
         first.get().then((item) => {
           let data = [];
 
@@ -128,7 +128,7 @@ class App extends Component {
 
       if(date != 'default' && type == 'default'){
         
-        const second = firebase.firestore().collection('Events').where('fullDate','==',date).orderBy('dateCreate', 'desc').limit(2);
+        const second = firebase.firestore().collection('Events').where('fullDate','==',date).orderBy('dateCreate', 'desc').limit(5);
         second.get().then((item) => {
           let data = [];
 
@@ -144,7 +144,7 @@ class App extends Component {
           // get all list
       if(date == 'default' && type == 'default'){
 
-        const three = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(2);
+        const three = firebase.firestore().collection('Events').orderBy('dateCreate', 'desc').limit(5);
         three.get().then((item) => {
           let data = [];
 
@@ -159,7 +159,7 @@ class App extends Component {
         })
       }
     }else{
-      const four = firebase.firestore().collection('Events').where('fullDate','==',date).where('type','==',type).orderBy('dateCreate', 'desc').limit(2)
+      const four = firebase.firestore().collection('Events').where('fullDate','==',date).where('type','==',type).orderBy('dateCreate', 'desc').limit(5)
       four.get().then((item) => {
         let data = [];
 
@@ -189,7 +189,7 @@ class App extends Component {
 
   render() {
     const {arrayEvent,type,date} = this.props;
-
+    
       return (
         <ImageBackground style={styles.background} source={require('../img/background/background1.jpg')}>
             <View style={styles.container}>

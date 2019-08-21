@@ -49,11 +49,9 @@ class Chats extends Component{
     }
 
     addData = () => {
+        
         const {myUserHesh} = this.props;
         const {chats,lastChat,allList} = this.state;
-        if(allList){
-
-        }else{
             const newChats = firebase.firestore().collection('chats').where('arrayUsers',"array-contains",myUserHesh).orderBy('lastMess','desc')
             .startAfter(lastChat).limit(5);
             
@@ -69,12 +67,11 @@ class Chats extends Component{
                 }
                 this.setState({lastChat:newLastChat,chats:[...chats,...data]});
             })
-        }
 
     }
 
     render(){
-        const {loader,chats,refresh,lastChat} = this.state;
+        const {loader,chats,refresh,allList} = this.state;
         
         return (
             <ImageBackground source={require('../img/background/background1.jpg')} style={styles.background}>
@@ -96,11 +93,12 @@ class Chats extends Component{
 
                     <FlatList
                         keyExtractor={(item, index) => index.toString()}
+                        style={{width: width,height: height - 130}}
                         data={chats}
                         refreshing={refresh}
                         onRefresh={this.refresh}
                         onEndReachedThreshold={0.001}
-                        onEndReached={(info) => this.addData()}
+                        onEndReached={(info) =>{allList?null:this.addData()}}
                         renderItem={({item,index})=>{
                             
                             if(!item.event){

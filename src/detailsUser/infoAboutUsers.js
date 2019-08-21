@@ -66,10 +66,6 @@ class userInfo extends Component {
                         <Text style={styles.infoBalText}>Балов: {bal}</Text>
                         <Image style={styles.infoBAlImage} source={require('../img/icons/detailsPersonalAcc/Star.png')}/>
                     </View>
-                    <View style={styles.infoBalConteiner}>
-                        <Text style={styles.infoBalText}>Позиция: {position}</Text>
-                        <Image style={{width:25,height: 25}} source={require('../img/icons/detailsPersonalAcc/people.png')}/>
-                    </View>
     
                 </View>
                 </View>

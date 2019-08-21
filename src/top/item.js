@@ -2,30 +2,27 @@ import React from 'react';
 import {View,TouchableOpacity,Image,StyleSheet,Dimensions,Text} from 'react-native';
 import {connect} from 'react-redux';
 const { width, height } = Dimensions.get('window');
-import { withNavigation } from 'react-navigation';
-
 
 function Item (props){
+    const {urlImg,bal,color,nick,heshUser} = props.item.item;
     
     return (
         <View style={styles.itemConteiner}>
-            <View style={styles.imageUserConteiner}>
-                <Image source={require('../img/testImage.png')} style={styles.imageUser}/>
+            <View style={[styles.imageUserConteiner,{backgroundColor: color}]}>
+                <Image source={{uri: urlImg}} style={styles.imageUser}/>
             </View>
 
             <View style={styles.mainConteiner}>
-                <Text style={styles.nickText} numberOfLines={1}>nick name 123</Text>
+                <Text style={styles.nickText} numberOfLines={1}>{nick}</Text>
                 <View style={styles.dataConteiner}>
-                    <Text style={styles.dataText} numberOfLines={1}>Балов: 160</Text>
+                    <Text style={styles.dataText} numberOfLines={1}>Балов: {bal}</Text>
                     <Image source={require('../img/icons/detailsPersonalAcc/Star.png')} style={styles.starImage}/>
-                </View>
-                <View style={styles.dataConteiner}>
-                    <Text style={styles.dataText} numberOfLines={1}>Позиция: 10</Text>
-                    <Image source={require('../img/icons/detailsPersonalAcc/people.png')} style={styles.peopleImage}/>
                 </View>
             </View>
 
-            <TouchableOpacity style={styles.btnMoreConteiner}>
+            <TouchableOpacity style={styles.btnMoreConteiner} onPress={() => {
+                props.goToUser(heshUser);
+            }}>
                 <Image source={require('../img/icons/btns/btnBack.png')} style={styles.btnMoreImage}/>
             </TouchableOpacity>
 
@@ -55,7 +52,6 @@ const styles = StyleSheet.create({
     imageUserConteiner: {
         width: 106,
         height: 106,
-        backgroundColor: 'red',
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center'
@@ -83,18 +79,18 @@ const styles = StyleSheet.create({
     },
     btnMoreImage: {
         width: 50,
-        height: 50
+        height: 50,
+        transform: [{rotate: '180deg'}]
     },
     btnMoreConteiner: {
-        width: 60,
-        height: 60,
+        width: 65,
+        height: 65,
         justifyContent: 'center',
         alignItems: 'center',
-        rotation:180
     },
     nickText: {
         color: '#644800',
-        fontSize: 19,
+        fontSize: 22,
         fontWeight: 'bold'
     },
     dataText:{
@@ -103,10 +99,4 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    return{
-        state: state.navigation
-    }
-}
-
-export default connect(mapStateToProps)(withNavigation(Item));
+export default connect()(Item);
